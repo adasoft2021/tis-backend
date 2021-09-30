@@ -20,7 +20,7 @@ public abstract class BaseEntity<PrimaryKey extends Serializable> {
     private PrimaryKey id;
     @Column(nullable = false)
     private boolean deleted;
-    @Column(updatable = false,nullable = false)
+    @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
     @Column(nullable = false)
     private LocalDateTime updatedAt;

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public abstract class BaseUpdateDTO <PrimaryKey extends Serializable>{
+public abstract class BaseUpdateDTO<PrimaryKey extends Serializable> {
     @JsonIgnore
     private PrimaryKey id;
     @NotNull(message = "Este campo no debe ser nulo")

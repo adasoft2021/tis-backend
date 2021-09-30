@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public abstract class BaseResponseDTO <PrimaryKey extends Serializable>{
+public abstract class BaseResponseDTO<PrimaryKey extends Serializable> {
     private PrimaryKey id;
     private boolean deleted;
     private LocalDateTime createdAt;
