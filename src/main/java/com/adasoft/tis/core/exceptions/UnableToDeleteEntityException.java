@@ -6,22 +6,22 @@ import java.io.Serializable;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
 
-@ExceptionHandlerSchema(code = HttpStatus.NOT_FOUND, title = EntityNotFoundException.TITLE)
-public class EntityNotFoundException extends TisDomainException {
+@ExceptionHandlerSchema(code = HttpStatus.BAD_REQUEST, title = UnableToDeleteEntityException.TITLE)
+public class UnableToDeleteEntityException extends TisDomainException {
 
-    public static final String TITLE = "No se pudo encontrar la entidad";
-    private static final long serialVersionUID = -9093937452666187533L;
+    public static final String TITLE = "No se pudo eliminar la entidad";
 
-    private static final String EXCEPTION_DETAIL_MESSAGE = "%s con id %s no se pudo encontrar o no existe.";
+    private static final long serialVersionUID = 4690177480494587739L;
+    private static final String EXCEPTION_DETAIL_MESSAGE = "%s con id %s no se pudo eliminar.";
 
-    private final Class<?> entityClass;
-    private final Serializable entityId;
+    private Class<?> entityClass;
+    private Serializable entityId;
 
-    public EntityNotFoundException(Class<?> entityClass, Serializable entityId) {
+    public UnableToDeleteEntityException(Class<?> entityClass, Serializable entityId) {
         this(entityClass, entityId, null);
     }
 
-    public EntityNotFoundException(Class<?> entityClass, Serializable entityId, Throwable exception) {
+    public UnableToDeleteEntityException(Class<?> entityClass, Serializable entityId, Throwable exception) {
         super(exception);
 
         checkArgument(entityClass != null, "El parámetro de la clase de entidad no debe ser nulo.");

@@ -1,13 +1,14 @@
 package com.adasoft.tis.controllers;
 
-import com.adasoft.tis.core.exceptions.EntityConflictException;
-import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.domain.Greeting;
 import com.adasoft.tis.services.GreetingService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
 
@@ -20,8 +21,7 @@ public class GreetingRestController {
 
     @GetMapping("{name}")
     public ResponseEntity<Greeting> welcome(@NotNull @PathVariable("name") final String name) {
-        throw new EntityConflictException(Greeting.class,1);
-        //Greeting response = greetingService.getGreeting(name);
-        //return ResponseEntity.ok(response);
+        Greeting response = greetingService.getGreeting(name);
+        return ResponseEntity.ok(response);
     }
 }
