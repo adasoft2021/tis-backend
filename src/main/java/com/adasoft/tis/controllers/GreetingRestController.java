@@ -1,5 +1,7 @@
 package com.adasoft.tis.controllers;
 
+import com.adasoft.tis.core.exceptions.EntityConflictException;
+import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.domain.Greeting;
 import com.adasoft.tis.services.GreetingService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -18,7 +20,8 @@ public class GreetingRestController {
 
     @GetMapping("{name}")
     public ResponseEntity<Greeting> welcome(@NotNull @PathVariable("name") final String name) {
-        Greeting response = greetingService.getGreeting(name);
-        return ResponseEntity.ok(response);
+        throw new EntityConflictException(Greeting.class,1);
+        //Greeting response = greetingService.getGreeting(name);
+        //return ResponseEntity.ok(response);
     }
 }
