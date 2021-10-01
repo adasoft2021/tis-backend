@@ -33,5 +33,5 @@ public class CreateReviewDTO extends BaseCreateDTO {
         type = "Number"
     )
     @NotNull(message = "Este campo no debe ser nulo.")
-    private long createdBy;
+    private long createdById;
 }
