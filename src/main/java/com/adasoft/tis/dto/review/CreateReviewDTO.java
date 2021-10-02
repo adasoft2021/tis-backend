@@ -26,7 +26,7 @@ public class CreateReviewDTO extends BaseCreateDTO {
     )
     private String comment = null;
     @Schema(
-        name = "createdBy",
+        name = "createdById",
         description = "ID del Asesor que creó la revisión.",
         required = true,
         example = "1",
