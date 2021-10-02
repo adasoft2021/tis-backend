@@ -13,7 +13,7 @@ public class UpdateReviewDTO extends BaseUpdateDTO<Long> {
     private int score;
     @Schema(
         name = "comment",
-        description = "Commentario de la revisión.",
+        description = "Comentario de la revisión.",
         example = "Este es un nuevo comentario",
         type = "String"
     )
