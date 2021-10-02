@@ -17,7 +17,7 @@ public class CreateReviewDTO extends BaseCreateDTO {
     @NotNull(message = "Este campo no debe ser nulo")
     @Min(value = 0, message = "Este campo no debe ser menor a 0")
     @Max(value = 100, message = "Este campo no debe ser mayor a 100")
-    private int score;
+    private Integer score;
     @Schema(
         name = "comment",
         description = "Comentario de la revisión.",
@@ -32,6 +32,6 @@ public class CreateReviewDTO extends BaseCreateDTO {
         example = "1",
         type = "Number"
     )
-    @NotNull(message = "Este campo no debe ser nulo.")
-    private long createdById;
+    @NotNull(message = "Este campo no debe ser nulo")
+    private Long createdById;
 }
