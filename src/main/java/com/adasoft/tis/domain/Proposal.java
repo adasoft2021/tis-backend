@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
@@ -18,4 +18,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "proposals")
 public class Proposal extends BaseEntity<Long> {
+    @Column(nullable = false)
+    private int company;
+    @Column
+    private String partA;
+    @Column
+    private String partB;
 }
