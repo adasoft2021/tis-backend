@@ -19,10 +19,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "qualifications")
 public class Qualification extends BaseEntity<Long> {
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private String description;
     @Column
     private int score;
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private int maxScore;
 }
