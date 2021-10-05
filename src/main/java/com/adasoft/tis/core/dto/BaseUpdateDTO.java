@@ -14,7 +14,7 @@ public abstract class BaseUpdateDTO<PrimaryKey extends Serializable> {
     @JsonIgnore
     private PrimaryKey id;
     @NotNull(message = "Este campo no debe ser nulo")
-    private boolean deleted;
+    private Boolean deleted;
     @JsonIgnore
     private LocalDateTime updatedAt = LocalDateTime.now();
 }
