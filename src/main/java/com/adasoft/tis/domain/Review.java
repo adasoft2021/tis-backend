@@ -24,10 +24,10 @@ import java.util.Set;
 @Table(name = "reviews")
 public class Review extends BaseEntity<Long> {
     @Column(nullable = false)
-    private int score;
+    private int totalScore;
     @Column
     private String comment;
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private long createdBy;
 
     @JsonManagedReference
