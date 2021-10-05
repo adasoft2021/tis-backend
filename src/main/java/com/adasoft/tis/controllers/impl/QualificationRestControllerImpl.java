@@ -22,8 +22,9 @@ public class QualificationRestControllerImpl implements QualificationRestControl
     @PostMapping
     @Override
     public ResponseEntity<QualificationResponseDTO> create(
+        @NotNull @RequestParam("reviewId") final Long reviewId,
         @Valid @RequestBody final CreateQualificationDTO qualificationDTO) {
-        QualificationResponseDTO responseDTO = qualificationService.create(qualificationDTO);
+        QualificationResponseDTO responseDTO = qualificationService.create(reviewId, qualificationDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 

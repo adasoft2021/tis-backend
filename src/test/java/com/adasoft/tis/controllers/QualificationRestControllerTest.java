@@ -68,9 +68,10 @@ class QualificationRestControllerTest {
 
     @Test
     void createQualificationSuccessfully() throws Exception {
-        when(qualificationService.create(any())).thenReturn(RESPONSE_DTO);
+        when(qualificationService.create(any(), any())).thenReturn(RESPONSE_DTO);
 
-        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL).queryParam("reviewId", String.valueOf(ID))
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CREATE_DTO)))
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -81,7 +82,8 @@ class QualificationRestControllerTest {
     void createQualificationBadRequest() throws Exception {
         CreateQualificationDTO qualificationDTO = new CreateQualificationDTO();
 
-        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL).queryParam("reviewId", String.valueOf(ID))
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(qualificationDTO)))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))

@@ -61,6 +61,7 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                skip(destination.getReview());
             }
         });
 
@@ -68,6 +69,7 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                skip(destination.getReview());
             }
         });
 

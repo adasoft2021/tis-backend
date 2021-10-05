@@ -32,6 +32,8 @@ public interface QualificationRestController {
         )
     })
     ResponseEntity<QualificationResponseDTO> create(
+        @Parameter(description = "ID del Review al cual se creará una calificación", example = "1")
+            Long reviewId,
         @RequestBody(description = "QualificationDTO que contiene los nuevos datos a crear")
             CreateQualificationDTO qualificationDTO
     );
