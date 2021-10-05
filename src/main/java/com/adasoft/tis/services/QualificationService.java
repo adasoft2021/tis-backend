@@ -6,11 +6,13 @@ import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.repository.QualificationRepository;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
 
+@AllArgsConstructor
 @Service
 public class QualificationService {
     private QualificationRepository qualificationRepository;
