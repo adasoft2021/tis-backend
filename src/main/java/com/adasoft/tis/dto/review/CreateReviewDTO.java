@@ -13,11 +13,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class CreateReviewDTO extends BaseCreateDTO {
-    @Schema(name = "score", description = "Nota de la revisión.", required = true, example = "100", type = "Number")
+    @Schema(name = "totalScore", description = "Nota de la revisión.", required = true, example = "100", type = "Number")
     @NotNull(message = "Este campo no debe ser nulo")
     @Min(value = 0, message = "Este campo no debe ser menor a 0")
     @Max(value = 100, message = "Este campo no debe ser mayor a 100")
-    private Integer score;
+    private Integer totalScore;
     @Schema(
         name = "comment",
         description = "Comentario de la revisión.",

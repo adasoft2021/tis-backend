@@ -9,8 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpdateReviewDTO extends BaseUpdateDTO<Long> {
-    @Schema(name = "score", description = "Nota de la revisión.", example = "100", type = "Number")
-    private int score;
+    @Schema(name = "totalScore", description = "Nota de la revisión.", example = "100", type = "Number")
+    private int totalScore;
     @Schema(
         name = "comment",
         description = "Comentario de la revisión.",
