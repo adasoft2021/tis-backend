@@ -11,6 +11,14 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class BeansConfiguration {
+    @Bean("proposalMapper")
+    public ModelMapper proposalMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+
+        return modelMapper;
+    }
+
     @Bean("reviewMapper")
     public ModelMapper reviewMapper() {
         ModelMapper modelMapper = new ModelMapper();
