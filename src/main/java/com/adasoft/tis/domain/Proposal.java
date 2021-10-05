@@ -8,7 +8,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+
 
 @Data
 @SuperBuilder
@@ -19,9 +19,11 @@ import java.time.LocalDateTime;
 @Table(name = "proposals")
 public class Proposal extends BaseEntity<Long> {
     @Column(nullable = false)
-    private int company;
+    private long createdBy;
     @Column
     private String partA;
     @Column
     private String partB;
+    @Column
+    private long review;
 }
