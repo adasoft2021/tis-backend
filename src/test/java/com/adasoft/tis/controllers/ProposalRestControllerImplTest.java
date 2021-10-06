@@ -44,6 +44,7 @@ class ProposalRestControllerImplTest {
     private static final Proposal.Part PART = Proposal.Part.A;
     private static final String FILE_URL= "files/company1PartA.zip";
     private static final long REVIEW_ID = 1L;
+    private static final long ADVISER_ID = 123L;
     private static CreateProposalDTO createDTO;
     private static ProposalResponseDTO responseDTO;
 
@@ -54,12 +55,14 @@ class ProposalRestControllerImplTest {
         createDTO.setPart(PART);
         createDTO.setFileUrl(FILE_URL);
         createDTO.setReviewId(REVIEW_ID);
+        createDTO.setAdviserId(ADVISER_ID);
 
         responseDTO = new ProposalResponseDTO();
         responseDTO.setCreatedById(CREATED_BY_ID);
         responseDTO.setPart(PART);
         responseDTO.setFileUrl(FILE_URL);
         responseDTO.setReviewId(REVIEW_ID);
+        responseDTO.setAdviserId(ADVISER_ID);
 
     }
 

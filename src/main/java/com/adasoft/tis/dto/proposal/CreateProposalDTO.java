@@ -33,4 +33,5 @@ public class CreateProposalDTO extends BaseCreateDTO {
         type = "Number"
     )
     private long reviewId;
+    private long adviserId;
 }

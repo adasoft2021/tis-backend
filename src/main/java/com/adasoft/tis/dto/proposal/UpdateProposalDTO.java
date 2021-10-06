@@ -21,4 +21,5 @@ public class UpdateProposalDTO extends BaseUpdateDTO<Long> {
     private String fileUrl;
 
     private long reviewId;
+    private long adviserId;
 }

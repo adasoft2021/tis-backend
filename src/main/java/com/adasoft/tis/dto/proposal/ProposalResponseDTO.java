@@ -13,4 +13,5 @@ public class ProposalResponseDTO extends BaseResponseDTO<Long> {
     private Proposal.Part part;
     private String fileUrl;
     private long reviewId;
+    private long adviserId;
 }
