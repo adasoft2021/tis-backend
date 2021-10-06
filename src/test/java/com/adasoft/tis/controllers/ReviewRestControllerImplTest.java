@@ -44,11 +44,11 @@ class ReviewRestControllerImplTest {
     void createReviewSuccessfully() throws Exception {
         CreateReviewDTO reviewDTO = new CreateReviewDTO();
         reviewDTO.setCreatedById(CREATED_BY_ID);
-        reviewDTO.setScore(SCORE);
+        reviewDTO.setTotalScore(SCORE);
         reviewDTO.setComment(COMMENT);
         ReviewResponseDTO responseDTO = new ReviewResponseDTO();
         responseDTO.setId(ID);
-        responseDTO.setScore(SCORE);
+        responseDTO.setTotalScore(SCORE);
         responseDTO.setComment(COMMENT);
         responseDTO.setCreatedById(CREATED_BY_ID);
         responseDTO.setCreatedAt(reviewDTO.getCreatedAt());
@@ -77,13 +77,13 @@ class ReviewRestControllerImplTest {
     @Test
     void updateReviewSuccessfully() throws Exception {
         UpdateReviewDTO reviewDTO = new UpdateReviewDTO();
-        reviewDTO.setScore(SCORE);
+        // reviewDTO.set(SCORE);
         reviewDTO.setComment(COMMENT);
         reviewDTO.setDeleted(false);
 
         ReviewResponseDTO responseDTO = new ReviewResponseDTO();
         responseDTO.setId(ID);
-        responseDTO.setScore(SCORE);
+        responseDTO.setTotalScore(SCORE);
         responseDTO.setComment(COMMENT);
         responseDTO.setCreatedById(CREATED_BY_ID);
         responseDTO.setCreatedAt(reviewDTO.getUpdatedAt());
@@ -113,7 +113,7 @@ class ReviewRestControllerImplTest {
     @Test
     void updateReviewNotFound() throws Exception {
         UpdateReviewDTO updateReviewDTO = new UpdateReviewDTO();
-        updateReviewDTO.setScore(SCORE);
+        // updateReviewDTO.setTotalScore(SCORE);
         updateReviewDTO.setComment(COMMENT);
         updateReviewDTO.setDeleted(false);
 

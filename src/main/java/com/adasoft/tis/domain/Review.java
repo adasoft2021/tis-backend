@@ -23,7 +23,7 @@ import java.util.Set;
 @Entity
 @Table(name = "reviews")
 public class Review extends BaseEntity<Long> {
-    @Column(nullable = false)
+    @Column
     private int totalScore;
     @Column
     private String comment;
