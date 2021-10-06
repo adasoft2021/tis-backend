@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
+
 @Repository
 public class ProposalRepositoryImpl extends AbstractTisRepository<Proposal, Long> implements ProposalRepository {
     @Autowired

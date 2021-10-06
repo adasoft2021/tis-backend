@@ -21,17 +21,17 @@ public class ProposalRestControllerImpl implements ProposalRestController {
 
     @PostMapping
     @Override
-    public ResponseEntity<ProposalResponseDTO> create(CreateProposalDTO proposalDTO) {
-        ProposalResponseDTO responseDTO = proposalService.create(proposalDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    public ResponseEntity<ProposalResponseDTO> create(@NotNull @RequestParam("reviewId") Long reviewId,
+                                                      @RequestBody @Valid CreateProposalDTO proposal) {
+        ProposalResponseDTO responseDTO = proposalService.create(reviewId,proposal);
+        return ResponseEntity.ok(responseDTO);
     }
 
-    @PutMapping("/{proposalId}")
+    @GetMapping(value = "/{proposalId}")
     @Override
-    public ResponseEntity<ProposalResponseDTO> update(
-        @NotNull final Long id,
-        @Valid @RequestBody final UpdateProposalDTO proposalDTO) {
-        ProposalResponseDTO responseDTO = proposalService.update(id, proposalDTO);
+    public ResponseEntity<ProposalResponseDTO> get(
+        @NotNull final Long id) {
+        ProposalResponseDTO responseDTO = proposalService.getById(id);
         return ResponseEntity.ok(responseDTO);
     }
 }

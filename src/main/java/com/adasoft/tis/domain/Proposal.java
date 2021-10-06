@@ -21,9 +21,14 @@ public class Proposal extends BaseEntity<Long> {
     @Column(nullable = false)
     private long createdBy;
     @Column
-    private String partA;
+    private Part part;
     @Column
-    private String partB;
-    @Column
-    private long review;
+    private String fileUrl;
+
+    private Review review;
+
+    public enum Part {
+        A, B
+    }
 }
+
