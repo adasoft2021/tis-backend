@@ -15,11 +15,9 @@ public class UpdateQualificationDTO extends BaseUpdateDTO<Long> {
     @Schema(
         name = "score",
         description = "Nota de la calificación parcial.",
-        required = true,
         example = "15",
         type = "Number"
     )
-    @NotNull(message = "Este campo no puede ser nulo")
     @Min(value = 0, message = "Este campo no puede ser menor a 0")
     private Integer score;
 }
