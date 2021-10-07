@@ -1,6 +1,7 @@
 package com.adasoft.tis.domain;
 
 import com.adasoft.tis.core.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -25,13 +26,16 @@ public class Proposal extends BaseEntity<Long> {
     private Part part;
     @Column
     private String fileUrl;
-    @OneToOne
+    @JsonBackReference
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "fk_review_id", nullable = true, updatable = false)
     private Review review;
     @Column
     private long adviserId;
 
     public enum Part {
         A, B
+        
     }
 }
 

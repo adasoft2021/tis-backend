@@ -43,7 +43,7 @@ public interface ProposalRestController {
         )
     })
     ResponseEntity<ProposalResponseDTO> get(
-        @Parameter(description = "ID del Proposal a actualizar", example = "1")
+        @Parameter(description = "ID del Proposal a obtener", example = "1")
             Long id
     );
 }

@@ -1,7 +1,11 @@
 package com.adasoft.tis.config;
 
+import com.adasoft.tis.domain.Observation;
 import com.adasoft.tis.domain.Proposal;
 import com.adasoft.tis.domain.Review;
+import com.adasoft.tis.dto.observation.CreateObservationDTO;
+import com.adasoft.tis.dto.observation.ObservationResponseDTO;
+import com.adasoft.tis.dto.observation.UpdateObservationDTO;
 import com.adasoft.tis.dto.proposal.CreateProposalDTO;
 import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import com.adasoft.tis.dto.proposal.UpdateProposalDTO;
@@ -13,38 +17,10 @@ import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManager;
+
 @Configuration
 public class BeansConfiguration {
-    @Bean("proposalMapper")
-    public ModelMapper proposalMapper() {
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setAmbiguityIgnored(true);
-
-        modelMapper.addMappings(new PropertyMap<Proposal, ProposalResponseDTO>() {
-            @Override
-            protected void configure() {
-                map().setCreatedById(source.getCreatedBy());
-            }
-        });
-
-        modelMapper.addMappings(new PropertyMap<CreateProposalDTO, Proposal>() {
-            @Override
-            protected void configure() {
-                skip(destination.getId());
-                map().setCreatedBy(source.getCreatedById());
-            }
-        });
-
-        modelMapper.addMappings(new PropertyMap<UpdateProposalDTO, Proposal>() {
-            @Override
-            protected void configure() {
-                skip(destination.getId());
-            }
-        });
-
-        return modelMapper;
-    }
-
     @Bean("reviewMapper")
     public ModelMapper reviewMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -66,6 +42,60 @@ public class BeansConfiguration {
         });
 
         modelMapper.addMappings(new PropertyMap<UpdateReviewDTO, Review>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+
+        return modelMapper;
+    }
+
+    @Bean("proposalMapper")
+    public ModelMapper proposalMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+
+        modelMapper.addMappings(new PropertyMap<Proposal, ProposalResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setCreatedById(source.getCreatedBy());
+                map().setReviewId(source.getReview().getId());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<CreateProposalDTO, Proposal>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+                map().setCreatedBy(source.getCreatedById());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<UpdateProposalDTO, Proposal>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+
+        return modelMapper;
+    }
+
+    @Bean("observationMapper")
+    public ModelMapper observationMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+
+        modelMapper.addMappings(new PropertyMap<Observation, ObservationResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setProposalId(source.getProposal().getId());
+            }
+        });
+
+
+        modelMapper.addMappings(new PropertyMap<UpdateObservationDTO, Observation>() {
             @Override
             protected void configure() {
                 skip(destination.getId());
