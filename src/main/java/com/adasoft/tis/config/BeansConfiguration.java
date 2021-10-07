@@ -3,6 +3,7 @@ package com.adasoft.tis.config;
 import com.adasoft.tis.domain.Qualification;
 import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
+import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
@@ -46,6 +47,7 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                skip(destination.getQualifications());
             }
         });
 
@@ -56,6 +58,14 @@ public class BeansConfiguration {
     public ModelMapper qualificationMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
+
+        modelMapper.addMappings(new PropertyMap<Qualification, QualificationResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setDescription(source.getBaseQualification().getDescription());
+                map().setMaxScore(source.getBaseQualification().getMaxScore());
+            }
+        });
 
         modelMapper.addMappings(new PropertyMap<CreateQualificationDTO, Qualification>() {
             @Override

@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class QualificationResponseDTO extends BaseResponseDTO<Long> {
     private String description;
-    private int score;
+    private Integer score;
     private int maxScore;
 }

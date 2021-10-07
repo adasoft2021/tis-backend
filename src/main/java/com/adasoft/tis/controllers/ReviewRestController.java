@@ -57,6 +57,20 @@ public interface ReviewRestController {
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
+        ),
+        @ApiResponse(
+            description = "Ya se realizó la revisión de todas las notas parciales",
+            responseCode = "405",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "Intento de modificar otra calificación que no pertenece a la revisión",
+            responseCode = "406",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
         )
     })
     ResponseEntity<ReviewResponseDTO> update(

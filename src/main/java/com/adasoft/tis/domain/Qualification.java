@@ -19,15 +19,15 @@ import javax.persistence.*;
 @Table(name = "qualifications")
 public class Qualification extends BaseEntity<Long> {
     @Column
-    private int score;
+    private Integer score;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_review_id")
+    @JoinColumn(name = "fk_review_id", nullable = false, updatable = false)
     private Review review;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_base_qualification_id")
+    @JoinColumn(name = "fk_base_qualification_id", nullable = false, updatable = false)
     private BaseQualification baseQualification;
 }

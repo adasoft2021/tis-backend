@@ -79,7 +79,7 @@ class ReviewRestControllerImplTest {
         UpdateReviewDTO reviewDTO = new UpdateReviewDTO();
         // reviewDTO.set(SCORE);
         reviewDTO.setComment(COMMENT);
-        reviewDTO.setDeleted(false);
+        // reviewDTO.setDeleted(false);
 
         ReviewResponseDTO responseDTO = new ReviewResponseDTO();
         responseDTO.setId(ID);
@@ -88,7 +88,6 @@ class ReviewRestControllerImplTest {
         responseDTO.setCreatedById(CREATED_BY_ID);
         responseDTO.setCreatedAt(reviewDTO.getUpdatedAt());
         responseDTO.setUpdatedAt(reviewDTO.getUpdatedAt());
-        responseDTO.setDeleted(reviewDTO.getDeleted());
 
         when(reviewService.update(any(), any())).thenReturn(responseDTO);
 
@@ -115,7 +114,7 @@ class ReviewRestControllerImplTest {
         UpdateReviewDTO updateReviewDTO = new UpdateReviewDTO();
         // updateReviewDTO.setTotalScore(SCORE);
         updateReviewDTO.setComment(COMMENT);
-        updateReviewDTO.setDeleted(false);
+        // updateReviewDTO.setDeleted(false);
 
         when(reviewService.update(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
 

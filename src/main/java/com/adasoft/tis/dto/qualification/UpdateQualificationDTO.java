@@ -20,4 +20,15 @@ public class UpdateQualificationDTO extends BaseUpdateDTO<Long> {
     )
     @Min(value = 0, message = "Este campo no puede ser menor a 0")
     private Integer score;
+
+    @Schema(
+        name = "qualificationId",
+        description = "ID del Qualification a actualizar",
+        required = true,
+        example = "1",
+        type = "Number"
+    )
+    @NotNull(message = "Este campo de debe ser nulo")
+    @Min(value = 1, message = "Este campo no puede ser menor a 1")
+    private Long qualificationId;
 }
