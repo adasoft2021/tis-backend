@@ -52,7 +52,7 @@ public interface ReviewRestController {
             )
         ),
         @ApiResponse(
-            description = "No se encontró el ID del Review en el sistema",
+            description = "No se encontró el ID del Review o del Qualification en el sistema",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
