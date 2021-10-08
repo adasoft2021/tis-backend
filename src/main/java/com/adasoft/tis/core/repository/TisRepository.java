@@ -1,6 +1,7 @@
 package com.adasoft.tis.core.repository;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Optional;
 
 public interface TisRepository<Entity, ID extends Serializable> {
@@ -35,6 +36,14 @@ public interface TisRepository<Entity, ID extends Serializable> {
      * @return la entidad actualizada
      */
     Entity update(Entity entity);
+
+    /**
+     * Actualiza los registros existentes con toda la nueva información pasada en la colección como parámetro.
+     *
+     * @param entities las entidades con la nueva información.
+     * @return las entidades actualizadas.
+     */
+    Collection<Entity> updateAll(Collection<Entity> entities);
 
     /**
      * Elimina una entidad existente

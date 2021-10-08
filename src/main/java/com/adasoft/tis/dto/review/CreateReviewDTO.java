@@ -1,6 +1,7 @@
 package com.adasoft.tis.dto.review;
 
 import com.adasoft.tis.core.dto.BaseCreateDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,17 +14,9 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class CreateReviewDTO extends BaseCreateDTO {
-    @Schema(name = "score", description = "Nota de la revisión.", required = true, example = "100", type = "Number")
-    @NotNull(message = "Este campo no debe ser nulo")
-    @Min(value = 0, message = "Este campo no debe ser menor a 0")
-    @Max(value = 100, message = "Este campo no debe ser mayor a 100")
-    private Integer score;
-    @Schema(
-        name = "comment",
-        description = "Comentario de la revisión.",
-        example = "Este es un comentario.",
-        type = "String"
-    )
+    @JsonIgnore
+    private Integer totalScore = null;
+    @JsonIgnore
     private String comment = null;
     @Schema(
         name = "createdById",
@@ -33,5 +26,6 @@ public class CreateReviewDTO extends BaseCreateDTO {
         type = "Number"
     )
     @NotNull(message = "Este campo no debe ser nulo")
+    @Min(value = 1, message = "Este campo no puede ser menor a 1")
     private Long createdById;
 }
