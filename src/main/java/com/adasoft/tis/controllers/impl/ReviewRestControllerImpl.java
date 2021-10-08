@@ -19,6 +19,13 @@ import javax.validation.constraints.NotNull;
 public class ReviewRestControllerImpl implements ReviewRestController {
     private ReviewService reviewService;
 
+    @GetMapping("/{reviewId}")
+    @Override
+    public ResponseEntity<ReviewResponseDTO> get(@NotNull @PathVariable("reviewId") Long id) {
+        ReviewResponseDTO responseDTO = reviewService.get(id);
+        return ResponseEntity.ok(responseDTO);
+    }
+
     @PostMapping
     @Override
     public ResponseEntity<ReviewResponseDTO> create(@Valid @RequestBody final CreateReviewDTO reviewDTO) {

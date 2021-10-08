@@ -15,6 +15,27 @@ import org.springframework.http.ResponseEntity;
 
 @Tag(name = "ReviewRestController", description = "Controlador para gestionar las Revisiones")
 public interface ReviewRestController {
+    @Operation(summary = "Obtener una revisión por su ID", responses = {
+        @ApiResponse(
+            description = "Review obtenido exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ReviewResponseDTO.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No se encontró el ID del Review en el sistema",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    })
+    ResponseEntity<ReviewResponseDTO> get(
+        @Parameter(description = "ID del Review a obtener", example = "1")
+            Long id
+    );
+
     @Operation(summary = "Creación de una revisión", responses = {
         @ApiResponse(
             description = "Review creado exitosamente",

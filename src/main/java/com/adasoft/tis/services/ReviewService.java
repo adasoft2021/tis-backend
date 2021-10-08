@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
 
@@ -26,6 +27,7 @@ public class ReviewService {
     private ModelMapper reviewMapper;
 
     private QualificationService qualificationService;
+    private ModelMapper qualificationMapper;
 
     private Collection<QualificationResponseDTO> updateQualifications(
         final Review review,
@@ -61,6 +63,21 @@ public class ReviewService {
 
         ReviewResponseDTO responseDTO = reviewMapper.map(review, ReviewResponseDTO.class);
         responseDTO.setQualifications(new HashSet<>(qualificationResponseDTOS));
+
+        return responseDTO;
+    }
+
+    public ReviewResponseDTO get(final Long reviewId) {
+        checkArgument(reviewId != null, "El id de Review a actualizar no puede ser nulo.");
+
+        Review foundReview = reviewRepository.findById(reviewId)
+            .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
+
+        ReviewResponseDTO responseDTO = reviewMapper.map(foundReview, ReviewResponseDTO.class);
+        Collection<QualificationResponseDTO> qualifications = foundReview.getQualifications()
+            .stream().map(qualification -> qualificationMapper.map(qualification, QualificationResponseDTO.class))
+            .collect(Collectors.toSet());
+        responseDTO.setQualifications(new HashSet<>(qualifications));
 
         return responseDTO;
     }

@@ -25,8 +25,7 @@ import java.util.HashSet;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ReviewRestControllerImpl.class)
@@ -78,6 +77,30 @@ class ReviewRestControllerImplTest {
         REVIEW_RESPONSE_DTO.setComment(COMMENT);
         REVIEW_RESPONSE_DTO.setTotalScore(TOTAL_SCORE);
         REVIEW_RESPONSE_DTO.setQualifications(new HashSet<>());
+    }
+
+    @Test
+    void getReviewSuccessfully() throws Exception {
+        when(reviewService.get(any())).thenReturn(REVIEW_RESPONSE_DTO);
+
+        mvc.perform(get(String.format("%s/{reviewId}", BASE_URL), ID))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO)));
+    }
+
+    @Test
+    void getReviewNotFound() throws Exception {
+        when(reviewService.get(any())).thenThrow(new EntityNotFoundException(Review.class, ID));
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .title("No se pudo encontrar la entidad")
+            .message(String.format("Review con id %d no se pudo encontrar o no existe.", ID))
+            .build();
+
+        mvc.perform(get(String.format("%s/{reviewId}", BASE_URL), ID))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 
     @Test

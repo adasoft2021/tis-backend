@@ -31,6 +31,7 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Review, ReviewResponseDTO>() {
             @Override
             protected void configure() {
+                skip(destination.getQualifications());
                 map().setCreatedById(source.getCreatedBy());
             }
         });
