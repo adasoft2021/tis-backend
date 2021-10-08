@@ -12,10 +12,27 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class CreateObservationDTO extends BaseCreateDTO {
+    @Schema(
+            name = "title",
+            description = "titulo de una observacion de la propuesta",
+            type = "String"
+    )
     @NotNull
     private String title;
+    @Schema(
+            name = "description",
+            description = "descripcion de una observacion de la propuesta",
+            type = "String"
+    )
+
     @NotNull
     private String description;
+
+    @Schema(
+            name = "proposalId",
+            description = "identificador de la propuesta observada",
+            type = "Number"
+    )
     @NotNull
     private Long proposalId;
 }

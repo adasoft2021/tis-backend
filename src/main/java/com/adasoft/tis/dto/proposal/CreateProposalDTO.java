@@ -18,13 +18,18 @@ public class CreateProposalDTO extends BaseCreateDTO {
     @NotNull(message = "Este campo no debe ser nulo")
     private long createdById;
     @Schema(
-        name = "partA",
-        description = "Ruta de los archivos de la parte A de la propuesta",
-        example = "//files/company1/partA.zip",
-        type = "String"
+            name = "part",
+            description = "Parte de la propuesta",
+            example = "A",
+            type = "String"
     )
     private Proposal.Part part;
-
+    @Schema(
+            name = "part",
+            description = "Ruta de los archivos de la propuesta",
+            example = "//files/company1/partA.pdf",
+            type = "String"
+    )
     private String fileUrl;
     @Schema(
         name = "reviewId",
@@ -33,5 +38,11 @@ public class CreateProposalDTO extends BaseCreateDTO {
         type = "Number"
     )
     private long reviewId;
+    @Schema(
+            name = "reviewId",
+            description = "identificador de un asesor de la propuesta",
+            example = "54L",
+            type = "Number"
+    )
     private long adviserId;
 }

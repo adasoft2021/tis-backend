@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 
 @Tag(name = "ObservationRestController", description = "Controlador para gestionar las Observaciones")
 public interface ObservationRestController {
-    @Operation(summary = "Creación de una revisión", responses = {
+    @Operation(summary = "Creación de una observacion", responses = {
     @ApiResponse(
         description = "Observation creado exitosamente",
         responseCode = "201",
@@ -33,7 +33,7 @@ public interface ObservationRestController {
     )
     })
     ResponseEntity<ObservationResponseDTO> create(
-        @Parameter(description = "ID de Proposal del cual se crea Observation", example = "1")
+        @Parameter(description = "ID de Proposal del cual se crea una Observation", example = "1")
             Long proposalId,
         @RequestBody(description = "ObservationDTO que contiene los nuevos datos a crear")
             CreateObservationDTO observationDTO
@@ -66,7 +66,7 @@ public interface ObservationRestController {
             Long id
     );
 
-    @Operation(summary = "Actualización de una revisión por su ID", responses = {
+    @Operation(summary = "Actualización de una observacion por su ID", responses = {
         @ApiResponse(
             description = "Observation actualizado exitosamente",
             responseCode = "200",
@@ -95,7 +95,7 @@ public interface ObservationRestController {
         @RequestBody(description = "ObservationDTO que contiene los nuevos datos a ser actualizados")
             UpdateObservationDTO observationDTO
     );
-    @Operation(summary = "Eliminacion de una revisión por su ID", responses = {
+    @Operation(summary = "Eliminacion de una observacion por su ID", responses = {
         @ApiResponse(
             description = "Observation eliminado exitosamente",
             responseCode = "200",

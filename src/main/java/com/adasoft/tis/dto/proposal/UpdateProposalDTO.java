@@ -11,15 +11,18 @@ import lombok.Setter;
 @Setter
 public class UpdateProposalDTO extends BaseUpdateDTO<Long> {
     @Schema(
-        name = "partA",
-        description = "Ruta de los archivos de la parte A de la propuesta",
-        example = "//files/company1/partA.zip",
+        name = "part",
+        description = "Parte de la propuesta",
+        example = "A",
         type = "String"
     )
     private Proposal.Part part;
-
+    @Schema(
+            name = "file",
+            description = "Ruta de los archivos de la propuesta",
+            example = "//files/company1/partA.pdf",
+            type = "String"
+    )
     private String fileUrl;
 
-    private long reviewId;
-    private long adviserId;
 }

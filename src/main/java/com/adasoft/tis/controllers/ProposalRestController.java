@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 public interface ProposalRestController {
 
     ResponseEntity<ProposalResponseDTO> create(
-        @Parameter(description = "ID del review a actualizar", example = "1")
+        @Parameter(description = "ID del Proposal a actualizar", example = "1")
             Long reviewId,
             CreateProposalDTO proposal
     );
