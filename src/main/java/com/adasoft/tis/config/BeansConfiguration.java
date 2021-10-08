@@ -3,12 +3,16 @@ package com.adasoft.tis.config;
 import com.adasoft.tis.domain.Observation;
 import com.adasoft.tis.domain.Proposal;
 import com.adasoft.tis.domain.Review;
+import com.adasoft.tis.domain.Qualification;
 import com.adasoft.tis.dto.observation.CreateObservationDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
 import com.adasoft.tis.dto.proposal.CreateProposalDTO;
 import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import com.adasoft.tis.dto.proposal.UpdateProposalDTO;
+import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
+import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
+import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
@@ -16,7 +20,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import javax.persistence.EntityManager;
 
 @Configuration
@@ -59,8 +62,10 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Proposal, ProposalResponseDTO>() {
             @Override
             protected void configure() {
+               //skip(destination.getQualifications());
                 map().setCreatedById(source.getCreatedBy());
                 map().setReviewId(source.getReview().getId());
+                map().setAdviserId(source.getAdviser());
             }
         });
 
@@ -69,6 +74,7 @@ public class BeansConfiguration {
             protected void configure() {
                 skip(destination.getId());
                 map().setCreatedBy(source.getCreatedById());
+                map().setAdviser(source.getAdviserId());
             }
         });
 
@@ -99,6 +105,39 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                //skip(destination.getQualifications());
+            }
+        });
+
+        return modelMapper;
+    }
+
+    @Bean("qualificationMapper")
+    public ModelMapper qualificationMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+
+        modelMapper.addMappings(new PropertyMap<Qualification, QualificationResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setDescription(source.getBaseQualification().getDescription());
+                map().setMaxScore(source.getBaseQualification().getMaxScore());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<CreateQualificationDTO, Qualification>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+                skip(destination.getReview());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<UpdateQualificationDTO, Qualification>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+                skip(destination.getReview());
             }
         });
 

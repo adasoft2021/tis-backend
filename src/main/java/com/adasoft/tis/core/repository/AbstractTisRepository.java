@@ -1,11 +1,12 @@
 package com.adasoft.tis.core.repository;
 
 import com.adasoft.tis.core.domain.BaseEntity;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Optional;
 
 public abstract class AbstractTisRepository<
@@ -74,6 +75,31 @@ public abstract class AbstractTisRepository<
     @Override
     public Entity update(final Entity entity) {
         return entityManager.merge(entity);
+    }
+
+    /**
+     * Actualiza los registros existentes con toda la nueva información pasada en la colección como parámetro.
+     *
+     * @param entities las entidades con la nueva información.
+     * @return las entidades actualizadas.
+     */
+    @Transactional
+    @Override
+    public Collection<Entity> updateAll(final Collection<Entity> entities) {
+        try {
+            for (Entity entity : entities) {
+                entityManager.merge(entity);
+            }
+        } catch (RuntimeException e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+
+            throw e;
+        } finally {
+            entityManager.close();
+        }
+        return entities;
     }
 
     /**

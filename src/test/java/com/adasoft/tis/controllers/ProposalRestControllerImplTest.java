@@ -80,8 +80,6 @@ class ProposalRestControllerImplTest {
     void getProposalNotFound() throws Exception {
         UpdateProposalDTO updateProposalDTO = new UpdateProposalDTO();
 
-        updateProposalDTO.setDeleted(false);
-
         when(proposalService.getById(any())).thenThrow(new EntityNotFoundException(Proposal.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()

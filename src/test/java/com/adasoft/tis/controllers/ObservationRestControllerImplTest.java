@@ -94,7 +94,6 @@ class ObservationRestControllerImplTest {
     void getObservationNotFound() throws Exception {
         UpdateObservationDTO updateObservationDTO = new UpdateObservationDTO();
 
-        updateObservationDTO.setDeleted(false);
 
         when(observationService.getById(any())).thenThrow(new EntityNotFoundException(Observation.class, ID));
 
@@ -114,11 +113,11 @@ class ObservationRestControllerImplTest {
         UpdateObservationDTO observationDTO = new UpdateObservationDTO();
         observationDTO.setTitle(TITLE);
         observationDTO.setDescription(DESCRIPTION);
-        observationDTO.setDeleted(false);
+
                 
         responseDTO.setCreatedAt(observationDTO.getUpdatedAt());
         responseDTO.setUpdatedAt(observationDTO.getUpdatedAt());
-        responseDTO.setDeleted(observationDTO.getDeleted());
+
 
         when(observationService.update(any(), any())).thenReturn(responseDTO);
 
@@ -145,7 +144,6 @@ class ObservationRestControllerImplTest {
         UpdateObservationDTO updateObservationDTO = new UpdateObservationDTO();
         updateObservationDTO.setTitle(TITLE);
         updateObservationDTO.setDescription(DESCRIPTION);
-        updateObservationDTO.setDeleted(false);
 
         when(observationService.update(any(), any())).thenThrow(new EntityNotFoundException(Observation.class, ID));
 

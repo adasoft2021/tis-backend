@@ -31,7 +31,7 @@ public class Proposal extends BaseEntity<Long> {
     @JoinColumn(name = "fk_review_id", nullable = true, updatable = false)
     private Review review;
     @Column
-    private long adviserId;
+    private long adviser;
 
     public enum Part {
         A, B
