@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public abstract class AbstractTisRepository<
     Entity extends BaseEntity<? extends Serializable>, ID extends Serializable>
-    implements TisRepository<Entity, ID> {
+    implements TisRepository<Entity, ID>{
     @PersistenceContext
     protected EntityManager entityManager;
     private Class<Entity> entityClass;

@@ -10,26 +10,21 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
-
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
 @Entity
-@Table(name = "proposals")
-public class Proposal extends BaseEntity<Long> {
-    @Column(nullable = false)
-    private long createdBy;
-    @Column
-    private String part;
-    @Column
-    private String fileUrl;
-    @JsonBackReference
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "fk_review_id", nullable = true, updatable = false)
-    private Review review;
-    @Column
-    private long adviser;
-}
+@Table(name = "observations")
+public class Observation extends BaseEntity<Long>{
+    @Column(nullable=false)
+    String title;
+    @Column(nullable=false)
+    String description;
 
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_proposal_id", nullable = false, updatable = false)
+    Proposal proposal;
+}
