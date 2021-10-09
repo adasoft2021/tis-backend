@@ -2,9 +2,8 @@ package com.adasoft.tis.config;
 
 import com.adasoft.tis.domain.Observation;
 import com.adasoft.tis.domain.Proposal;
-import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.domain.Qualification;
-import com.adasoft.tis.dto.observation.CreateObservationDTO;
+import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
 import com.adasoft.tis.dto.proposal.CreateProposalDTO;
@@ -20,7 +19,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import javax.persistence.EntityManager;
+
 
 @Configuration
 public class BeansConfiguration {
@@ -32,6 +31,7 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Review, ReviewResponseDTO>() {
             @Override
             protected void configure() {
+                skip(destination.getQualifications());
                 map().setCreatedById(source.getCreatedBy());
             }
         });
@@ -48,6 +48,7 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                skip(destination.getQualifications());
             }
         });
 
@@ -62,7 +63,7 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Proposal, ProposalResponseDTO>() {
             @Override
             protected void configure() {
-               //skip(destination.getQualifications());
+
                 map().setCreatedById(source.getCreatedBy());
                 map().setReviewId(source.getReview().getId());
                 map().setAdviserId(source.getAdviser());
@@ -105,7 +106,7 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
-                //skip(destination.getQualifications());
+
             }
         });
 

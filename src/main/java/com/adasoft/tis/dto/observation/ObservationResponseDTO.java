@@ -1,7 +1,6 @@
 package com.adasoft.tis.dto.observation;
 
 import com.adasoft.tis.core.dto.BaseResponseDTO;
-import com.adasoft.tis.domain.Proposal;
 import lombok.Getter;
 import lombok.Setter;
 

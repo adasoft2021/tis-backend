@@ -36,10 +36,10 @@ class ObservationRestControllerImplTest {
     private ObservationService observationService;
 
     private static final String BASE_URL = "/observations";
-    private static final long ID = 15615;
+    private static final Long ID = 15615L;
     private static final String TITLE = "SECCION 2";
     private static final String DESCRIPTION = "Descripcion de la observacion";
-    private static final long PROPOSAL_ID = 2;
+    private static final Long PROPOSAL_ID = 2L;
 
     private static  CreateObservationDTO observationDTO;
     private static ObservationResponseDTO responseDTO;
@@ -48,7 +48,6 @@ class ObservationRestControllerImplTest {
         observationDTO = new CreateObservationDTO();
         observationDTO.setTitle(TITLE);
         observationDTO.setDescription(DESCRIPTION);
-        observationDTO.setProposalId(PROPOSAL_ID);
         responseDTO = new ObservationResponseDTO();
         responseDTO.setTitle(TITLE);
         responseDTO.setDescription(DESCRIPTION);
@@ -64,18 +63,20 @@ class ObservationRestControllerImplTest {
 
         when(observationService.create(any(),any())).thenReturn(responseDTO);
 
-        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL).param("proposal",PROPOSAL_ID.toString())
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(observationDTO)))
-            .andExpect(status().isCreated())
-            .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
+                .andExpect(status().isCreated())
+                .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
     }
 
     @Test
     void createdObservationBadRequest() throws Exception {
         CreateObservationDTO badObservationDTO = new CreateObservationDTO();
 
-        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(badObservationDTO)))
+        mvc.perform(post(BASE_URL).param("proposal", PROPOSAL_ID.toString())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(badObservationDTO)))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));

@@ -1,7 +1,6 @@
 package com.adasoft.tis.dto.observation;
 
 import com.adasoft.tis.core.dto.BaseCreateDTO;
-import com.adasoft.tis.domain.Proposal;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,12 +26,4 @@ public class CreateObservationDTO extends BaseCreateDTO {
 
     @NotNull
     private String description;
-
-    @Schema(
-            name = "proposalId",
-            description = "identificador de la propuesta observada",
-            type = "Number"
-    )
-    @NotNull
-    private Long proposalId;
 }

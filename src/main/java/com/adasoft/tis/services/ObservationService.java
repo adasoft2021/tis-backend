@@ -3,16 +3,18 @@ package com.adasoft.tis.services;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.domain.Observation;
 import com.adasoft.tis.domain.Proposal;
-import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.observation.CreateObservationDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
-import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import com.adasoft.tis.repository.ObservationRepository;
 import com.adasoft.tis.repository.ProposalRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
 
@@ -27,7 +29,7 @@ public class ObservationService {
         checkArgument(observationDTO != null, "El ObservationDTO a crear no puede ser nulo.");
         checkArgument(proposalId != null, "El ID del Proposal a observar no puede ser nulo.");
         Proposal proposal = proposalRepository.findById(proposalId)
-            .orElseThrow(()-> new EntityNotFoundException(Review.class,proposalId));
+            .orElseThrow(()-> new EntityNotFoundException(Proposal.class,proposalId));
         Observation defaultObservation = observationMapper.map(observationDTO, Observation.class);
         defaultObservation.setProposal(proposal);
         Observation persistedObservation = observationRepository.save(defaultObservation);
@@ -76,5 +78,16 @@ public class ObservationService {
         }
 
         return observationMapper.map(foundObservation, ObservationResponseDTO.class);
+    }
+    public Collection<ObservationResponseDTO> getAllByProposalId(Long proposalId){
+        checkArgument(proposalId != null, "El ID del proposal no puede ser nulo.");
+        Proposal p = proposalRepository.findById(proposalId)
+                .orElseThrow(()-> new EntityNotFoundException(Proposal.class,proposalId));
+
+        Collection<ObservationResponseDTO> observations = observationRepository.getAllByProposalId(proposalId)
+                .stream().filter(observation -> !observation.isDeleted())
+                .map(observation -> observationMapper.map(observation, ObservationResponseDTO.class))
+                .collect(Collectors.toSet());
+        return new HashSet<>(observations);
     }
 }
