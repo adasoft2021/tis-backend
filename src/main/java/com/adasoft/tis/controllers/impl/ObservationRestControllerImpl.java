@@ -1,9 +1,11 @@
 package com.adasoft.tis.controllers.impl;
 
 import com.adasoft.tis.controllers.ObservationRestController;
+import com.adasoft.tis.domain.Proposal;
 import com.adasoft.tis.dto.observation.CreateObservationDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
+import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import com.adasoft.tis.services.ObservationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/observations")
@@ -21,14 +25,16 @@ public class ObservationRestControllerImpl implements ObservationRestController 
 
     @PostMapping
     @Override
-    public ResponseEntity<ObservationResponseDTO> create(final Long proposalId,@Valid @RequestBody final CreateObservationDTO observationDTO) {
+    public ResponseEntity<ObservationResponseDTO> create(
+            @NotNull @RequestParam(name = "proposal", required = true) final Long proposalId,
+            @Valid @RequestBody final CreateObservationDTO observationDTO) {
         ObservationResponseDTO responseDTO = observationService.create(observationDTO,proposalId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
     @GetMapping(value = "/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> get(
-        @NotNull final Long id) {
+        @NotNull @PathVariable("observationId") final Long id) {
         ObservationResponseDTO responseDTO = observationService.getById(id);
         return ResponseEntity.ok(responseDTO);
     }
@@ -47,5 +53,12 @@ public class ObservationRestControllerImpl implements ObservationRestController 
         @NotNull final Long id) {
         ObservationResponseDTO responseDTO = observationService.delete(id);
         return ResponseEntity.ok(responseDTO);
+    }
+    @GetMapping
+    @Override
+    public ResponseEntity<Collection<ObservationResponseDTO>> getAllByProposalId(
+            @NotNull @RequestParam(name = "proposal", required = true) final Long proposalId) {
+        Collection<ObservationResponseDTO> responses = observationService.getAllByProposalId(proposalId);
+        return ResponseEntity.ok(responses);
     }
 }

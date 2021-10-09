@@ -16,9 +16,9 @@ public class UpdateProposalDTO extends BaseUpdateDTO<Long> {
         example = "A",
         type = "String"
     )
-    private Proposal.Part part;
+    private String part;
     @Schema(
-            name = "file",
+            name = "fileUrl",
             description = "Ruta de los archivos de la propuesta",
             example = "//files/company1/partA.pdf",
             type = "String"

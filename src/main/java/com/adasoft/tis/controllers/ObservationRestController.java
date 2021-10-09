@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Collection;
+
 @Tag(name = "ObservationRestController", description = "Controlador para gestionar las Observaciones")
 public interface ObservationRestController {
     @Operation(summary = "Creación de una observacion", responses = {
@@ -119,7 +121,35 @@ public interface ObservationRestController {
         )
     })
     ResponseEntity<ObservationResponseDTO> delete(
-        @Parameter(description = "ID del Observation a actualizar", example = "1")
+        @Parameter(description = "ID del Observation a eliminar", example = "1")
             Long id
+    );
+
+    @Operation(summary = "Obtener todas las  observaciones por su propuesta", responses = {
+            @ApiResponse(
+                    description = "Observations devueltos exitosamente",
+                    responseCode = "200",
+                    content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    description = "Fallo al buscar los Observations",
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    description = "No se encontró el ID del Proposal en el sistema\"",
+                    responseCode = "404",
+                    content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            )
+    })
+    ResponseEntity<Collection<ObservationResponseDTO>> getAllByProposalId(
+            @Parameter(description = "ID del Proposal de las Observations a obtener", example = "1")
+                    Long proposalId
     );
 }

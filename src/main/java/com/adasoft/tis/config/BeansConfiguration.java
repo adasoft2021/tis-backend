@@ -32,6 +32,7 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Review, ReviewResponseDTO>() {
             @Override
             protected void configure() {
+                skip(destination.getQualifications());
                 map().setCreatedById(source.getCreatedBy());
             }
         });
@@ -48,6 +49,7 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                skip(destination.getQualifications());
             }
         });
 
@@ -62,7 +64,7 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Proposal, ProposalResponseDTO>() {
             @Override
             protected void configure() {
-               //skip(destination.getQualifications());
+
                 map().setCreatedById(source.getCreatedBy());
                 map().setReviewId(source.getReview().getId());
                 map().setAdviserId(source.getAdviser());
@@ -105,7 +107,7 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
-                //skip(destination.getQualifications());
+
             }
         });
 

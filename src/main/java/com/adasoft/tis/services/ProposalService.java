@@ -12,6 +12,10 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
 
 @AllArgsConstructor
@@ -21,14 +25,10 @@ public class ProposalService {
     private ReviewRepository reviewRepository;
     private ModelMapper proposalMapper;
 
-    public ProposalResponseDTO create(final Long reviewId, final CreateProposalDTO proposalDTO) {
+    public ProposalResponseDTO create(final CreateProposalDTO proposalDTO) {
         checkArgument(proposalDTO != null, "El ProposalDTO a crear no puede ser nulo.");
 
-        Review r = reviewRepository.findById(reviewId)
-            .orElseThrow(()-> new EntityNotFoundException(Review.class,reviewId));
-
         Proposal defaultProposal = proposalMapper.map(proposalDTO, Proposal.class);
-        defaultProposal.setReview(r);
 
         Proposal persistedProposal = proposalRepository.save(defaultProposal);
 
@@ -79,4 +79,17 @@ public class ProposalService {
         return proposalMapper.map(foundProposal, ProposalResponseDTO.class);
     }
 
+    public Collection<ProposalResponseDTO> getAllByAdviserId(Long adviserId){
+        checkArgument(adviserId != null, "El ID del adviser no puede ser nulo.");
+        /*Adviser foundAdviser = adviserRepository.findById(adviserId)
+                .orElseThrow(()-> new EntityNotFoundException(Adviser.class,adviserId));
+        if (foundAdviser.isDeleted()) {
+            throw new EntityNotFoundException(Adviser.class, AdviserId);
+        }*/
+        Collection<ProposalResponseDTO> proposals = proposalRepository.getAllByAdviserId(adviserId)
+                .stream().filter(proposal -> !proposal.isDeleted())
+                .map(proposal -> proposalMapper.map(proposal, ProposalResponseDTO.class))
+                .collect(Collectors.toSet());
+        return new HashSet<>(proposals);
+    }
 }

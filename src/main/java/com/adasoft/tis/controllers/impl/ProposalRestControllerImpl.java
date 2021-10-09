@@ -3,7 +3,6 @@ package com.adasoft.tis.controllers.impl;
 import com.adasoft.tis.controllers.ProposalRestController;
 import com.adasoft.tis.dto.proposal.CreateProposalDTO;
 import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
-import com.adasoft.tis.dto.proposal.UpdateProposalDTO;
 import com.adasoft.tis.services.ProposalService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/proposals")
@@ -21,17 +21,23 @@ public class ProposalRestControllerImpl implements ProposalRestController {
 
     @PostMapping
     @Override
-    public ResponseEntity<ProposalResponseDTO> create(@NotNull @RequestParam("reviewId") Long reviewId,
-                                                      @RequestBody @Valid CreateProposalDTO proposal) {
-        ProposalResponseDTO responseDTO = proposalService.create(reviewId,proposal);
-        return ResponseEntity.ok(responseDTO);
+    public ResponseEntity<ProposalResponseDTO> create(@Valid @RequestBody final CreateProposalDTO proposalDTO) {
+        ProposalResponseDTO responseDTO = proposalService.create(proposalDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @GetMapping(value = "/{proposalId}")
+    @GetMapping("/{proposalId}")
     @Override
     public ResponseEntity<ProposalResponseDTO> get(
-        @NotNull final Long id) {
+        @NotNull @PathVariable("proposalId") final Long id) {
         ProposalResponseDTO responseDTO = proposalService.getById(id);
         return ResponseEntity.ok(responseDTO);
+    }
+    @GetMapping
+    @Override
+    public ResponseEntity<Collection<ProposalResponseDTO>> getAllByAdviserId(
+            @NotNull @RequestParam(name = "adviser", required = true) final Long adviserId) {
+        Collection<ProposalResponseDTO> responses = proposalService.getAllByAdviserId(adviserId);
+        return ResponseEntity.ok(responses);
     }
 }

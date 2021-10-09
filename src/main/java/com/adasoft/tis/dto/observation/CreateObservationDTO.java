@@ -27,12 +27,4 @@ public class CreateObservationDTO extends BaseCreateDTO {
 
     @NotNull
     private String description;
-
-    @Schema(
-            name = "proposalId",
-            description = "identificador de la propuesta observada",
-            type = "Number"
-    )
-    @NotNull
-    private Long proposalId;
 }

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class BaseEntity<PrimaryKey extends Serializable> {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private PrimaryKey id;
     @Column(nullable = false)
     private boolean deleted;

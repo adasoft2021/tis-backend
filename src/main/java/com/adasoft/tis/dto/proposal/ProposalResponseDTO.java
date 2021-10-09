@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class ProposalResponseDTO extends BaseResponseDTO<Long> {
     private long createdById;
-    private Proposal.Part part;
+    private String part;
     private String fileUrl;
     private long reviewId;
     private long adviserId;

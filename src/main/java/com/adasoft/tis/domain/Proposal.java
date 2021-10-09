@@ -23,7 +23,7 @@ public class Proposal extends BaseEntity<Long> {
     @Column(nullable = false)
     private long createdBy;
     @Column
-    private Part part;
+    private String part;
     @Column
     private String fileUrl;
     @JsonBackReference
@@ -32,10 +32,5 @@ public class Proposal extends BaseEntity<Long> {
     private Review review;
     @Column
     private long adviser;
-
-    public enum Part {
-        A, B
-        
-    }
 }
 
