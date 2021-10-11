@@ -16,12 +16,13 @@ public class ProposalRepositoryImpl extends AbstractTisRepository<Proposal, Long
     protected ProposalRepositoryImpl(final EntityManager entityManager) {
         super(entityManager, Proposal.class);
     }
+
     @Override
     public List<Proposal> getAllByAdviserId(Long adviserId) {
         String jpqlQuery = "SELECT q FROM Proposal q WHERE q.adviser = :adviserId";
 
         return entityManager.createQuery(jpqlQuery, Proposal.class)
-                .setParameter("adviserId",adviserId)
+                .setParameter("adviserId", adviserId)
                 .getResultList();
     }
 }

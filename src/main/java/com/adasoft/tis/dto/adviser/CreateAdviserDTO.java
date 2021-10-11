@@ -5,10 +5,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
-@Schema(name = "CreateObservationDTO", description = "DTO para creación de una observation")
+@Schema(name = "CreateAdviserDTO", description = "DTO para creación de Adviser")
 @Getter
 @Setter
 public class CreateAdviserDTO extends BaseCreateDTO {

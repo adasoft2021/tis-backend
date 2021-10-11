@@ -16,17 +16,17 @@ import java.util.Collection;
 @Setter
 public class UpdateReviewDTO extends BaseUpdateDTO<Long> {
     @Schema(
-        name = "comment",
-        description = "Comentario de la revisión.",
-        type = "String"
+            name = "comment",
+            description = "Comentario de la revisión.",
+            type = "String"
     )
     private String comment;
 
     @Schema(
-        name = "qualifications",
-        description = "Colección de las calificaciones parciales.",
-        required = true,
-        type = "Collection"
+            name = "qualifications",
+            description = "Colección de las calificaciones parciales.",
+            required = true,
+            type = "Collection"
     )
     @NotNull(message = "Este campo no debe ser nulo")
     @NotEmpty(message = "Este campo no debe estar vacío")

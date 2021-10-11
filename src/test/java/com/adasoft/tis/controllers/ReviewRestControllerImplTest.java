@@ -84,8 +84,8 @@ class ReviewRestControllerImplTest {
         when(reviewService.get(any())).thenReturn(REVIEW_RESPONSE_DTO);
 
         mvc.perform(get(String.format("%s/{reviewId}", BASE_URL), ID))
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO)));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO)));
     }
 
     @Test
@@ -93,14 +93,14 @@ class ReviewRestControllerImplTest {
         when(reviewService.get(any())).thenThrow(new EntityNotFoundException(Review.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-            .title("No se pudo encontrar la entidad")
-            .message(String.format("Review con id %d no se pudo encontrar o no existe.", ID))
-            .build();
+                .title("No se pudo encontrar la entidad")
+                .message(String.format("Review con id %d no se pudo encontrar o no existe.", ID))
+                .build();
 
         mvc.perform(get(String.format("%s/{reviewId}", BASE_URL), ID))
-            .andExpect(status().isNotFound())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 
     @Test
@@ -108,9 +108,9 @@ class ReviewRestControllerImplTest {
         when(reviewService.create(any())).thenReturn(REVIEW_RESPONSE_DTO);
 
         mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(CREATE_REVIEW_DTO)))
-            .andExpect(status().isCreated())
-            .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO)));
+                        .content(objectMapper.writeValueAsString(CREATE_REVIEW_DTO)))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO)));
     }
 
     @Test
@@ -118,10 +118,10 @@ class ReviewRestControllerImplTest {
         CreateReviewDTO reviewDTO = new CreateReviewDTO();
 
         mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(reviewDTO)))
-            .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
+                        .content(objectMapper.writeValueAsString(reviewDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
     }
 
     @Test
@@ -129,10 +129,10 @@ class ReviewRestControllerImplTest {
         when(reviewService.update(any(), any())).thenReturn(REVIEW_RESPONSE_DTO);
 
         mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO)));
+                        .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO)));
     }
 
     @Test
@@ -140,10 +140,10 @@ class ReviewRestControllerImplTest {
         UpdateReviewDTO reviewDTO = new UpdateReviewDTO();
 
         mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(reviewDTO)))
-            .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
+                        .content(objectMapper.writeValueAsString(reviewDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
     }
 
     @Test
@@ -151,52 +151,52 @@ class ReviewRestControllerImplTest {
         when(reviewService.update(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-            .title("No se pudo encontrar la entidad")
-            .message(String.format("Review con id %d no se pudo encontrar o no existe.", ID))
-            .build();
+                .title("No se pudo encontrar la entidad")
+                .message(String.format("Review con id %d no se pudo encontrar o no existe.", ID))
+                .build();
 
         mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
-            .andExpect(status().isNotFound())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+                        .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 
     @Test
     void updateReviewMethodNotAllowed() throws Exception {
         when(reviewService.update(any(), any()))
-            .thenThrow(new DefaultTisDomainException(
-                HttpStatus.METHOD_NOT_ALLOWED,
-                "Usted ya no puede hacer ningún cambio en la entidad Review."));
+                .thenThrow(new DefaultTisDomainException(
+                        HttpStatus.METHOD_NOT_ALLOWED,
+                        "Usted ya no puede hacer ningún cambio en la entidad Review."));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-            .title("El proceso no puede continuar")
-            .message("Usted ya no puede hacer ningún cambio en la entidad Review.")
-            .build();
+                .title("El proceso no puede continuar")
+                .message("Usted ya no puede hacer ningún cambio en la entidad Review.")
+                .build();
 
         mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
-            .andExpect(status().isMethodNotAllowed())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+                        .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 
     @Test
     void updateReviewNotAcceptable() throws Exception {
         when(reviewService.update(any(), any()))
-            .thenThrow(new DefaultTisDomainException(
-                HttpStatus.NOT_ACCEPTABLE,
-                "No está permitido editar la entidad Qualification."));
+                .thenThrow(new DefaultTisDomainException(
+                        HttpStatus.NOT_ACCEPTABLE,
+                        "No está permitido editar la entidad Qualification."));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-            .title("El proceso no puede continuar")
-            .message("No está permitido editar la entidad Qualification.")
-            .build();
+                .title("El proceso no puede continuar")
+                .message("No está permitido editar la entidad Qualification.")
+                .build();
 
         mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
-            .andExpect(status().isNotAcceptable())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+                        .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
+                .andExpect(status().isNotAcceptable())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 }

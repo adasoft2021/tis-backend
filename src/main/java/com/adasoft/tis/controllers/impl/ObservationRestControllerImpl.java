@@ -26,13 +26,14 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     public ResponseEntity<ObservationResponseDTO> create(
             @NotNull @RequestParam(name = "proposal", required = true) final Long proposalId,
             @Valid @RequestBody final CreateObservationDTO observationDTO) {
-        ObservationResponseDTO responseDTO = observationService.create(observationDTO,proposalId);
+        ObservationResponseDTO responseDTO = observationService.create(observationDTO, proposalId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
+
     @GetMapping(value = "/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> get(
-        @NotNull @PathVariable("observationId") final Long id) {
+            @NotNull @PathVariable("observationId") final Long id) {
         ObservationResponseDTO responseDTO = observationService.getById(id);
         return ResponseEntity.ok(responseDTO);
     }
@@ -40,18 +41,20 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @PutMapping("/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> update(
-        @NotNull final Long id,
-        @Valid @RequestBody final UpdateObservationDTO observationDTO) {
+            @NotNull final Long id,
+            @Valid @RequestBody final UpdateObservationDTO observationDTO) {
         ObservationResponseDTO responseDTO = observationService.update(id, observationDTO);
         return ResponseEntity.ok(responseDTO);
     }
+
     @DeleteMapping("/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> delete(
-        @NotNull final Long id) {
+            @NotNull final Long id) {
         ObservationResponseDTO responseDTO = observationService.delete(id);
         return ResponseEntity.ok(responseDTO);
     }
+
     @GetMapping
     @Override
     public ResponseEntity<Collection<ObservationResponseDTO>> getAllByProposalId(

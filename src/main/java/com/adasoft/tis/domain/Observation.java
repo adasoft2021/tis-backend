@@ -17,10 +17,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "observations")
-public class Observation extends BaseEntity<Long>{
-    @Column(nullable=false)
+public class Observation extends BaseEntity<Long> {
+    @Column(nullable = false)
     String title;
-    @Column(nullable=false)
+    @Column(nullable = false)
     String description;
 
     @JsonBackReference

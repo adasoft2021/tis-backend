@@ -20,11 +20,11 @@ public class CorsConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                    .allowedOrigins(clientOrigin, devOrigin)
-                    .allowedHeaders("*")
-                    .allowedMethods("*")
-                    .allowCredentials(true)
-                    .maxAge(3600);
+                        .allowedOrigins(clientOrigin, devOrigin)
+                        .allowedHeaders("*")
+                        .allowedMethods("*")
+                        .allowCredentials(true)
+                        .maxAge(3600);
                 WebMvcConfigurer.super.addCorsMappings(registry);
             }
         };

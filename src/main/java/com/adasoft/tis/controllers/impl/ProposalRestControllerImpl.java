@@ -29,10 +29,11 @@ public class ProposalRestControllerImpl implements ProposalRestController {
     @GetMapping("/{proposalId}")
     @Override
     public ResponseEntity<ProposalResponseDTO> get(
-        @NotNull @PathVariable("proposalId") final Long id) {
+            @NotNull @PathVariable("proposalId") final Long id) {
         ProposalResponseDTO responseDTO = proposalService.getById(id);
         return ResponseEntity.ok(responseDTO);
     }
+
     @GetMapping
     @Override
     public ResponseEntity<Collection<ProposalResponseDTO>> getAllByAdviserId(

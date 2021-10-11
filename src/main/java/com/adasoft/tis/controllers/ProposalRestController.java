@@ -36,33 +36,35 @@ public interface ProposalRestController {
             @RequestBody(description = "ProposalDTO que contiene los nuevos datos a crear")
                     CreateProposalDTO proposalDTO
     );
+
     @Operation(summary = "Obtener una propuesta por su ID", responses = {
-        @ApiResponse(
-            description = "Proposal devuelto exitosamente",
-            responseCode = "200",
-            content = @Content(
-                mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
+            @ApiResponse(
+                    description = "Proposal devuelto exitosamente",
+                    responseCode = "200",
+                    content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    description = "Fallo al buscar el Proposal",
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    description = "No se encontró el ID del Proposal en el sistema",
+                    responseCode = "404",
+                    content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                    )
             )
-        ),
-        @ApiResponse(
-            description = "Fallo al buscar el Proposal",
-            responseCode = "400",
-            content = @Content(
-                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
-            )
-        ),
-        @ApiResponse(
-            description = "No se encontró el ID del Proposal en el sistema",
-            responseCode = "404",
-            content = @Content(
-                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
-            )
-        )
     })
     ResponseEntity<ProposalResponseDTO> get(
-        @Parameter(description = "ID del Proposal a obtener", example = "1")
-            Long id
+            @Parameter(description = "ID del Proposal a obtener", example = "1")
+                    Long id
     );
+
     @Operation(summary = "Obtener todas las  propuestas por su Adviser", responses = {
             @ApiResponse(
                     description = "Proposals devueltos exitosamente",

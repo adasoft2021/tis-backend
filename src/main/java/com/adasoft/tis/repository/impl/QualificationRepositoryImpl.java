@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 
 @Repository
 public class QualificationRepositoryImpl extends AbstractTisRepository<Qualification, Long>
-    implements QualificationRepository {
+        implements QualificationRepository {
     @Autowired
     protected QualificationRepositoryImpl(final EntityManager entityManager) {
         super(entityManager, Qualification.class);

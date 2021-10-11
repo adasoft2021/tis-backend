@@ -22,9 +22,9 @@ public class EntityAlreadyExistException extends TisDomainException {
     }
 
     public EntityAlreadyExistException(
-        final Class<?> entityClass,
-        final Serializable entityId,
-        final Throwable exception) {
+            final Class<?> entityClass,
+            final Serializable entityId,
+            final Throwable exception) {
         super(exception);
 
         checkArgument(entityClass != null, "El parámetro de la clase de entidad no debe ser nulo.");

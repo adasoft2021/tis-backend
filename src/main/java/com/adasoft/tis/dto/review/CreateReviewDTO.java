@@ -18,11 +18,11 @@ public class CreateReviewDTO extends BaseCreateDTO {
     @JsonIgnore
     private String comment = null;
     @Schema(
-        name = "createdById",
-        description = "ID del Asesor que creó la revisión.",
-        required = true,
-        example = "1",
-        type = "Number"
+            name = "createdById",
+            description = "ID del Asesor que creó la revisión.",
+            required = true,
+            example = "1",
+            type = "Number"
     )
     @NotNull(message = "Este campo no debe ser nulo")
     @Min(value = 1, message = "Este campo no puede ser menor a 1")

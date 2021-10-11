@@ -1,12 +1,14 @@
 package com.adasoft.tis.domain;
-import com.adasoft.tis.core.domain.BaseEntity;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Data
 @SuperBuilder
@@ -15,8 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "advisers")
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Adviser extends BaseEntity<Long> {
+public class Adviser extends User {
     @Column(nullable = false)
     String firstName;
     @Column(nullable = false)

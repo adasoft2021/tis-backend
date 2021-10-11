@@ -10,10 +10,10 @@ import lombok.Setter;
 @Setter
 public class UpdateProposalDTO extends BaseUpdateDTO<Long> {
     @Schema(
-        name = "part",
-        description = "Parte de la propuesta",
-        example = "A",
-        type = "String"
+            name = "part",
+            description = "Parte de la propuesta",
+            example = "A",
+            type = "String"
     )
     private String part;
     @Schema(
