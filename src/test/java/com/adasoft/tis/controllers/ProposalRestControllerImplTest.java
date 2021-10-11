@@ -39,11 +39,11 @@ class ProposalRestControllerImplTest {
 
 
     private static final String BASE_URL = "/proposals";
-    private static final long ID = 12L;
-    private static final long CREATED_BY_ID= 859824510526320544L;
+    private static final Long ID = 12L;
+    private static final Long CREATED_BY_ID= 859824510526320544L;
     private static final String PART = "Parte A";
     private static final String FILE_URL= "files/company1PartA.zip";
-    private static final long ADVISER_ID = 123L;
+    private static final Long ADVISER_ID = 123L;
     private static CreateProposalDTO createDTO;
     private static ProposalResponseDTO responseDTO;
 
@@ -90,4 +90,31 @@ class ProposalRestControllerImplTest {
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 
+    @Test
+    void createProposalSuccessfully() throws Exception {
+
+        responseDTO.setCreatedAt(createDTO.getCreatedAt());
+        responseDTO.setUpdatedAt(createDTO.getUpdatedAt());
+        responseDTO.setDeleted(createDTO.isDeleted());
+
+        when(proposalService.create(any())).thenReturn(responseDTO);
+
+        mvc.perform(post(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
+    }
+
+    @Test
+    void createdProposalBadRequest() throws Exception {
+        CreateProposalDTO badProposalDTO = new CreateProposalDTO();
+
+        mvc.perform(post(BASE_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(badProposalDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
+    }
 }
