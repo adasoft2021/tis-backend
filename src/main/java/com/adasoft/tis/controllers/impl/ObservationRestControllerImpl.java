@@ -30,7 +30,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @GetMapping(value = "/{observationId}")
+    @GetMapping("/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> get(
             @NotNull @PathVariable("observationId") final Long id) {
@@ -41,7 +41,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @PutMapping("/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> update(
-            @NotNull final Long id,
+            @NotNull @PathVariable("observationId") final Long id,
             @Valid @RequestBody final UpdateObservationDTO observationDTO) {
         ObservationResponseDTO responseDTO = observationService.update(id, observationDTO);
         return ResponseEntity.ok(responseDTO);
@@ -50,7 +50,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @DeleteMapping("/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> delete(
-            @NotNull final Long id) {
+            @NotNull @PathVariable("observationId") final Long id) {
         ObservationResponseDTO responseDTO = observationService.delete(id);
         return ResponseEntity.ok(responseDTO);
     }

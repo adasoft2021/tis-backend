@@ -16,7 +16,7 @@ import java.util.Collection;
 
 
 @RestController
-@RequestMapping("/companys")
+@RequestMapping("/companies")
 @AllArgsConstructor
 public class CompanyRestControllerImpl implements CompanyRestController {
     private CompanyService companyService;
@@ -29,7 +29,7 @@ public class CompanyRestControllerImpl implements CompanyRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @GetMapping(value = "/{companyId}")
+    @GetMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> get(
             @NotNull @PathVariable("companyId") final Long id) {
@@ -40,7 +40,7 @@ public class CompanyRestControllerImpl implements CompanyRestController {
     @PutMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> update(
-            @NotNull final Long id,
+            @NotNull @PathVariable("companyID") final Long id,
             @Valid @RequestBody final UpdateCompanyDTO companyDTO) {
         CompanyResponseDTO responseDTO = companyService.update(id, companyDTO);
         return ResponseEntity.ok(responseDTO);
@@ -49,7 +49,7 @@ public class CompanyRestControllerImpl implements CompanyRestController {
     @DeleteMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> delete(
-            @NotNull final Long id) {
+            @NotNull @PathVariable("companyID") final Long id) {
         CompanyResponseDTO responseDTO = companyService.delete(id);
         return ResponseEntity.ok(responseDTO);
     }

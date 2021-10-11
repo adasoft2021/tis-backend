@@ -4,9 +4,9 @@ import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.dto.observation.CreateObservationDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
-import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -46,7 +46,7 @@ public interface ObservationRestController {
                     description = "Observation devuelto exitosamente",
                     responseCode = "200",
                     content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
+                            mediaType = "application/json", schema = @Schema(implementation = ObservationResponseDTO.class)
                     )
             ),
             @ApiResponse(
@@ -132,7 +132,9 @@ public interface ObservationRestController {
                     description = "Observations devueltos exitosamente",
                     responseCode = "200",
                     content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = ObservationResponseDTO.class))
+
                     )
             ),
             @ApiResponse(
@@ -146,7 +148,8 @@ public interface ObservationRestController {
                     description = "No se encontró el ID del Proposal en el sistema\"",
                     responseCode = "404",
                     content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)
                     )
             )
     })

@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Schema(name = "UpdateProposalDTO", description = "DTO para la actualización de una propuesta")
 @Getter
 @Setter
@@ -15,6 +17,7 @@ public class UpdateProposalDTO extends BaseUpdateDTO<Long> {
             example = "A",
             type = "String"
     )
+    @NotNull
     private String part;
     @Schema(
             name = "fileUrl",
@@ -22,6 +25,7 @@ public class UpdateProposalDTO extends BaseUpdateDTO<Long> {
             example = "//files/company1/partA.pdf",
             type = "String"
     )
+    @NotNull
     private String fileUrl;
 
 }
