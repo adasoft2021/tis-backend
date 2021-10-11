@@ -5,8 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
-
 @Schema(name = "UpdateAdviserDTO", description = "DTO para la actualización de Adviser")
 @Getter
 @Setter
@@ -16,14 +14,12 @@ public class UpdateAdviserDTO extends BaseUpdateDTO<Long> {
             description = "nombre de usuario de un asesor",
             type = "String"
     )
-    @NotNull
     String userName;
     @Schema(
             name = "password",
             description = "password de un asesor",
             type = "String"
     )
-    @NotNull
     String password;
 
 }
