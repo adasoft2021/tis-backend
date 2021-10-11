@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
-@Schema(name = "CreateObservationDTO", description = "DTO para creación de una observation")
+@Schema(name = "CreateCompanyDTO", description = "DTO para creación de una observation")
 @Getter
 @Setter
 public class CreateCompanyDTO extends BaseCreateDTO {

@@ -16,7 +16,7 @@ import java.util.Collection;
 
 
 @RestController
-@RequestMapping("/companys")
+@RequestMapping("/companies")
 @AllArgsConstructor
 public class CompanyRestControllerImpl implements CompanyRestController {
     private CompanyService companyService;

@@ -4,9 +4,9 @@ import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
-import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -44,7 +44,7 @@ public interface AdviserRestController {
                     description = "Adviser devuelto exitosamente",
                     responseCode = "200",
                     content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
+                            mediaType = "application/json", schema = @Schema(implementation = AdviserResponseDTO.class)
                     )
             ),
             @ApiResponse(
@@ -130,7 +130,8 @@ public interface AdviserRestController {
                     description = "Advisers devueltos exitosamente",
                     responseCode = "200",
                     content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = AdviserResponseDTO.class))
                     )
             ),
             @ApiResponse(
