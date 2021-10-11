@@ -3,6 +3,7 @@ package com.adasoft.tis.config;
 import com.adasoft.tis.domain.*;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
+import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
 import com.adasoft.tis.dto.proposal.CreateProposalDTO;
@@ -151,16 +152,29 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Adviser, AdviserResponseDTO>() {
             @Override
             protected void configure() {
-                skip(destination.getId());
-                skip(destination.getUserName());
+                map().setId(source.getId());
+                map().setUserName(source.getUserName());
+                map().setFisrtName(source.getFirstName());
+                map().setLastName(source.getLastName());
+
             }
         });
         modelMapper.addMappings(new PropertyMap<CreateAdviserDTO, Adviser>() {
             @Override
             protected void configure() {
                 skip(destination.getId());
-                skip(destination.getUserName());
-                skip(destination.getPassword());
+                map().setUserName(source.getUserName());
+                map().setPassword(source.getPassword());
+                map().setFirstName(source.getFirstName());
+                map().setLastName(source.getLastName());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<UpdateAdviserDTO, Adviser>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+                map().setUserName(source.getUserName());
+                map().setPassword(source.getPassword());
             }
         });
         return modelMapper;
