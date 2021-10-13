@@ -18,11 +18,12 @@ public class PublicationRepositoryImpl extends AbstractTisRepository<Publication
     }
 
     @Override
-    public Collection<Publication> getByAdviserId(final Long adviserId) {
-        String jpqlQuery = "SELECT p FROM Publication p WHERE p.cretedBy.id = :adviserId and p.deleted = false";
+    public Collection<Publication> getByAdviserId(final Long adviserId, final Publication.PublicationType type) {
+        String jpqlQuery = "SELECT p FROM Publication p WHERE p.createdBy.id = :adviserId and p.type = :type and p.deleted = false";
 
         return entityManager.createQuery(jpqlQuery, Publication.class)
             .setParameter("adviserId", adviserId)
+            .setParameter("type", type)
             .getResultList();
     }
 }

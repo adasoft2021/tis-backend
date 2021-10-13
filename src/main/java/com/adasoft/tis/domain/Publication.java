@@ -35,7 +35,7 @@ public class Publication extends BaseEntity<Long> {
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_adviser_id", nullable = false, updatable = false)
-    private Adviser cretedBy;
+    private Adviser createdBy;
 
     public enum PublicationType {
         ANNOUNCEMENT,

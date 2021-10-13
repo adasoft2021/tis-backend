@@ -7,6 +7,7 @@ import com.adasoft.tis.dto.proposal.CreateProposalDTO;
 import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import com.adasoft.tis.dto.proposal.UpdateProposalDTO;
 import com.adasoft.tis.dto.publication.CreatePublicationDTO;
+import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
@@ -155,7 +156,7 @@ public class BeansConfiguration {
             }
         });
 
-        modelMapper.addMappings(new PropertyMap<UpdateQualificationDTO, Publication>() {
+        modelMapper.addMappings(new PropertyMap<UpdatePublicationDTO, Publication>() {
             @Override
             protected void configure() {
                 skip(destination.getId());

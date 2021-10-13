@@ -6,5 +6,5 @@ import com.adasoft.tis.domain.Publication;
 import java.util.Collection;
 
 public interface PublicationRepository extends TisRepository<Publication, Long> {
-    Collection<Publication> getByAdviserId(Long adviserId);
+    Collection<Publication> getByAdviserId(Long adviserId, Publication.PublicationType type);
 }
