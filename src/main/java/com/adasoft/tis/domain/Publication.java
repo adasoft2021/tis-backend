@@ -37,7 +37,7 @@ public class Publication extends BaseEntity<Long> {
     @JoinColumn(name = "fk_adviser_id", nullable = false, updatable = false)
     private Adviser cretedBy;
 
-    private enum PublicationType {
+    public enum PublicationType {
         ANNOUNCEMENT,
         SPECIFICATION_SHEET
     }
