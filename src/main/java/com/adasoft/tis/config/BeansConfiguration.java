@@ -1,14 +1,12 @@
 package com.adasoft.tis.config;
 
-import com.adasoft.tis.domain.Observation;
-import com.adasoft.tis.domain.Proposal;
-import com.adasoft.tis.domain.Qualification;
-import com.adasoft.tis.domain.Review;
+import com.adasoft.tis.domain.*;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
 import com.adasoft.tis.dto.proposal.CreateProposalDTO;
 import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import com.adasoft.tis.dto.proposal.UpdateProposalDTO;
+import com.adasoft.tis.dto.publication.CreatePublicationDTO;
 import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
@@ -139,6 +137,28 @@ public class BeansConfiguration {
             protected void configure() {
                 skip(destination.getId());
                 skip(destination.getReview());
+            }
+        });
+
+        return modelMapper;
+    }
+
+    @Bean("publicationMapper")
+    public ModelMapper publicationMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+
+        modelMapper.addMappings(new PropertyMap<CreatePublicationDTO, Publication>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<UpdateQualificationDTO, Publication>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
             }
         });
 
