@@ -8,3 +8,4 @@ import java.util.Collection;
 public interface AdviserRepository extends TisRepository<Adviser, Long> {
     Collection<Adviser> getAll();
 }
+

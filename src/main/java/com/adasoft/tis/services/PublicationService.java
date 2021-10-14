@@ -1,0 +1,73 @@
+package com.adasoft.tis.services;
+
+import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
+import com.adasoft.tis.core.exceptions.EntityNotFoundException;
+import com.adasoft.tis.domain.Adviser;
+import com.adasoft.tis.domain.Publication;
+import com.adasoft.tis.dto.publication.PublicationResponseDTO;
+import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
+import com.adasoft.tis.repository.AdviserRepository;
+import com.adasoft.tis.repository.PublicationRepository;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
+
+@AllArgsConstructor
+@Service
+public class PublicationService {
+    private PublicationRepository publicationRepository;
+    private AdviserRepository adviserRepository;
+    private ModelMapper publicationMapper;
+
+    public PublicationResponseDTO update(final Long publicationId, final UpdatePublicationDTO publicationDTO) {
+        checkArgument(publicationId != null, "El id de Publication a actualizar no puede ser nulo.");
+        checkArgument(publicationDTO != null, "El PublicationDTO a actualizar no puede ser nulo.");
+
+        Publication foundPublication = publicationRepository.findById(publicationId)
+            .orElseThrow(() -> new EntityNotFoundException(Publication.class, publicationId));
+
+        publicationMapper.map(publicationDTO, foundPublication);
+
+        foundPublication = publicationRepository.update(foundPublication);
+        return publicationMapper.map(foundPublication, PublicationResponseDTO.class);
+    }
+
+    public Object delete(final Long publicationId) {
+        checkArgument(publicationId != null, "El id de Publication a actualizar no puede ser nulo.");
+
+        Publication foundPublication = publicationRepository.findById(publicationId)
+            .orElseThrow(() -> new EntityNotFoundException(Publication.class, publicationId));
+
+        if (foundPublication.isDeleted()) {
+            throw new DefaultTisDomainException(HttpStatus.NOT_ACCEPTABLE, "La Publicación no puede ser eliminada.");
+        }
+
+        foundPublication.setDeleted(true);
+        publicationRepository.update(foundPublication);
+
+        return null;
+    }
+
+    public Collection<PublicationResponseDTO> getByAdviserId(
+        final Long adviserId,
+        final Publication.PublicationType type) {
+        checkArgument(adviserId != null, "El id de Adviser a actualizar no puede ser nulo.");
+
+        System.out.printf("AdviserId: %d\n", adviserId);
+
+        adviserRepository.findById(adviserId)
+            .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
+
+        Collection<Publication> publications = publicationRepository.getByAdviserId(adviserId, type);
+
+        return publications.stream()
+            .map(publication -> publicationMapper.map(publication, PublicationResponseDTO.class))
+            .collect(Collectors.toSet());
+    }
+}
