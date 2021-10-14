@@ -51,4 +51,13 @@ public class UpdatePublicationDTO extends BaseUpdateDTO<Long> {
     @NotNull
     @Size(min = 6, max = 6, message = "Este campo debe tener 6 caracteres")
     private String semester;
+
+    @Schema(
+        name = "fileUrl",
+        description = "URL del archivo de la publicación.",
+        required = true,
+        type = "String"
+    )
+    @NotNull
+    private String fileUrl;
 }

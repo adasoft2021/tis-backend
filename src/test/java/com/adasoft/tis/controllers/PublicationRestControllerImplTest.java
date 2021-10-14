@@ -46,7 +46,7 @@ class PublicationRestControllerImplTest {
     private static final LocalDateTime DATE = LocalDateTime.now();
     private static final String CODE = "CPTIS-0609-2021";
     private static final String SEMESTER = "2-2021";
-    private static final String FILE_URL = "https://...";
+    private static final String FILE_URL = "https://drive.google.com/file/d/1Y1UxDtPa7Qr7uPzJ32D6pB7nwbCrrXxe/view?usp=sharing";
 
     @BeforeAll
     static void setup() {
@@ -56,6 +56,7 @@ class PublicationRestControllerImplTest {
         UPDATE_PUBLICATION_DTO.setDate(DATE);
         UPDATE_PUBLICATION_DTO.setCode(CODE);
         UPDATE_PUBLICATION_DTO.setSemester(SEMESTER);
+        UPDATE_PUBLICATION_DTO.setFileUrl(FILE_URL);
 
         PUBLICATION_RESPONSE_DTO.setId(ID);
         PUBLICATION_RESPONSE_DTO.setDeleted(false);

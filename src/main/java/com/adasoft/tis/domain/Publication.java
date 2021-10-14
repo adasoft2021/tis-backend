@@ -21,9 +21,9 @@ import java.time.LocalDateTime;
 public class Publication extends BaseEntity<Long> {
     @Column(nullable = false)
     private String title;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private LocalDateTime date;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String code;
     @Column(nullable = false)
     private String semester;

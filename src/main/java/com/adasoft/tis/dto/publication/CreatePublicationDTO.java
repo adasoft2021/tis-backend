@@ -55,6 +55,15 @@ public class CreatePublicationDTO extends BaseCreateDTO {
     private String semester;
 
     @Schema(
+        name = "fileUrl",
+        description = "URL del archivo de la publicación.",
+        required = true,
+        type = "String"
+    )
+    @NotNull
+    private String fileUrl;
+
+    @Schema(
         name = "type",
         description = "Tipo de la publicación.",
         required = true
