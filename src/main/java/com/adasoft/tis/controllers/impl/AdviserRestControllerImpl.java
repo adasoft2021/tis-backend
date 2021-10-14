@@ -24,7 +24,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @PostMapping
     @Override
     public ResponseEntity<AdviserResponseDTO> create(
-            @Valid @RequestBody final CreateAdviserDTO adviserDTO) {
+        @Valid @RequestBody final CreateAdviserDTO adviserDTO) {
         AdviserResponseDTO responseDTO = adviserService.create(adviserDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
@@ -32,7 +32,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @GetMapping("/{adviserId}")
     @Override
     public ResponseEntity<AdviserResponseDTO> get(
-            @NotNull @PathVariable("adviserId") final Long id) {
+        @NotNull @PathVariable("adviserId") final Long id) {
         AdviserResponseDTO responseDTO = adviserService.getById(id);
         return ResponseEntity.ok(responseDTO);
     }
@@ -40,8 +40,8 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @PutMapping("/{adviserId}")
     @Override
     public ResponseEntity<AdviserResponseDTO> update(
-            @NotNull @PathVariable("adviserID") final Long id,
-            @Valid @RequestBody final UpdateAdviserDTO adviserDTO) {
+        @NotNull @PathVariable("adviserID") final Long id,
+        @Valid @RequestBody final UpdateAdviserDTO adviserDTO) {
         AdviserResponseDTO responseDTO = adviserService.update(id, adviserDTO);
         return ResponseEntity.ok(responseDTO);
     }
@@ -49,7 +49,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @DeleteMapping("/{adviserId}")
     @Override
     public ResponseEntity<AdviserResponseDTO> delete(
-            @NotNull @PathVariable("adviserID") final Long id) {
+        @NotNull @PathVariable("adviserID") final Long id) {
         AdviserResponseDTO responseDTO = adviserService.delete(id);
         return ResponseEntity.ok(responseDTO);
     }

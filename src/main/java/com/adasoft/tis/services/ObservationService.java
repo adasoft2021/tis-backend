@@ -29,7 +29,7 @@ public class ObservationService {
         checkArgument(observationDTO != null, "El ObservationDTO a crear no puede ser nulo.");
         checkArgument(proposalId != null, "El ID del Proposal a observar no puede ser nulo.");
         Proposal proposal = proposalRepository.findById(proposalId)
-                .orElseThrow(() -> new EntityNotFoundException(Proposal.class, proposalId));
+            .orElseThrow(() -> new EntityNotFoundException(Proposal.class, proposalId));
         Observation defaultObservation = observationMapper.map(observationDTO, Observation.class);
         defaultObservation.setProposal(proposal);
         Observation persistedObservation = observationRepository.save(defaultObservation);
@@ -42,7 +42,7 @@ public class ObservationService {
         checkArgument(observationDTO != null, "El ObservationDTO a actualizar no puede ser nulo.");
 
         Observation foundObservation = observationRepository.findById(observationId)
-                .orElseThrow(() -> new EntityNotFoundException(Observation.class, observationId));
+            .orElseThrow(() -> new EntityNotFoundException(Observation.class, observationId));
 
         if (foundObservation.isDeleted()) {
             throw new EntityNotFoundException(Observation.class, observationId);
@@ -58,7 +58,7 @@ public class ObservationService {
         checkArgument(observationId != null, "El id de Observation a actualizar no puede ser nulo.");
 
         Observation foundObservation = observationRepository.findById(observationId)
-                .orElseThrow(() -> new EntityNotFoundException(Observation.class, observationId));
+            .orElseThrow(() -> new EntityNotFoundException(Observation.class, observationId));
 
         if (foundObservation.isDeleted()) {
             throw new EntityNotFoundException(Observation.class, observationId);
@@ -72,7 +72,7 @@ public class ObservationService {
         checkArgument(observationId != null, "El id de Observation a obtener no puede ser nulo.");
 
         Observation foundObservation = observationRepository.findById(observationId)
-                .orElseThrow(() -> new EntityNotFoundException(Observation.class, observationId));
+            .orElseThrow(() -> new EntityNotFoundException(Observation.class, observationId));
 
         if (foundObservation.isDeleted()) {
             throw new EntityNotFoundException(Observation.class, observationId);
@@ -84,12 +84,12 @@ public class ObservationService {
     public Collection<ObservationResponseDTO> getAllByProposalId(Long proposalId) {
         checkArgument(proposalId != null, "El ID del proposal no puede ser nulo.");
         Proposal p = proposalRepository.findById(proposalId)
-                .orElseThrow(() -> new EntityNotFoundException(Proposal.class, proposalId));
+            .orElseThrow(() -> new EntityNotFoundException(Proposal.class, proposalId));
 
         Collection<ObservationResponseDTO> observations = observationRepository.getAllByProposalId(proposalId)
-                .stream().filter(observation -> !observation.isDeleted())
-                .map(observation -> observationMapper.map(observation, ObservationResponseDTO.class))
-                .collect(Collectors.toSet());
+            .stream().filter(observation -> !observation.isDeleted())
+            .map(observation -> observationMapper.map(observation, ObservationResponseDTO.class))
+            .collect(Collectors.toSet());
         return new HashSet<>(observations);
     }
 }

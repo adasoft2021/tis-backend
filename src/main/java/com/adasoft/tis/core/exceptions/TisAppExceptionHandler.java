@@ -22,7 +22,7 @@ public class TisAppExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(TisDomainException.class)
     public ResponseEntity<Problem> handleDomainException(final TisDomainException exception) {
         ExceptionHandlerSchema exceptionHandler = AnnotationUtils
-                .findAnnotation(exception.getClass(), ExceptionHandlerSchema.class);
+            .findAnnotation(exception.getClass(), ExceptionHandlerSchema.class);
 
         validateException(exception, exceptionHandler);
 
@@ -30,40 +30,40 @@ public class TisAppExceptionHandler extends ResponseEntityExceptionHandler {
         String title = getTitle(exception, exceptionHandler);
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .title(title)
-                .message(exception.getExceptionDetail())
-                .build();
+            .title(title)
+            .message(exception.getExceptionDetail())
+            .build();
 
         return ResponseEntity.status(status).body(errorResponse);
     }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            final MethodArgumentNotValidException exception,
-            final HttpHeaders headers,
-            final HttpStatus status,
-            final WebRequest request) {
+        final MethodArgumentNotValidException exception,
+        final HttpHeaders headers,
+        final HttpStatus status,
+        final WebRequest request) {
         logger.error("Se ha producido una excepción de validación: "
-                + exception.getBindingResult(), exception);
+            + exception.getBindingResult(), exception);
 
         String errorDetail = "";
         if (exception.hasFieldErrors()) {
             errorDetail = exception.getFieldErrors().stream()
-                    .map(error -> String.format("[%s %s]", error.getField(), error.getDefaultMessage()))
-                    .collect(Collectors.joining(", "));
+                .map(error -> String.format("[%s %s]", error.getField(), error.getDefaultMessage()))
+                .collect(Collectors.joining(", "));
         }
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .title("Las validaciones de la entidad no han pasado.")
-                .message(errorDetail)
-                .build();
+            .title("Las validaciones de la entidad no han pasado.")
+            .message(errorDetail)
+            .build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     private void validateException(final TisDomainException exception, final ExceptionHandlerSchema exceptionHandler) {
         if (!(exception instanceof DefaultTisDomainException) &&
-                null == exceptionHandler) {
+            null == exceptionHandler) {
             log.error("La clase de problema no tiene la anotación @ExceptionHandlerSchema.");
 
             String errorFormat = "Se requiere la anotación @ExceptionHandlerSchema en la clase de problema: '%s'";
@@ -71,12 +71,12 @@ public class TisAppExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         if (!(exception instanceof DefaultTisDomainException) &&
-                !StringUtils.hasText(exceptionHandler.title())) {
+            !StringUtils.hasText(exceptionHandler.title())) {
 
             log.error("La anotación @ExceptionHandlerSchema no contiene el título del problema.");
 
             throw new UnsupportedOperationException(
-                    "El campo de título en la anotación @ExceptionHandlerSchema no puede estar vacío");
+                "El campo de título en la anotación @ExceptionHandlerSchema no puede estar vacío");
         }
     }
 

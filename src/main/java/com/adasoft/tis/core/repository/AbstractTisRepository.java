@@ -10,8 +10,8 @@ import java.util.Collection;
 import java.util.Optional;
 
 public abstract class AbstractTisRepository<
-        Entity extends BaseEntity<? extends Serializable>, ID extends Serializable>
-        implements TisRepository<Entity, ID> {
+    Entity extends BaseEntity<? extends Serializable>, ID extends Serializable>
+    implements TisRepository<Entity, ID> {
     @PersistenceContext
     protected EntityManager entityManager;
     private Class<Entity> entityClass;
@@ -30,10 +30,10 @@ public abstract class AbstractTisRepository<
     @Override
     public boolean exists(final ID id) {
         var query = String.format("SELECT CASE WHEN COUNT(e) > 0 THEN TRUE ELSE FALSE END " +
-                "FROM %s e " +
-                "WHERE e.id = :id ", entityClass.getSimpleName());
+            "FROM %s e " +
+            "WHERE e.id = :id ", entityClass.getSimpleName());
         return entityManager.createQuery(query, Boolean.class)
-                .setParameter("id", id).getSingleResult();
+            .setParameter("id", id).getSingleResult();
     }
 
     /**

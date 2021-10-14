@@ -36,7 +36,7 @@ public class ProposalService {
         checkArgument(proposalId != null, "El id de Proposal a obtener no puede ser nulo.");
 
         Proposal foundProposal = proposalRepository.findById(proposalId)
-                .orElseThrow(() -> new EntityNotFoundException(Proposal.class, proposalId));
+            .orElseThrow(() -> new EntityNotFoundException(Proposal.class, proposalId));
 
         if (foundProposal.isDeleted()) {
             throw new EntityNotFoundException(Proposal.class, proposalId);
@@ -49,7 +49,7 @@ public class ProposalService {
         checkArgument(proposalDTO != null, "El ProposalDTO a actualizar no puede ser nulo.");
 
         Proposal foundProposal = proposalRepository.findById(proposalId)
-                .orElseThrow(() -> new EntityNotFoundException(Proposal.class, proposalId));
+            .orElseThrow(() -> new EntityNotFoundException(Proposal.class, proposalId));
 
         if (foundProposal.isDeleted()) {
             throw new EntityNotFoundException(Proposal.class, proposalId);
@@ -65,9 +65,9 @@ public class ProposalService {
     public Collection<ProposalResponseDTO> getAllByAdviserId(Long adviserId) {
         checkArgument(adviserId != null, "El ID del adviser no puede ser nulo.");
         Collection<ProposalResponseDTO> proposals = proposalRepository.getAllByAdviserId(adviserId)
-                .stream().filter(proposal -> !proposal.isDeleted())
-                .map(proposal -> proposalMapper.map(proposal, ProposalResponseDTO.class))
-                .collect(Collectors.toSet());
+            .stream().filter(proposal -> !proposal.isDeleted())
+            .map(proposal -> proposalMapper.map(proposal, ProposalResponseDTO.class))
+            .collect(Collectors.toSet());
         return new HashSet<>(proposals);
     }
 }

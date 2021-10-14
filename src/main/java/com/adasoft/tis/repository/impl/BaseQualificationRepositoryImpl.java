@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Repository
 public class BaseQualificationRepositoryImpl extends AbstractTisRepository<BaseQualification, Long>
-        implements BaseQualificationRepository {
+    implements BaseQualificationRepository {
     @Autowired
     protected BaseQualificationRepositoryImpl(final EntityManager entityManager) {
         super(entityManager, BaseQualification.class);
@@ -22,6 +22,6 @@ public class BaseQualificationRepositoryImpl extends AbstractTisRepository<BaseQ
         String jpqlQuery = "SELECT q FROM BaseQualification q";
 
         return entityManager.createQuery(jpqlQuery, BaseQualification.class)
-                .getResultList();
+            .getResultList();
     }
 }

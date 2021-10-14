@@ -182,6 +182,7 @@ public class BeansConfiguration {
         });
         return modelMapper;
     }
+
     @Bean("companyMapper")
     public ModelMapper companyMapper() {
         ModelMapper modelMapper = new ModelMapper();

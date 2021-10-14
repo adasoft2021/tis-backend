@@ -21,6 +21,6 @@ public class CompanyRepositoryImpl extends AbstractTisRepository<Company, Long> 
         String jpqlQuery = "SELECT a FROM Company a";
 
         return entityManager.createQuery(jpqlQuery, Company.class)
-                .getResultList();
+            .getResultList();
     }
 }

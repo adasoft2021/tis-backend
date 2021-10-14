@@ -21,7 +21,7 @@ public class ObservationRepositoryImpl extends AbstractTisRepository<Observation
         String jpqlQuery = "SELECT q FROM Observation q WHERE q.proposal.id = :proposalId";
 
         return entityManager.createQuery(jpqlQuery, Observation.class)
-                .setParameter("proposalId", proposalId)
-                .getResultList();
+            .setParameter("proposalId", proposalId)
+            .getResultList();
     }
 }

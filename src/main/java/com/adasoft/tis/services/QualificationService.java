@@ -25,23 +25,23 @@ public class QualificationService {
     private ModelMapper qualificationMapper;
 
     private Qualification validateScore(
-            final Qualification qualification,
-            final UpdateQualificationDTO qualificationDTO) {
+        final Qualification qualification,
+        final UpdateQualificationDTO qualificationDTO) {
         if (qualificationDTO.getScore() != null) {
             int scoreValid = 0;
             if (qualificationDTO.getScore() < scoreValid) {
                 throw new DefaultTisDomainException(
-                        HttpStatus.BAD_REQUEST,
-                        String.format("[qualificationId: %d], [score Este campo no puede ser menor a %d]",
-                                qualification.getId(), scoreValid));
+                    HttpStatus.BAD_REQUEST,
+                    String.format("[qualificationId: %d], [score Este campo no puede ser menor a %d]",
+                        qualification.getId(), scoreValid));
             }
 
             scoreValid = qualification.getBaseQualification().getMaxScore();
             if (qualificationDTO.getScore() > scoreValid) {
                 throw new DefaultTisDomainException(
-                        HttpStatus.BAD_REQUEST,
-                        String.format("[qualificationId: %d], [score Este campo no puede ser mayor a %d]",
-                                qualification.getId(), scoreValid));
+                    HttpStatus.BAD_REQUEST,
+                    String.format("[qualificationId: %d], [score Este campo no puede ser mayor a %d]",
+                        qualification.getId(), scoreValid));
             }
         }
 
@@ -50,16 +50,16 @@ public class QualificationService {
     }
 
     private Collection<Qualification> getQualificationsByIdToUpdate(
-            final Review review,
-            final Collection<UpdateQualificationDTO> qualificationDTOS) {
+        final Review review,
+        final Collection<UpdateQualificationDTO> qualificationDTOS) {
         return qualificationDTOS.stream().map((qualificationDTO -> {
             Qualification qualification = qualificationRepository.findById(qualificationDTO.getQualificationId())
-                    .orElseThrow(
-                            () -> new EntityNotFoundException(Qualification.class, qualificationDTO.getQualificationId()));
+                .orElseThrow(
+                    () -> new EntityNotFoundException(Qualification.class, qualificationDTO.getQualificationId()));
 
             if (!qualification.getReview().equals(review)) {
                 throw new DefaultTisDomainException(
-                        HttpStatus.NOT_ACCEPTABLE, "No está permitido editar la entidad Qualification.");
+                    HttpStatus.NOT_ACCEPTABLE, "No está permitido editar la entidad Qualification.");
             }
 
             return validateScore(qualification, qualificationDTO);
@@ -71,11 +71,11 @@ public class QualificationService {
 
         return baseQualifications.stream().map((baseQualification -> {
             Qualification qualification = Qualification.builder()
-                    .createdAt(review.getCreatedAt())
-                    .updatedAt(review.getUpdatedAt())
-                    .review(review)
-                    .baseQualification(baseQualification)
-                    .build();
+                .createdAt(review.getCreatedAt())
+                .updatedAt(review.getUpdatedAt())
+                .review(review)
+                .baseQualification(baseQualification)
+                .build();
 
             qualification = qualificationRepository.save(qualification);
             return qualificationMapper.map(qualification, QualificationResponseDTO.class);
@@ -83,14 +83,14 @@ public class QualificationService {
     }
 
     public Collection<QualificationResponseDTO> updateAll(
-            final Review review,
-            final Collection<UpdateQualificationDTO> qualificationDTOS) {
+        final Review review,
+        final Collection<UpdateQualificationDTO> qualificationDTOS) {
         Collection<Qualification> qualifications = getQualificationsByIdToUpdate(review, qualificationDTOS);
 
         qualifications = qualificationRepository.updateAll(qualifications);
 
         return qualifications.stream()
-                .map((qualification -> qualificationMapper.map(qualification, QualificationResponseDTO.class)))
-                .collect(Collectors.toSet());
+            .map((qualification -> qualificationMapper.map(qualification, QualificationResponseDTO.class)))
+            .collect(Collectors.toSet());
     }
 }

@@ -12,12 +12,12 @@ public class SwaggerConfiguration {
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("TisAPI")
-                        .description("API para el gestionamiento de GE")
-                        .version("0.0.1")
-                        .license(new License().name("Apache 2.0").url("http://springdoc.org")))
-                .externalDocs(new ExternalDocumentation()
-                        .description("Repositorio de TIS API")
-                        .url("https://github.com/adasoft2021/tis-backend"));
+            .info(new Info().title("TisAPI")
+                .description("API para el gestionamiento de GE")
+                .version("0.0.1")
+                .license(new License().name("Apache 2.0").url("http://springdoc.org")))
+            .externalDocs(new ExternalDocumentation()
+                .description("Repositorio de TIS API")
+                .url("https://github.com/adasoft2021/tis-backend"));
     }
 }

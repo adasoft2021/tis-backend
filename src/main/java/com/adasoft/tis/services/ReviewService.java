@@ -30,20 +30,20 @@ public class ReviewService {
     private ModelMapper qualificationMapper;
 
     private Collection<QualificationResponseDTO> updateQualifications(
-            final Review review,
-            final Collection<UpdateQualificationDTO> qualificationDTOS) {
+        final Review review,
+        final Collection<UpdateQualificationDTO> qualificationDTOS) {
         if (review.getTotalScore() != null) {
             throw new DefaultTisDomainException(
-                    HttpStatus.METHOD_NOT_ALLOWED,
-                    "Usted ya no puede hacer ningún cambio en la entidad Review.");
+                HttpStatus.METHOD_NOT_ALLOWED,
+                "Usted ya no puede hacer ningún cambio en la entidad Review.");
         }
 
         return qualificationService.updateAll(review, qualificationDTOS);
     }
 
     private ReviewResponseDTO updateReview(
-            final Review review,
-            final Collection<UpdateQualificationDTO> qualificationDTOS) {
+        final Review review,
+        final Collection<UpdateQualificationDTO> qualificationDTOS) {
         Collection<QualificationResponseDTO> qualificationResponseDTOS = updateQualifications(review, qualificationDTOS);
 
         boolean fullNotes = true;
@@ -71,12 +71,12 @@ public class ReviewService {
         checkArgument(reviewId != null, "El id de Review a actualizar no puede ser nulo.");
 
         Review foundReview = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
+            .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
 
         ReviewResponseDTO responseDTO = reviewMapper.map(foundReview, ReviewResponseDTO.class);
         Collection<QualificationResponseDTO> qualifications = foundReview.getQualifications()
-                .stream().map(qualification -> qualificationMapper.map(qualification, QualificationResponseDTO.class))
-                .collect(Collectors.toSet());
+            .stream().map(qualification -> qualificationMapper.map(qualification, QualificationResponseDTO.class))
+            .collect(Collectors.toSet());
         responseDTO.setQualifications(new HashSet<>(qualifications));
 
         return responseDTO;
@@ -102,7 +102,7 @@ public class ReviewService {
         checkArgument(reviewDTO != null, "El ReviewDTO a actualizar no puede ser nulo.");
 
         Review foundReview = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
+            .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
 
         reviewMapper.map(reviewDTO, foundReview);
         return updateReview(foundReview, reviewDTO.getQualifications());

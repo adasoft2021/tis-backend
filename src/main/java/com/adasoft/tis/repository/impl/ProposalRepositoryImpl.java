@@ -22,7 +22,7 @@ public class ProposalRepositoryImpl extends AbstractTisRepository<Proposal, Long
         String jpqlQuery = "SELECT q FROM Proposal q WHERE q.adviser = :adviserId";
 
         return entityManager.createQuery(jpqlQuery, Proposal.class)
-                .setParameter("adviserId", adviserId)
-                .getResultList();
+            .setParameter("adviserId", adviserId)
+            .getResultList();
     }
 }

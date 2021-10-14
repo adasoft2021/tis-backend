@@ -37,7 +37,7 @@ public class AdviserService {
         checkArgument(adviserDTO != null, "El AdviserDTO a actualizar no puede ser nulo.");
 
         Adviser foundAdviser = adviserRepository.findById(adviserId)
-                .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
+            .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
 
         if (foundAdviser.isDeleted()) {
             throw new EntityNotFoundException(Adviser.class, adviserId);
@@ -53,7 +53,7 @@ public class AdviserService {
         checkArgument(adviserId != null, "El id de Adviser a actualizar no puede ser nulo.");
 
         Adviser foundAdviser = adviserRepository.findById(adviserId)
-                .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
+            .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
 
         if (foundAdviser.isDeleted()) {
             throw new EntityNotFoundException(Adviser.class, adviserId);
@@ -67,7 +67,7 @@ public class AdviserService {
         checkArgument(adviserId != null, "El id de Adviser a obtener no puede ser nulo.");
 
         Adviser foundAdviser = adviserRepository.findById(adviserId)
-                .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
+            .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
 
         if (foundAdviser.isDeleted()) {
             throw new EntityNotFoundException(Adviser.class, adviserId);
@@ -78,9 +78,9 @@ public class AdviserService {
 
     public Collection<AdviserResponseDTO> getAll() {
         Collection<AdviserResponseDTO> advisers = adviserRepository.getAll()
-                .stream().filter(adviser -> !adviser.isDeleted())
-                .map(adviser -> adviserMapper.map(adviser, AdviserResponseDTO.class))
-                .collect(Collectors.toSet());
+            .stream().filter(adviser -> !adviser.isDeleted())
+            .map(adviser -> adviserMapper.map(adviser, AdviserResponseDTO.class))
+            .collect(Collectors.toSet());
         return new HashSet<>(advisers);
     }
 }

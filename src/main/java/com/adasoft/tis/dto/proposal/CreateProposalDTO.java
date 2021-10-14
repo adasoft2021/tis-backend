@@ -12,31 +12,31 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class CreateProposalDTO extends BaseCreateDTO {
     @Schema(name = "createdById",
-            description = "Empresa a la que pertenece la propuesta",
-            required = true, example = "159423756456L", type = "Number")
+        description = "Empresa a la que pertenece la propuesta",
+        required = true, example = "159423756456L", type = "Number")
     @NotNull(message = "Este campo no debe ser nulo")
     private long createdById;
     @Schema(
-            name = "part",
-            description = "Parte de la propuesta",
-            example = "A",
-            type = "String"
+        name = "part",
+        description = "Parte de la propuesta",
+        example = "A",
+        type = "String"
     )
     @NotNull(message = "Este campo no debe ser nulo")
     private String part;
     @Schema(
-            name = "fileUrl",
-            description = "Ruta de los archivos de la propuesta",
-            example = "//files/company1/partA.pdf",
-            type = "String"
+        name = "fileUrl",
+        description = "Ruta de los archivos de la propuesta",
+        example = "//files/company1/partA.pdf",
+        type = "String"
     )
     @NotNull(message = "Este campo no debe ser nulo")
     private String fileUrl;
     @Schema(
-            name = "adviserId",
-            description = "id del asesor de la propuesta",
-            example = "4564L",
-            type = "Number"
+        name = "adviserId",
+        description = "id del asesor de la propuesta",
+        example = "4564L",
+        type = "Number"
     )
     @NotNull(message = "Este campo no debe ser nulo")
     private long adviserId;

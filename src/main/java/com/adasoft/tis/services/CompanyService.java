@@ -37,7 +37,7 @@ public class CompanyService {
         checkArgument(companyDTO != null, "El CompanyDTO a actualizar no puede ser nulo.");
 
         Company foundCompany = companyRepository.findById(companyId)
-                .orElseThrow(() -> new EntityNotFoundException(Company.class, companyId));
+            .orElseThrow(() -> new EntityNotFoundException(Company.class, companyId));
 
         if (foundCompany.isDeleted()) {
             throw new EntityNotFoundException(Company.class, companyId);
@@ -53,7 +53,7 @@ public class CompanyService {
         checkArgument(companyId != null, "El id de Company a actualizar no puede ser nulo.");
 
         Company foundCompany = companyRepository.findById(companyId)
-                .orElseThrow(() -> new EntityNotFoundException(Company.class, companyId));
+            .orElseThrow(() -> new EntityNotFoundException(Company.class, companyId));
 
         if (foundCompany.isDeleted()) {
             throw new EntityNotFoundException(Company.class, companyId);
@@ -67,7 +67,7 @@ public class CompanyService {
         checkArgument(companyId != null, "El id de Company a obtener no puede ser nulo.");
 
         Company foundCompany = companyRepository.findById(companyId)
-                .orElseThrow(() -> new EntityNotFoundException(Company.class, companyId));
+            .orElseThrow(() -> new EntityNotFoundException(Company.class, companyId));
 
         if (foundCompany.isDeleted()) {
             throw new EntityNotFoundException(Company.class, companyId);
@@ -78,9 +78,9 @@ public class CompanyService {
 
     public Collection<CompanyResponseDTO> getAll() {
         Collection<CompanyResponseDTO> companys = companyRepository.getAll()
-                .stream().filter(company -> !company.isDeleted())
-                .map(company -> companyMapper.map(company, CompanyResponseDTO.class))
-                .collect(Collectors.toSet());
+            .stream().filter(company -> !company.isDeleted())
+            .map(company -> companyMapper.map(company, CompanyResponseDTO.class))
+            .collect(Collectors.toSet());
         return new HashSet<>(companys);
     }
 }

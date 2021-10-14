@@ -12,16 +12,16 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class UpdateAdviserDTO extends BaseUpdateDTO<Long> {
     @Schema(
-            name = "userName",
-            description = "nombre de usuario de un asesor",
-            type = "String"
+        name = "userName",
+        description = "nombre de usuario de un asesor",
+        type = "String"
     )
     @NotNull
     String userName;
     @Schema(
-            name = "password",
-            description = "password de un asesor",
-            type = "String"
+        name = "password",
+        description = "password de un asesor",
+        type = "String"
     )
     @NotNull
     String password;

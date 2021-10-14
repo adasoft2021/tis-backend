@@ -21,6 +21,6 @@ public class AdviserRepositoryImpl extends AbstractTisRepository<Adviser, Long> 
         String jpqlQuery = "SELECT a FROM Adviser a";
 
         return entityManager.createQuery(jpqlQuery, Adviser.class)
-                .getResultList();
+            .getResultList();
     }
 }

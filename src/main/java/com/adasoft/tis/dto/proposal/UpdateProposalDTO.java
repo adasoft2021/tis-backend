@@ -12,18 +12,18 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class UpdateProposalDTO extends BaseUpdateDTO<Long> {
     @Schema(
-            name = "part",
-            description = "Parte de la propuesta",
-            example = "A",
-            type = "String"
+        name = "part",
+        description = "Parte de la propuesta",
+        example = "A",
+        type = "String"
     )
     @NotNull
     private String part;
     @Schema(
-            name = "fileUrl",
-            description = "Ruta de los archivos de la propuesta",
-            example = "//files/company1/partA.pdf",
-            type = "String"
+        name = "fileUrl",
+        description = "Ruta de los archivos de la propuesta",
+        example = "//files/company1/partA.pdf",
+        type = "String"
     )
     @NotNull
     private String fileUrl;

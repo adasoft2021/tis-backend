@@ -12,30 +12,30 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class CreateAdviserDTO extends BaseCreateDTO {
     @Schema(
-            name = "firstName",
-            description = "nombre de un asesor",
-            type = "String"
+        name = "firstName",
+        description = "nombre de un asesor",
+        type = "String"
     )
     @NotNull
     String firstName;
     @Schema(
-            name = "lastName",
-            description = "apellido de un asesor",
-            type = "String"
+        name = "lastName",
+        description = "apellido de un asesor",
+        type = "String"
     )
     @NotNull
     String lastName;
     @Schema(
-            name = "userName",
-            description = "nombre de usuario de un asesor",
-            type = "String"
+        name = "userName",
+        description = "nombre de usuario de un asesor",
+        type = "String"
     )
     @NotNull
     String userName;
     @Schema(
-            name = "password",
-            description = "password de un asesor",
-            type = "String"
+        name = "password",
+        description = "password de un asesor",
+        type = "String"
     )
     @NotNull
     String password;
