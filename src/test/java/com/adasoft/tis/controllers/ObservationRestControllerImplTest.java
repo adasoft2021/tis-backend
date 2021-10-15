@@ -63,10 +63,10 @@ class ObservationRestControllerImplTest {
         when(observationService.create(any(), any())).thenReturn(responseDTO);
 
         mvc.perform(post(BASE_URL).param("proposal", PROPOSAL_ID.toString())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(observationDTO)))
-                .andExpect(status().isCreated())
-                .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(observationDTO)))
+            .andExpect(status().isCreated())
+            .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
     }
 
     @Test
@@ -74,11 +74,11 @@ class ObservationRestControllerImplTest {
         CreateObservationDTO badObservationDTO = new CreateObservationDTO();
 
         mvc.perform(post(BASE_URL).param("proposal", PROPOSAL_ID.toString())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(badObservationDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(badObservationDTO)))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
     }
 
     @Test
@@ -86,8 +86,8 @@ class ObservationRestControllerImplTest {
         when(observationService.getById(any())).thenReturn(responseDTO);
 
         mvc.perform(get(BASE_URL + "/{proposalId}", ID)
-                ).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
+            ).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
 
     }
 
@@ -99,14 +99,14 @@ class ObservationRestControllerImplTest {
         when(observationService.getById(any())).thenThrow(new EntityNotFoundException(Observation.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .title("No se pudo encontrar la entidad")
-                .message(String.format("Observation con id %d no se pudo encontrar o no existe.", ID))
-                .build();
+            .title("No se pudo encontrar la entidad")
+            .message(String.format("Observation con id %d no se pudo encontrar o no existe.", ID))
+            .build();
 
         mvc.perform(get(String.format("%s/{observation}", BASE_URL), ID)
-                ).andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+            ).andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 
     @Test
@@ -123,10 +123,10 @@ class ObservationRestControllerImplTest {
         when(observationService.update(any(), any())).thenReturn(responseDTO);
 
         mvc.perform(put(String.format("%s/{observationId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(observationDTO)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
+                .content(objectMapper.writeValueAsString(observationDTO)))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
     }
 
     @Test
@@ -134,10 +134,10 @@ class ObservationRestControllerImplTest {
         UpdateObservationDTO observationDTO = new UpdateObservationDTO();
 
         mvc.perform(put(String.format("%s/{observationId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(observationDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
+                .content(objectMapper.writeValueAsString(observationDTO)))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
     }
 
     @Test
@@ -149,14 +149,14 @@ class ObservationRestControllerImplTest {
         when(observationService.update(any(), any())).thenThrow(new EntityNotFoundException(Observation.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .title("No se pudo encontrar la entidad")
-                .message(String.format("Observation con id %d no se pudo encontrar o no existe.", ID))
-                .build();
+            .title("No se pudo encontrar la entidad")
+            .message(String.format("Observation con id %d no se pudo encontrar o no existe.", ID))
+            .build();
 
         mvc.perform(put(String.format("%s/{observationId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateObservationDTO)))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+                .content(objectMapper.writeValueAsString(updateObservationDTO)))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 }

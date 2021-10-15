@@ -67,8 +67,8 @@ class ProposalRestControllerImplTest {
         when(proposalService.getById(any())).thenReturn(responseDTO);
 
         mvc.perform(get(BASE_URL + "/{proposalId}", ID)
-                ).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
+            ).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
 
     }
 
@@ -79,14 +79,14 @@ class ProposalRestControllerImplTest {
         when(proposalService.getById(any())).thenThrow(new EntityNotFoundException(Proposal.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .title("No se pudo encontrar la entidad")
-                .message(String.format("Proposal con id %d no se pudo encontrar o no existe.", ID))
-                .build();
+            .title("No se pudo encontrar la entidad")
+            .message(String.format("Proposal con id %d no se pudo encontrar o no existe.", ID))
+            .build();
 
         mvc.perform(get(String.format("%s/{proposalId}", BASE_URL), ID)
-                ).andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+            ).andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 
     @Test
@@ -99,10 +99,10 @@ class ProposalRestControllerImplTest {
         when(proposalService.create(any())).thenReturn(responseDTO);
 
         mvc.perform(post(BASE_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createDTO)))
-                .andExpect(status().isCreated())
-                .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createDTO)))
+            .andExpect(status().isCreated())
+            .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
     }
 
     @Test
@@ -110,10 +110,10 @@ class ProposalRestControllerImplTest {
         CreateProposalDTO badProposalDTO = new CreateProposalDTO();
 
         mvc.perform(post(BASE_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(badProposalDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(badProposalDTO)))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
     }
 }
