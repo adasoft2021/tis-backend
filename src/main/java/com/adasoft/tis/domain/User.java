@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @SuperBuilder
@@ -17,7 +18,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User extends BaseEntity<Long> {
+public class User<PrimaryKey extends Serializable> extends BaseEntity<PrimaryKey> {
     @Column(nullable = false, unique = true, updatable = true)
     String userName;
     @Column(nullable = false)
