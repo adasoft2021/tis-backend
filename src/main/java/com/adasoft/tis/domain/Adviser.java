@@ -20,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "advisers")
-public class Adviser extends User {
+public class Adviser extends User<Long> {
     @Column(nullable = false)
     String firstName;
     @Column(nullable = false)

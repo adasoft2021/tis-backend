@@ -193,8 +193,6 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 map().setId(source.getId());
-                map().setUserName(source.getUserName());
-                map().setName(source.getName());
 
             }
         });
@@ -202,17 +200,12 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
-                map().setUserName(source.getUserName());
-                map().setPassword(source.getPassword());
-                map().setName(source.getName());
             }
         });
         modelMapper.addMappings(new PropertyMap<UpdateCompanyDTO, Company>() {
             @Override
             protected void configure() {
                 skip(destination.getId());
-                map().setUserName(source.getUserName());
-                map().setPassword(source.getPassword());
                 map().setName(source.getName());
             }
         });
