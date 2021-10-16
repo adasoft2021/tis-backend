@@ -4,6 +4,7 @@ import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Publication;
+import com.adasoft.tis.dto.publication.CreatePublicationDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import com.adasoft.tis.repository.AdviserRepository;
@@ -24,6 +25,20 @@ public class PublicationService {
     private PublicationRepository publicationRepository;
     private AdviserRepository adviserRepository;
     private ModelMapper publicationMapper;
+
+    public PublicationResponseDTO create(final CreatePublicationDTO publicationDTO) {
+        checkArgument(publicationDTO != null, "El PublicationDTO a actualizar no puede ser nulo.");
+
+        Adviser foundAdviser = adviserRepository.findById(publicationDTO.getCreatedById())
+            .orElseThrow(() -> new EntityNotFoundException(Adviser.class, publicationDTO.getCreatedById()));
+
+        Publication defaultPublication = publicationMapper.map(publicationDTO, Publication.class);
+        defaultPublication.setCreatedBy(foundAdviser);
+
+        Publication persistedPublication = publicationRepository.save(defaultPublication);
+
+        return publicationMapper.map(persistedPublication, PublicationResponseDTO.class);
+    }
 
     public PublicationResponseDTO update(final Long publicationId, final UpdatePublicationDTO publicationDTO) {
         checkArgument(publicationId != null, "El id de Publication a actualizar no puede ser nulo.");
