@@ -2,6 +2,7 @@ package com.adasoft.tis.controllers;
 
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.domain.Publication;
+import com.adasoft.tis.dto.publication.CreatePublicationDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,34 @@ import java.util.Collection;
 
 @Tag(name = "PublicationRestController", description = "Controlador para gestionar las Publicaciones")
 public interface PublicationRestController {
+    @Operation(summary = "Crear una publicación", responses = {
+        @ApiResponse(
+            description = "Publicación creada exitosamente",
+            responseCode = "201",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = PublicationResponseDTO.class)
+            )
+        ),
+        @ApiResponse(
+            description = "Campos no válidos",
+            responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "El ID del Asesor no existe en el sistema",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    })
+    ResponseEntity<PublicationResponseDTO> create(
+        @RequestBody(description = "PublicationDTO que contiene los nuevos datos a crear")
+            CreatePublicationDTO publicationDTO
+    );
+
     @Operation(summary = "Actualizar una publicación por su ID", responses = {
         @ApiResponse(
             description = "Publicación actualizado exitosamente",

@@ -3,7 +3,9 @@ package com.adasoft.tis.controllers;
 import com.adasoft.tis.controllers.impl.PublicationRestControllerImpl;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
+import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Publication;
+import com.adasoft.tis.dto.publication.CreatePublicationDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import com.adasoft.tis.services.PublicationService;
@@ -38,6 +40,7 @@ class PublicationRestControllerImplTest {
 
     private static final String BASE_URL = "/publications";
 
+    private static final CreatePublicationDTO CREATE_PUBLICATION_DTO = new CreatePublicationDTO();
     private static final UpdatePublicationDTO UPDATE_PUBLICATION_DTO = new UpdatePublicationDTO();
     private static final PublicationResponseDTO PUBLICATION_RESPONSE_DTO = new PublicationResponseDTO();
 
@@ -50,6 +53,14 @@ class PublicationRestControllerImplTest {
 
     @BeforeAll
     static void setup() {
+        CREATE_PUBLICATION_DTO.setCode(CODE);
+        CREATE_PUBLICATION_DTO.setCreatedById(ID);
+        CREATE_PUBLICATION_DTO.setDate(DATE);
+        CREATE_PUBLICATION_DTO.setSemester(SEMESTER);
+        CREATE_PUBLICATION_DTO.setTitle(TITLE);
+        CREATE_PUBLICATION_DTO.setFileUrl(FILE_URL);
+        CREATE_PUBLICATION_DTO.setType(Publication.PublicationType.ANNOUNCEMENT);
+
         UPDATE_PUBLICATION_DTO.setId(ID);
         UPDATE_PUBLICATION_DTO.setUpdatedAt(DATE);
         UPDATE_PUBLICATION_DTO.setTitle(TITLE);
@@ -67,6 +78,44 @@ class PublicationRestControllerImplTest {
         PUBLICATION_RESPONSE_DTO.setCode(CODE);
         PUBLICATION_RESPONSE_DTO.setSemester(SEMESTER);
         PUBLICATION_RESPONSE_DTO.setFileUrl(FILE_URL);
+    }
+
+    @Test
+    void createPublicationSuccessfully() throws Exception {
+        when(publicationService.create(any())).thenReturn(PUBLICATION_RESPONSE_DTO);
+
+        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(CREATE_PUBLICATION_DTO)))
+            .andExpect(status().isCreated())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(PUBLICATION_RESPONSE_DTO)));
+    }
+
+    @Test
+    void createPublicationBadRequest() throws Exception {
+        CreatePublicationDTO createPublicationDTO = new CreatePublicationDTO();
+
+        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createPublicationDTO)))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
+    }
+
+    @Test
+    void createPublicationNotFound() throws Exception {
+        when(publicationService.create(any())).thenThrow(new EntityNotFoundException(Adviser.class, ID));
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .title("No se pudo encontrar la entidad")
+            .message(String.format("Adviser con id %d no se pudo encontrar o no existe.", ID))
+            .build();
+
+        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(CREATE_PUBLICATION_DTO)))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 
     @Test
