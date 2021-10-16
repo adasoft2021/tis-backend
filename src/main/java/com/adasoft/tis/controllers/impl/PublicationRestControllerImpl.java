@@ -2,10 +2,12 @@ package com.adasoft.tis.controllers.impl;
 
 import com.adasoft.tis.controllers.PublicationRestController;
 import com.adasoft.tis.domain.Publication;
+import com.adasoft.tis.dto.publication.CreatePublicationDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import com.adasoft.tis.services.PublicationService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,13 @@ import java.util.Collection;
 @AllArgsConstructor
 public class PublicationRestControllerImpl implements PublicationRestController {
     private PublicationService publicationService;
+
+    @PostMapping
+    @Override
+    public ResponseEntity<PublicationResponseDTO> create(@Valid @RequestBody CreatePublicationDTO publicationDTO) {
+        PublicationResponseDTO responseDTO = publicationService.create(publicationDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
 
     @PutMapping("/{publicationId}")
     @Override
