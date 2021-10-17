@@ -193,4 +193,19 @@ class PublicationRestControllerImplTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(publications)));
     }
+
+    @Test
+    void getByAdviserIdSemesterSuccessfully() throws Exception {
+        Collection<PublicationResponseDTO> publications = new HashSet<>();
+        publications.add(PUBLICATION_RESPONSE_DTO);
+        when(publicationService.getByAdviserIdSemester(any(), any(), any())).thenReturn(publications);
+
+        mvc.perform(get(BASE_URL+"/published")
+                .queryParam("adviserId", String.valueOf(ID))
+                .queryParam("type", Publication.PublicationType.ANNOUNCEMENT.toString())
+                .queryParam("semester",SEMESTER))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(publications)));
+    }
 }

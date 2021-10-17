@@ -118,6 +118,38 @@ public interface PublicationRestController {
     ResponseEntity<Collection<PublicationResponseDTO>> getByAdviserId(
         @Parameter(description = "ID del Adviser a obtener sus publicaciones", example = "1")
             Long adviserId,
-        @Parameter(description = "Tipo de Publicación a obtener", example = "1")
+        @Parameter(description = "Tipo de Publicación a obtener")
             Publication.PublicationType type);
+
+    @Operation(summary = "Obtener lista publicaciones por ID del Asesor, tipo de Publicación y semestre", responses = {
+        @ApiResponse(
+            description = "Publicaciones obtenidas exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = PublicationResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "Campos no válidos",
+            responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No se encontró el ID del Asesor en el sistema",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    })
+    ResponseEntity<Collection<PublicationResponseDTO>> getByAdviserIdSemester(
+        @Parameter(description = "ID del Adviser a obtener sus publicaciones", example = "1")
+            Long adviserId,
+        @Parameter(description = "Tipo de Publicación a obtener")
+            Publication.PublicationType type,
+        @Parameter(description = "Semestre de Publicación a obtener", example = "2-2021")
+            String semester);
 }
