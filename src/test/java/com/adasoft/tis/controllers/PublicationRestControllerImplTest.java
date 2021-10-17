@@ -44,7 +44,7 @@ class PublicationRestControllerImplTest {
     private static final UpdatePublicationDTO UPDATE_PUBLICATION_DTO = new UpdatePublicationDTO();
     private static final PublicationResponseDTO PUBLICATION_RESPONSE_DTO = new PublicationResponseDTO();
 
-    private static final long ID = 1996128482800373344L;
+    private static final Long ID = 1996128482800373344L;
     private static final String TITLE = "Nuevo Título para la publicación";
     private static final LocalDateTime DATE = LocalDateTime.now();
     private static final String CODE = "CPTIS-0609-2021";
@@ -195,17 +195,61 @@ class PublicationRestControllerImplTest {
     }
 
     @Test
+    void getByAdviserIdNotFound() throws Exception {
+        when(publicationService.getByAdviserId(any(), any())).thenThrow(new EntityNotFoundException(Adviser.class, ID));
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .title("No se pudo encontrar la entidad")
+            .message(String.format("Adviser con id %d no se pudo encontrar o no existe.", ID))
+            .build();
+
+        mvc.perform(get(BASE_URL)
+                .queryParam("adviserId", String.valueOf(ID))
+                .queryParam("type", Publication.PublicationType.ANNOUNCEMENT.toString()))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+    }
+
+    @Test
     void getByAdviserIdSemesterSuccessfully() throws Exception {
         Collection<PublicationResponseDTO> publications = new HashSet<>();
         publications.add(PUBLICATION_RESPONSE_DTO);
         when(publicationService.getByAdviserIdSemester(any(), any(), any())).thenReturn(publications);
 
-        mvc.perform(get(BASE_URL+"/published")
+        mvc.perform(get(BASE_URL + "/published")
                 .queryParam("adviserId", String.valueOf(ID))
                 .queryParam("type", Publication.PublicationType.ANNOUNCEMENT.toString())
-                .queryParam("semester",SEMESTER))
+                .queryParam("semester", SEMESTER))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(publications)));
     }
+
+    @Test
+    void getByAdviserIdSemesterBadRequest() throws Exception {
+
+        mvc.perform(get(BASE_URL + "/published")
+                .queryParam("adviserId", String.valueOf(ID))
+                .queryParam("type", Publication.PublicationType.ANNOUNCEMENT.toString()))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getByAdviserIdSemesterNotFound() throws Exception {
+        when(publicationService.getByAdviserIdSemester(any(), any(), any()))
+            .thenThrow(new EntityNotFoundException(Adviser.class, ID));
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .title("No se pudo encontrar la entidad")
+            .message(String.format("Adviser con id %d no se pudo encontrar o no existe.", ID))
+            .build();
+        mvc.perform(get(BASE_URL + "/published")
+                .queryParam("adviserId", String.valueOf(ID))
+                .queryParam("semester", SEMESTER)
+                .queryParam("type", Publication.PublicationType.ANNOUNCEMENT.toString()))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+    }
+
 }

@@ -19,20 +19,20 @@ import java.util.Collection;
 @Tag(name = "ObservationRestController", description = "Controlador para gestionar las Observaciones")
 public interface ObservationRestController {
     @Operation(summary = "Creación de una observacion", responses = {
-    @ApiResponse(
-        description = "Observation creado exitosamente",
-        responseCode = "201",
-        content = @Content(
-            mediaType = "application/json", schema = @Schema(implementation = ObservationResponseDTO.class)
+        @ApiResponse(
+            description = "Observation creado exitosamente",
+            responseCode = "201",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ObservationResponseDTO.class)
+            )
+        ),
+        @ApiResponse(
+            description = "Fallo al crear el Observation",
+            responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
         )
-    ),
-    @ApiResponse(
-        description = "Fallo al crear el Observation",
-        responseCode = "400",
-        content = @Content(
-            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
-        )
-    )
     })
     ResponseEntity<ObservationResponseDTO> create(
         @Parameter(description = "ID de Proposal del cual se crea una Observation", example = "1")
@@ -40,6 +40,7 @@ public interface ObservationRestController {
         @RequestBody(description = "ObservationDTO que contiene los nuevos datos a crear")
             CreateObservationDTO observationDTO
     );
+
     @Operation(summary = "Obtener de una observacion por su ID", responses = {
         @ApiResponse(
             description = "Observation devuelto exitosamente",
@@ -97,6 +98,7 @@ public interface ObservationRestController {
         @RequestBody(description = "ObservationDTO que contiene los nuevos datos a ser actualizados")
             UpdateObservationDTO observationDTO
     );
+
     @Operation(summary = "Eliminacion de una observacion por su ID", responses = {
         @ApiResponse(
             description = "Observation eliminado exitosamente",
@@ -126,30 +128,30 @@ public interface ObservationRestController {
     );
 
     @Operation(summary = "Obtener todas las  observaciones por su propuesta", responses = {
-            @ApiResponse(
-                    description = "Observations devueltos exitosamente",
-                    responseCode = "200",
-                    content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
-                    )
-            ),
-            @ApiResponse(
-                    description = "Fallo al buscar los Observations",
-                    responseCode = "400",
-                    content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    description = "No se encontró el ID del Proposal en el sistema\"",
-                    responseCode = "404",
-                    content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
-                    )
+        @ApiResponse(
+            description = "Observations devueltos exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
             )
+        ),
+        @ApiResponse(
+            description = "Fallo al buscar los Observations",
+            responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No se encontró el ID del Proposal en el sistema\"",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
     })
     ResponseEntity<Collection<ObservationResponseDTO>> getAllByProposalId(
-            @Parameter(description = "ID del Proposal de las Observations a obtener", example = "1")
-                    Long proposalId
+        @Parameter(description = "ID del Proposal de las Observations a obtener", example = "1")
+            Long proposalId
     );
 }

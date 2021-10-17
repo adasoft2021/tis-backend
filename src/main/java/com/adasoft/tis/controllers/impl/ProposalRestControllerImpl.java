@@ -33,10 +33,11 @@ public class ProposalRestControllerImpl implements ProposalRestController {
         ProposalResponseDTO responseDTO = proposalService.getById(id);
         return ResponseEntity.ok(responseDTO);
     }
+
     @GetMapping
     @Override
     public ResponseEntity<Collection<ProposalResponseDTO>> getAllByAdviserId(
-            @NotNull @RequestParam(name = "adviser", required = true) final Long adviserId) {
+        @NotNull @RequestParam(name = "adviser", required = true) final Long adviserId) {
         Collection<ProposalResponseDTO> responses = proposalService.getAllByAdviserId(adviserId);
         return ResponseEntity.ok(responses);
     }

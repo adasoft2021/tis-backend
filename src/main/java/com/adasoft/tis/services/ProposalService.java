@@ -53,22 +53,21 @@ public class ProposalService {
 
         if (foundProposal.isDeleted()) {
             throw new EntityNotFoundException(Proposal.class, proposalId);
-        }
-        else{
+        } else {
             Proposal defaultProposal = proposalMapper.map(proposalDTO, Proposal.class);
             Proposal persistedProposal = proposalRepository.update(defaultProposal);
-            foundProposal = proposalMapper.map(persistedProposal,Proposal.class);
+            foundProposal = proposalMapper.map(persistedProposal, Proposal.class);
         }
 
         return proposalMapper.map(foundProposal, ProposalResponseDTO.class);
     }
 
-    public Collection<ProposalResponseDTO> getAllByAdviserId(Long adviserId){
+    public Collection<ProposalResponseDTO> getAllByAdviserId(Long adviserId) {
         checkArgument(adviserId != null, "El ID del adviser no puede ser nulo.");
         Collection<ProposalResponseDTO> proposals = proposalRepository.getAllByAdviserId(adviserId)
-                .stream().filter(proposal -> !proposal.isDeleted())
-                .map(proposal -> proposalMapper.map(proposal, ProposalResponseDTO.class))
-                .collect(Collectors.toSet());
+            .stream().filter(proposal -> !proposal.isDeleted())
+            .map(proposal -> proposalMapper.map(proposal, ProposalResponseDTO.class))
+            .collect(Collectors.toSet());
         return new HashSet<>(proposals);
     }
 }

@@ -17,25 +17,26 @@ import java.util.Collection;
 @Tag(name = "ProposalRestController", description = "Controlador para gestionar las Propuestas")
 public interface ProposalRestController {
     @Operation(summary = "Creación de una Proposal", responses = {
-            @ApiResponse(
-                    description = "Proposal creado exitosamente",
-                    responseCode = "201",
-                    content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
-                    )
-            ),
-            @ApiResponse(
-                    description = "Fallo al crear el Proposal",
-                    responseCode = "400",
-                    content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
-                    )
+        @ApiResponse(
+            description = "Proposal creado exitosamente",
+            responseCode = "201",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
             )
+        ),
+        @ApiResponse(
+            description = "Fallo al crear el Proposal",
+            responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
     })
     ResponseEntity<ProposalResponseDTO> create(
-            @RequestBody(description = "ProposalDTO que contiene los nuevos datos a crear")
-                    CreateProposalDTO proposalDTO
+        @RequestBody(description = "ProposalDTO que contiene los nuevos datos a crear")
+            CreateProposalDTO proposalDTO
     );
+
     @Operation(summary = "Obtener una propuesta por su ID", responses = {
         @ApiResponse(
             description = "Proposal devuelto exitosamente",
@@ -63,25 +64,26 @@ public interface ProposalRestController {
         @Parameter(description = "ID del Proposal a obtener", example = "1")
             Long id
     );
+
     @Operation(summary = "Obtener todas las  propuestas por su Adviser", responses = {
-            @ApiResponse(
-                    description = "Proposals devueltos exitosamente",
-                    responseCode = "200",
-                    content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
-                    )
-            ),
-            @ApiResponse(
-                    description = "Fallo al buscar los Proposals",
-                    responseCode = "400",
-                    content = @Content(
-                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
-                    )
+        @ApiResponse(
+            description = "Proposals devueltos exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
             )
+        ),
+        @ApiResponse(
+            description = "Fallo al buscar los Proposals",
+            responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
     })
     ResponseEntity<Collection<ProposalResponseDTO>> getAllByAdviserId(
-            @Parameter(description = "ID del Adviser de las Proposals a obtener", example = "1")
-                    Long id
+        @Parameter(description = "ID del Adviser de las Proposals a obtener", example = "1")
+            Long id
     );
 
 }

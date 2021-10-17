@@ -17,10 +17,10 @@ public class UpdateProposalDTO extends BaseUpdateDTO<Long> {
     )
     private String part;
     @Schema(
-            name = "fileUrl",
-            description = "Ruta de los archivos de la propuesta",
-            example = "//files/company1/partA.pdf",
-            type = "String"
+        name = "fileUrl",
+        description = "Ruta de los archivos de la propuesta",
+        example = "//files/company1/partA.pdf",
+        type = "String"
     )
     private String fileUrl;
 

@@ -24,11 +24,12 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @PostMapping
     @Override
     public ResponseEntity<ObservationResponseDTO> create(
-            @NotNull @RequestParam(name = "proposal", required = true) final Long proposalId,
-            @Valid @RequestBody final CreateObservationDTO observationDTO) {
-        ObservationResponseDTO responseDTO = observationService.create(observationDTO,proposalId);
+        @NotNull @RequestParam(name = "proposal", required = true) final Long proposalId,
+        @Valid @RequestBody final CreateObservationDTO observationDTO) {
+        ObservationResponseDTO responseDTO = observationService.create(observationDTO, proposalId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
+
     @GetMapping(value = "/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> get(
@@ -45,6 +46,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
         ObservationResponseDTO responseDTO = observationService.update(id, observationDTO);
         return ResponseEntity.ok(responseDTO);
     }
+
     @DeleteMapping("/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> delete(
@@ -52,10 +54,11 @@ public class ObservationRestControllerImpl implements ObservationRestController 
         ObservationResponseDTO responseDTO = observationService.delete(id);
         return ResponseEntity.ok(responseDTO);
     }
+
     @GetMapping
     @Override
     public ResponseEntity<Collection<ObservationResponseDTO>> getAllByProposalId(
-            @NotNull @RequestParam(name = "proposal", required = true) final Long proposalId) {
+        @NotNull @RequestParam(name = "proposal", required = true) final Long proposalId) {
         Collection<ObservationResponseDTO> responses = observationService.getAllByProposalId(proposalId);
         return ResponseEntity.ok(responses);
     }
