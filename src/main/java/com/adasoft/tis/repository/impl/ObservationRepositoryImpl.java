@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
-public class ObservationRepositoryImpl extends AbstractTisRepository<Observation,Long> implements ObservationRepository {
+public class ObservationRepositoryImpl extends AbstractTisRepository<Observation, Long> implements ObservationRepository {
     @Autowired
     protected ObservationRepositoryImpl(final EntityManager entityManager) {
         super(entityManager, Observation.class);
@@ -21,7 +21,7 @@ public class ObservationRepositoryImpl extends AbstractTisRepository<Observation
         String jpqlQuery = "SELECT q FROM Observation q WHERE q.proposal.id = :proposalId";
 
         return entityManager.createQuery(jpqlQuery, Observation.class)
-                .setParameter("proposalId",proposalId)
-                .getResultList();
+            .setParameter("proposalId", proposalId)
+            .getResultList();
     }
 }

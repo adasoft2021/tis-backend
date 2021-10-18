@@ -7,7 +7,6 @@ import com.adasoft.tis.domain.Observation;
 import com.adasoft.tis.dto.observation.CreateObservationDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
-import com.adasoft.tis.dto.proposal.UpdateProposalDTO;
 import com.adasoft.tis.services.ObservationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ObservationRestControllerImpl.class)
@@ -41,10 +39,11 @@ class ObservationRestControllerImplTest {
     private static final String DESCRIPTION = "Descripcion de la observacion";
     private static final Long PROPOSAL_ID = 2L;
 
-    private static  CreateObservationDTO observationDTO;
+    private static CreateObservationDTO observationDTO;
     private static ObservationResponseDTO responseDTO;
+
     @BeforeAll
-    static void setup(){
+    static void setup() {
         observationDTO = new CreateObservationDTO();
         observationDTO.setTitle(TITLE);
         observationDTO.setDescription(DESCRIPTION);
@@ -61,13 +60,13 @@ class ObservationRestControllerImplTest {
         responseDTO.setUpdatedAt(observationDTO.getUpdatedAt());
         responseDTO.setDeleted(observationDTO.isDeleted());
 
-        when(observationService.create(any(),any())).thenReturn(responseDTO);
+        when(observationService.create(any(), any())).thenReturn(responseDTO);
 
-        mvc.perform(post(BASE_URL).param("proposal",PROPOSAL_ID.toString())
+        mvc.perform(post(BASE_URL).param("proposal", PROPOSAL_ID.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(observationDTO)))
-                .andExpect(status().isCreated())
-                .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
+            .andExpect(status().isCreated())
+            .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
     }
 
     @Test
@@ -75,18 +74,19 @@ class ObservationRestControllerImplTest {
         CreateObservationDTO badObservationDTO = new CreateObservationDTO();
 
         mvc.perform(post(BASE_URL).param("proposal", PROPOSAL_ID.toString())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(badObservationDTO)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(badObservationDTO)))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("title").value("Las validaciones de la entidad no han pasado."));
     }
+
     @Test
-    void getObservationSuccesfully() throws Exception{
+    void getObservationSuccesfully() throws Exception {
         when(observationService.getById(any())).thenReturn(responseDTO);
 
-        mvc.perform(get(BASE_URL+"/{proposalId}",ID)
-        ).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get(BASE_URL + "/{proposalId}", ID)
+            ).andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
 
     }
@@ -104,7 +104,7 @@ class ObservationRestControllerImplTest {
             .build();
 
         mvc.perform(get(String.format("%s/{observation}", BASE_URL), ID)
-        ).andExpect(status().isNotFound())
+            ).andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
@@ -115,7 +115,7 @@ class ObservationRestControllerImplTest {
         observationDTO.setTitle(TITLE);
         observationDTO.setDescription(DESCRIPTION);
 
-                
+
         responseDTO.setCreatedAt(observationDTO.getUpdatedAt());
         responseDTO.setUpdatedAt(observationDTO.getUpdatedAt());
 
