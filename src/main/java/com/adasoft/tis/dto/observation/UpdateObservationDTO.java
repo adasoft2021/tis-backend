@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
-@Schema(name = "UpdateProposalDTO", description = "DTO para la actualización de una propuesta")
+@Schema(name = "UpdateObservationDTO", description = "DTO para la actualización de una observacion")
 @Getter
 @Setter
 public class UpdateObservationDTO extends BaseUpdateDTO<Long> {

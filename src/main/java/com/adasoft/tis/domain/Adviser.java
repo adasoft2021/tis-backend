@@ -1,6 +1,5 @@
 package com.adasoft.tis.domain;
 
-import com.adasoft.tis.core.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,7 +20,11 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "advisers")
-public class Adviser extends BaseEntity<Long> {
+public class Adviser extends User<Long> {
+    @Column(nullable = false)
+    String firstName;
+    @Column(nullable = false)
+    String lastName;
     @JsonManagedReference
     @OneToMany(mappedBy = "createdBy")
     private Set<Publication> publications;

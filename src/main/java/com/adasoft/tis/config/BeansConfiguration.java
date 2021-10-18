@@ -1,6 +1,12 @@
 package com.adasoft.tis.config;
 
 import com.adasoft.tis.domain.*;
+import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
+import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
+import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
+import com.adasoft.tis.dto.company.CompanyResponseDTO;
+import com.adasoft.tis.dto.company.CreateCompanyDTO;
+import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
 import com.adasoft.tis.dto.proposal.CreateProposalDTO;
@@ -141,6 +147,68 @@ public class BeansConfiguration {
             }
         });
 
+        return modelMapper;
+    }
+
+    @Bean("adviserMapper")
+    public ModelMapper adviserMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Adviser, AdviserResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+                map().setUserName(source.getUserName());
+                map().setFisrtName(source.getFirstName());
+                map().setLastName(source.getLastName());
+
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreateAdviserDTO, Adviser>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+                map().setUserName(source.getUserName());
+                map().setPassword(source.getPassword());
+                map().setFirstName(source.getFirstName());
+                map().setLastName(source.getLastName());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<UpdateAdviserDTO, Adviser>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+                map().setUserName(source.getUserName());
+                map().setPassword(source.getPassword());
+            }
+        });
+        return modelMapper;
+    }
+
+    @Bean("companyMapper")
+    public ModelMapper companyMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Company, CompanyResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreateCompanyDTO, Company>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<UpdateCompanyDTO, Company>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+                map().setName(source.getName());
+            }
+        });
         return modelMapper;
     }
 

@@ -5,6 +5,7 @@ import com.adasoft.tis.dto.proposal.CreateProposalDTO;
 import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -70,7 +71,8 @@ public interface ProposalRestController {
             description = "Proposals devueltos exitosamente",
             responseCode = "200",
             content = @Content(
-                mediaType = "application/json", schema = @Schema(implementation = ProposalResponseDTO.class)
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = ProposalResponseDTO.class))
             )
         ),
         @ApiResponse(
