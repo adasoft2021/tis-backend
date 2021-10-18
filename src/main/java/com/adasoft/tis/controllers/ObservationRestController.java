@@ -145,11 +145,10 @@ public interface ObservationRestController {
             )
         ),
         @ApiResponse(
-            description = "No se encontró el ID del Proposal en el sistema\"",
+            description = "No se encontró el ID del Proposal en el sistema",
             responseCode = "404",
             content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ErrorResponse.class)
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
     })

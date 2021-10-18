@@ -85,4 +85,21 @@ public class PublicationService {
             .map(publication -> publicationMapper.map(publication, PublicationResponseDTO.class))
             .collect(Collectors.toSet());
     }
+
+    public Collection<PublicationResponseDTO> getByAdviserIdSemester(
+        final Long adviserId,
+        final Publication.PublicationType type,
+        final String semester) {
+        checkArgument(adviserId != null, "El id de Adviser no puede ser nulo.");
+        checkArgument(semester != null, "El semestre a obtener no puede ser nulo.");
+
+        adviserRepository.findById(adviserId)
+            .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
+
+        Collection<Publication> publications = publicationRepository.getByAdviserIdSemester(adviserId, type, semester);
+
+        return publications.stream()
+            .map(publication -> publicationMapper.map(publication, PublicationResponseDTO.class))
+            .collect(Collectors.toSet());
+    }
 }

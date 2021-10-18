@@ -55,4 +55,15 @@ public class PublicationRestControllerImpl implements PublicationRestController 
 
         return ResponseEntity.ok(publicationResponseDTOS);
     }
+
+    @GetMapping("/published")
+    @Override
+    public ResponseEntity<Collection<PublicationResponseDTO>> getByAdviserIdSemester(
+        @NotNull @RequestParam("adviserId") final Long adviserId,
+        @NotNull @RequestParam("type") final Publication.PublicationType type,
+        @NotNull @RequestParam("semester") final String semester) {
+        Collection<PublicationResponseDTO> publicationResponseDTOS = publicationService.getByAdviserIdSemester(adviserId, type, semester);
+
+        return ResponseEntity.ok(publicationResponseDTOS);
+    }
 }

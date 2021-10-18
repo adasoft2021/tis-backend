@@ -7,4 +7,6 @@ import java.util.Collection;
 
 public interface PublicationRepository extends TisRepository<Publication, Long> {
     Collection<Publication> getByAdviserId(Long adviserId, Publication.PublicationType type);
+
+    Collection<Publication> getByAdviserIdSemester(Long adviserId, Publication.PublicationType type, String semester);
 }
