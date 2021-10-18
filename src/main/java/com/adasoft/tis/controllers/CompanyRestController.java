@@ -134,14 +134,6 @@ public interface CompanyRestController {
                 array = @ArraySchema(schema = @Schema(implementation = CompanyResponseDTO.class))
             )
         ),
-        @ApiResponse(
-            description = "Fallo al buscar los Companys",
-            responseCode = "400",
-            content = @Content(
-                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
-            )
-        ),
-
     })
     ResponseEntity<Collection<CompanyResponseDTO>> getAll();
 }
