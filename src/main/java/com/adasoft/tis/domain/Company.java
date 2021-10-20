@@ -31,14 +31,14 @@ public class Company extends BaseEntity<Long> {
     @Column(nullable = false)
     String email;
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "members", joinColumns = @JoinColumn(name = "id"))
+    @CollectionTable(name = "partners", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "partners")
     List<String> partners;
     @JsonManagedReference
     @OneToMany(mappedBy = "createdBy")
     Set<Publication> publications;
 
-    public enum SocietyKind {
+    public enum CompanyType {
         ///<summary>Sociedad de responsbilidad limitada</summary>
         LLC("SRL"),
         ///<summary>Sociedad Anonima</summary>
@@ -50,7 +50,7 @@ public class Company extends BaseEntity<Long> {
 
         public final String type;
 
-        SocietyKind(String type) {
+        CompanyType(String type) {
             this.type = type;
         }
     }
