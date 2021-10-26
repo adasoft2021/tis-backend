@@ -26,9 +26,9 @@ public class Company extends BaseEntity<Long> {
     String name;
     @Column(nullable = false)
     String companyType;
-    @Column
+    @Column(nullable = false)
     String address;
-    @Column
+    @Column(nullable = false)
     String email;
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "partners", joinColumns = @JoinColumn(name = "id"))
