@@ -25,5 +25,12 @@ public class UpdateAdviserDTO extends BaseUpdateDTO<Long> {
     )
     @NotNull
     String password;
+    @Schema(
+        name = "email",
+        description = "email de un asesor",
+        type = "String"
+    )
+    @NotNull
+    String email;
 
 }

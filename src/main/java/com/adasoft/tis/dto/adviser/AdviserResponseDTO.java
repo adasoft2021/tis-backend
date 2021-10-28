@@ -11,4 +11,5 @@ public class AdviserResponseDTO extends BaseResponseDTO<Long> {
     private String userName;
     private String fisrtName;
     private String lastName;
+    private String email;
 }

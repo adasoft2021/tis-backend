@@ -23,4 +23,6 @@ public class User<PrimaryKey extends Serializable> extends BaseEntity<PrimaryKey
     String userName;
     @Column(nullable = false)
     String password;
+    @Column(nullable = false)
+    String email;
 }

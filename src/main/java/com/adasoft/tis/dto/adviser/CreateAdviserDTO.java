@@ -40,4 +40,11 @@ public class CreateAdviserDTO extends BaseCreateDTO {
     @NotNull
     String password;
 
+    @Schema(
+        name = "email",
+        description = "email de un asesor",
+        type = "String"
+    )
+    @NotNull
+    String email;
 }
