@@ -26,21 +26,6 @@ public class CreateAdviserDTO extends BaseCreateDTO {
     @NotNull
     String lastName;
     @Schema(
-        name = "userName",
-        description = "nombre de usuario de un asesor",
-        type = "String"
-    )
-    @NotNull
-    String userName;
-    @Schema(
-        name = "password",
-        description = "password de un asesor",
-        type = "String"
-    )
-    @NotNull
-    String password;
-
-    @Schema(
         name = "email",
         description = "email de un asesor",
         type = "String"

@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 public class AdviserResponseDTO extends BaseResponseDTO<Long> {
     private Long id;
-    private String userName;
     private String fisrtName;
     private String lastName;
     private String email;
