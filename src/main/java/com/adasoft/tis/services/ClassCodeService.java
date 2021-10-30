@@ -1,6 +1,5 @@
 package com.adasoft.tis.services;
 
-import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.utils.CodeGenerator;
 import com.adasoft.tis.domain.Adviser;
@@ -11,7 +10,6 @@ import com.adasoft.tis.repository.ClassCodeRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,15 +36,9 @@ public class ClassCodeService {
         }
         String code;
 
-        long max = 5429503678976L;
-        long i = 0L;
         do {
             code = codeGenerator.generateLetterCode(9, 3, '-');
-            i++;
-        } while (classCodeRepository.existByCode(code) && i < max);
-        if (i == max)
-            throw new DefaultTisDomainException(HttpStatus.CONFLICT, "Se ha excedido la cantidad de ClassCode");
-
+        } while (classCodeRepository.existByCode(code));
 
         ClassCode classCode = new ClassCode();
         classCode.setCode(code);

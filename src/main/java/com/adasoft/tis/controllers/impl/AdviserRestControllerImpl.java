@@ -73,6 +73,6 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         if (token.equals(""))
             throw new DefaultTisDomainException(HttpStatus.UNAUTHORIZED, "Falta autorizacion");
         ClassCodeResponseDTO responseDTO = classCodeService.create(adviserId);
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 }

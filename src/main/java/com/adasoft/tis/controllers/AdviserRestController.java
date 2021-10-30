@@ -151,7 +151,7 @@ public interface AdviserRestController {
         responses = {
             @ApiResponse(
                 description = "ClassCode creado exitosamente",
-                responseCode = "200",
+                responseCode = "201",
                 content = @Content(
                     mediaType = "application/json", schema = @Schema(implementation = ClassCodeResponseDTO.class)
                 )
@@ -177,13 +177,6 @@ public interface AdviserRestController {
                     mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
                 )
             ),
-            @ApiResponse(
-                description = "No se puede crear el ClassCode",
-                responseCode = "409",
-                content = @Content(
-                    mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
-                )
-            )
         })
     ResponseEntity<ClassCodeResponseDTO> createClassCode(
         @Parameter(in = ParameterIn.HEADER,

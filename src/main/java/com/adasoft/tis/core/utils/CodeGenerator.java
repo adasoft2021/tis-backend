@@ -2,7 +2,7 @@ package com.adasoft.tis.core.utils;
 
 import java.security.SecureRandom;
 
-public class CodeGenerator {
+public final class CodeGenerator {
 
     private SecureRandom rnd = new SecureRandom();
 
