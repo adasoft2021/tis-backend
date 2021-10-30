@@ -4,8 +4,10 @@ import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
+import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -144,4 +146,51 @@ public interface AdviserRestController {
 
     })
     ResponseEntity<Collection<AdviserResponseDTO>> getAll();
+
+    @Operation(summary = "Crear un ClassCode por el ID del Adviser",
+        responses = {
+            @ApiResponse(
+                description = "ClassCode creado exitosamente",
+                responseCode = "200",
+                content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = ClassCodeResponseDTO.class)
+                )
+            ),
+            @ApiResponse(
+                description = "Fallo al buscar Adviser",
+                responseCode = "400",
+                content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                )
+            ),
+            @ApiResponse(
+                description = "Falta autorizacion",
+                responseCode = "401",
+                content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                )
+            ),
+            @ApiResponse(
+                description = "No se encontró el ID de Adviser en el sistema",
+                responseCode = "404",
+                content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                )
+            ),
+            @ApiResponse(
+                description = "No se puede crear el ClassCode",
+                responseCode = "409",
+                content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                )
+            )
+        })
+    ResponseEntity<ClassCodeResponseDTO> createClassCode(
+        @Parameter(in = ParameterIn.HEADER,
+            name = "auth",
+            description = "codigo para autorizacion (ninguna)",
+            required = true) String token,
+        @Parameter(description = "ID de Adviser para crear ClassCode", example = "1")
+            Long adviserId
+    );
 }

@@ -1,10 +1,13 @@
 package com.adasoft.tis.controllers.impl;
 
 import com.adasoft.tis.controllers.AdviserRestController;
+import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
+import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.services.AdviserService;
+import com.adasoft.tis.services.ClassCodeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ import java.util.Collection;
 @AllArgsConstructor
 public class AdviserRestControllerImpl implements AdviserRestController {
     private AdviserService adviserService;
+    private ClassCodeService classCodeService;
 
     @PostMapping
     @Override
@@ -40,7 +44,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @PutMapping("/{adviserId}")
     @Override
     public ResponseEntity<AdviserResponseDTO> update(
-        @NotNull @PathVariable("adviserID") final Long id,
+        @NotNull @PathVariable("adviserId") final Long id,
         @Valid @RequestBody final UpdateAdviserDTO adviserDTO) {
         AdviserResponseDTO responseDTO = adviserService.update(id, adviserDTO);
         return ResponseEntity.ok(responseDTO);
@@ -49,7 +53,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @DeleteMapping("/{adviserId}")
     @Override
     public ResponseEntity<AdviserResponseDTO> delete(
-        @NotNull @PathVariable("adviserID") final Long id) {
+        @NotNull @PathVariable("adviserId") final Long id) {
         AdviserResponseDTO responseDTO = adviserService.delete(id);
         return ResponseEntity.ok(responseDTO);
     }
@@ -59,5 +63,16 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     public ResponseEntity<Collection<AdviserResponseDTO>> getAll() {
         Collection<AdviserResponseDTO> responses = adviserService.getAll();
         return ResponseEntity.ok(responses);
+    }
+
+    @PostMapping("/{adviserId}/class-code")
+    @Override
+    public ResponseEntity<ClassCodeResponseDTO> createClassCode(
+        @RequestHeader(value = "auth") String token,
+        @NotNull @PathVariable("adviserId") Long adviserId) {
+        if (token.equals(""))
+            throw new DefaultTisDomainException(HttpStatus.UNAUTHORIZED, "Falta autorizacion");
+        ClassCodeResponseDTO responseDTO = classCodeService.create(adviserId);
+        return ResponseEntity.ok(responseDTO);
     }
 }
