@@ -22,6 +22,8 @@ import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
+import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
+import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
@@ -241,6 +243,27 @@ public class BeansConfiguration {
                 map().setId(source.getId());
             }
         });
+        return modelMapper;
+    }
+
+    @Bean("spaceAnswerMapper")
+    public ModelMapper spaceAnswerMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<SpaceAnswer, SpaceAnswerResponseDTO>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+                map().setCompanyName(source.getCreatedBy().getName());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreateSpaceAnswerDTO, SpaceAnswer>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+
         return modelMapper;
     }
 
