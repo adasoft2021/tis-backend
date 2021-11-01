@@ -1,9 +1,11 @@
 package com.adasoft.tis.config;
 
+import com.adasoft.tis.core.utils.CodeGenerator;
 import com.adasoft.tis.domain.*;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
+import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.PostCompanyDTO;
@@ -25,6 +27,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 
 @Configuration
@@ -159,7 +162,6 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 map().setId(source.getId());
-                map().setUserName(source.getUserName());
                 map().setFisrtName(source.getFirstName());
                 map().setLastName(source.getLastName());
 
@@ -169,8 +171,6 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
-                map().setUserName(source.getUserName());
-                map().setPassword(source.getPassword());
                 map().setFirstName(source.getFirstName());
                 map().setLastName(source.getLastName());
             }
@@ -179,8 +179,6 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
-                map().setUserName(source.getUserName());
-                map().setPassword(source.getPassword());
             }
         });
         return modelMapper;
@@ -207,7 +205,6 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
-                map().setName(source.getName());
             }
         });
         modelMapper.addMappings(new PropertyMap<PostCompanyDTO, Company>() {
@@ -239,5 +236,24 @@ public class BeansConfiguration {
         });
 
         return modelMapper;
+    }
+
+    @Bean("classCodeMapper")
+    public ModelMapper classCodeMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<ClassCode, ClassCodeResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+            }
+        });
+        return modelMapper;
+    }
+
+    @Bean("codeGenerator")
+    @Scope("singleton")
+    public CodeGenerator codeGenerator() {
+        return new CodeGenerator();
     }
 }
