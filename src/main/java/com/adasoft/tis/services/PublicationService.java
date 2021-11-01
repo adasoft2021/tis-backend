@@ -73,7 +73,7 @@ public class PublicationService {
         final Long adviserId,
         final Publication.PublicationType type) {
         checkArgument(adviserId != null, "El id de Adviser no puede ser nulo.");
-        
+
         adviserRepository.findById(adviserId)
             .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
 

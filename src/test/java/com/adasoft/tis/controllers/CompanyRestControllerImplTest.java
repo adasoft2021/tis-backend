@@ -46,7 +46,7 @@ class CompanyRestControllerImplTest {
     private static final String ADDRESS = "Jordan y Oquendo";
     private static final String EMAIL = "acme@gmail.com";
     private static final String TELEPHONE = "77777777";
-    private static final String[] PARTNERS = {"Violeta Guzman", "Jesus Jimenez", "Leonardo Roldan", "Luis Tapia", "Viviana Tolaba"};
+    private static final String[] PARTNERS = {"Violeta Guzman", "Jesus Jimenez", "Leonardo Roldan", "Luis Tapia", "Viviana Tolaba" };
     private static CompanyResponseDTO responseDTO;
     private static UpdateCompanyDTO updateDTO;
 

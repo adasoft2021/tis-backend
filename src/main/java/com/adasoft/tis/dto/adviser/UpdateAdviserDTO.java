@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class UpdateAdviserDTO extends BaseUpdateDTO<Long> {
-    
+
     @Schema(
         name = "email",
         description = "email de un asesor",

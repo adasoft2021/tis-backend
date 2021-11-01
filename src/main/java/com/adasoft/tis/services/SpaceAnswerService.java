@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
@@ -26,11 +27,13 @@ public class SpaceAnswerService {
     private CompanyRepository companyRepository;
     private ModelMapper spaceAnswerMapper;
 
-    public SpaceAnswerResponseDTO create(final CreateSpaceAnswerDTO spaceDTO) {
-        checkArgument(spaceDTO != null, "El SpaceAnswerDTO a actualizar no puede ser nulo.");
+    public SpaceAnswerResponseDTO create(final Long spaceId, final CreateSpaceAnswerDTO spaceDTO) {
+        checkArgument(spaceId != null, "El spaceId no puede ser nulo.");
+        checkArgument(Objects.equals(spaceId, spaceDTO.getSpaceId()), "Los ids de Space no coinciden");
+        checkArgument(spaceDTO != null, "El SpaceAnswerDTO  no puede ser nulo.");
 
         Space foundSpace = spaceRepository.findById(spaceDTO.getSpaceId())
-            .orElseThrow(() -> new EntityNotFoundException(Space.class, spaceDTO.getCreatedById()));
+            .orElseThrow(() -> new EntityNotFoundException(Space.class, spaceDTO.getSpaceId()));
 
         Company foundCompany = companyRepository.findById(spaceDTO.getCreatedById())
             .orElseThrow(() -> new EntityNotFoundException(Space.class, spaceDTO.getCreatedById()));
