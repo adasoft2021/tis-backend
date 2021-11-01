@@ -6,6 +6,7 @@ import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
+import com.adasoft.tis.dto.company.PostCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
@@ -207,6 +208,12 @@ public class BeansConfiguration {
             protected void configure() {
                 skip(destination.getId());
                 map().setName(source.getName());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<PostCompanyDTO, Company>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
             }
         });
         return modelMapper;

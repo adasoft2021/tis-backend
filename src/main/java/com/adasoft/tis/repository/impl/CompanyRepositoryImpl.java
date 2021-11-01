@@ -23,4 +23,10 @@ public class CompanyRepositoryImpl extends AbstractTisRepository<Company, Long> 
         return entityManager.createQuery(jpqlQuery, Company.class)
             .getResultList();
     }
+
+    @Override
+    public Company findbyName(final String name){
+        Company foundEntity = entityManager.find(Company.class, name);
+        return foundEntity;
+    }
 }

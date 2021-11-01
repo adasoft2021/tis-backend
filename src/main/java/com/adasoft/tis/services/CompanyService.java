@@ -4,14 +4,17 @@ import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.domain.Company;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
+import com.adasoft.tis.dto.company.PostCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.repository.CompanyRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
@@ -29,6 +32,20 @@ public class CompanyService {
 
         Company persistedCompany = companyRepository.save(defaultCompany);
 
+        return companyMapper.map(persistedCompany, CompanyResponseDTO.class);
+    }
+
+    public CompanyResponseDTO post(final PostCompanyDTO companyDTO) {
+        checkArgument(companyDTO != null, "El CompanyDTO a registrar no puede ser nulo.");
+
+        Company defaultCompany = companyMapper.map(companyDTO, Company.class);
+
+        Company findCompany = companyRepository.findbyName(defaultCompany.getName())
+            .orElseThrow(() -> new EntityNotFoundException(Company.class, defaultCompany.getName()));
+        Company persistedCompany = new Company();
+        if(findCompany == null) {
+            persistedCompany = companyRepository.save(defaultCompany);
+        }
         return companyMapper.map(persistedCompany, CompanyResponseDTO.class);
     }
 
