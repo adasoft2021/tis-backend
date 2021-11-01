@@ -1,9 +1,11 @@
 package com.adasoft.tis.config;
 
+import com.adasoft.tis.core.utils.CodeGenerator;
 import com.adasoft.tis.domain.*;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
+import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
@@ -24,6 +26,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 
 @Configuration
@@ -188,21 +191,19 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 map().setId(source.getId());
-                map().setEmail(source.getEmail());
+
             }
         });
         modelMapper.addMappings(new PropertyMap<CreateCompanyDTO, Company>() {
             @Override
             protected void configure() {
                 skip(destination.getId());
-                map().setEmail(source.getEmail());
             }
         });
         modelMapper.addMappings(new PropertyMap<UpdateCompanyDTO, Company>() {
             @Override
             protected void configure() {
                 skip(destination.getId());
-                map().setEmail(source.getEmail());
             }
         });
         return modelMapper;
@@ -230,5 +231,22 @@ public class BeansConfiguration {
         return modelMapper;
     }
 
+    @Bean("classCodeMapper")
+    public ModelMapper classCodeMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<ClassCode, ClassCodeResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+            }
+        });
+        return modelMapper;
+    }
 
+    @Bean("codeGenerator")
+    @Scope("singleton")
+    public CodeGenerator codeGenerator() {
+        return new CodeGenerator();
+    }
 }
