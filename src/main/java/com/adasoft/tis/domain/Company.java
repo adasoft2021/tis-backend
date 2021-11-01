@@ -1,6 +1,5 @@
 package com.adasoft.tis.domain;
 
-import com.adasoft.tis.core.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,17 +18,17 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "companies")
-public class Company extends BaseEntity<Long> {
+public class Company extends User<Long> {
     @Column(nullable = false)
     String shortName;
     @Column(nullable = false)
     String name;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String companyType;
     @Column
     String address;
     @Column
-    String email;
+    String telephone;
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "partners", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "partners")
@@ -38,20 +37,4 @@ public class Company extends BaseEntity<Long> {
     @OneToMany(mappedBy = "createdBy")
     Set<Publication> publications;
 
-    public enum CompanyType {
-        ///<summary>Sociedad de responsbilidad limitada</summary>
-        LLC("SRL"),
-        ///<summary>Sociedad Anonima</summary>
-        AC("SA"),
-        ///<summary>Coorporacion</summary>
-        CORP("CORPORACION"),
-        ///<summary>Cooperativa</summary>
-        COOP("COOPERATIVA");
-
-        public final String type;
-
-        CompanyType(String type) {
-            this.type = type;
-        }
-    }
 }

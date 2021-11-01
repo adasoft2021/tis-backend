@@ -23,7 +23,7 @@ public class Publication extends BaseEntity<Long> {
     private String title;
     @Column(nullable = false)
     private LocalDateTime date;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String code;
     @Column(nullable = false)
     private String semester;

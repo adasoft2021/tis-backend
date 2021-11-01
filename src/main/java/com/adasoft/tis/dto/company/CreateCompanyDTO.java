@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 public class CreateCompanyDTO extends BaseCreateDTO {
     @Schema(
-        name = "shotName",
+        name = "shortName",
         description = "nombre corto de una GE",
         type = "String"
     )
@@ -39,20 +39,18 @@ public class CreateCompanyDTO extends BaseCreateDTO {
         description = "direccion de una GE",
         type = "String"
     )
-    @NotNull
+
     private String address;
     @Schema(
         name = "email",
         description = "correo electronico de una GE",
         type = "String"
     )
-    @NotNull
     private String email;
     @ArraySchema(
         schema = @Schema(
             type = "String"
         )
     )
-    @NotNull
     private List<String> partners;
 }

@@ -1,7 +1,6 @@
 package com.adasoft.tis.controllers;
 
 import com.adasoft.tis.controllers.impl.AdviserRestControllerImpl;
-import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.domain.Adviser;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -88,21 +86,4 @@ class AdviserRestControllerImplTest {
             .andExpect(status().isUnauthorized()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
-
-    @Test
-    void createClassCode() throws Exception {
-        when(classCodeService.create(any())).thenThrow(new DefaultTisDomainException(HttpStatus.CONFLICT, "Se ha excedido la cantidad de ClassCode"));
-
-        ErrorResponse errorResponse = ErrorResponse.builder()
-            .title("El proceso no puede continuar")
-            .message(String.format("Se ha excedido la cantidad de ClassCode", ID))
-            .build();
-
-        mvc.perform(post(String.format("%s/{adviserId}/class-code", BASE_URL), ID).header("auth", TOKEN))
-            .andExpect(status().isConflict())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
-    }
-
-
 }

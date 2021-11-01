@@ -15,5 +15,6 @@ public class CompanyResponseDTO extends BaseResponseDTO<Long> {
     private String companyType;
     private String address;
     private String email;
+    private String telephone;
     private List<String> partners;
 }
