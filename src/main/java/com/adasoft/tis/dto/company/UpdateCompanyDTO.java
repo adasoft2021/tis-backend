@@ -27,7 +27,6 @@ public class UpdateCompanyDTO extends BaseUpdateDTO<Long> {
         description = "correo electronico de una GE",
         type = "String"
     )
-    @NotNull
     private String email;
     @Schema(
         name = "telephone",

@@ -5,6 +5,7 @@ import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.domain.Company;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
+import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.services.CompanyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,6 +23,7 @@ import java.util.HashSet;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,13 +40,15 @@ class CompanyRestControllerImplTest {
 
     private static final String BASE_URL = "/companies";
     private static final Long ID = 1L;
-    private static final String SHORT = "ADASOFT";
-    private static final String NAME = "ÄDASOFTWARE";
+    private static final String SHORT = "acme";
+    private static final String NAME = "acme company";
     private static final String COMPANY_TYPE = "SRL";
     private static final String ADDRESS = "Jordan y Oquendo";
-    private static final String EMAIL = "adasoftsrl@gmail.com";
+    private static final String EMAIL = "acme@gmail.com";
+    private static final String TELEPHONE = "77777777";
     private static final String[] PARTNERS = {"Violeta Guzman", "Jesus Jimenez", "Leonardo Roldan", "Luis Tapia", "Viviana Tolaba"};
     private static CompanyResponseDTO responseDTO;
+    private static UpdateCompanyDTO updateDTO;
 
     @BeforeAll
     static void setup() {
@@ -56,6 +60,10 @@ class CompanyRestControllerImplTest {
         responseDTO.setAddress(ADDRESS);
         responseDTO.setEmail(EMAIL);
         responseDTO.setPartners(Arrays.asList(PARTNERS));
+        updateDTO = new UpdateCompanyDTO();
+        updateDTO.setAddress(ADDRESS + "23");
+        updateDTO.setTelephone(TELEPHONE);
+        updateDTO.setPartners(Arrays.asList(PARTNERS).subList(0, 3));
     }
 
     @Test
@@ -94,4 +102,32 @@ class CompanyRestControllerImplTest {
             .andExpect(content().json(objectMapper.writeValueAsString(companies)));
     }
 
+    @Test
+    void updateCompanySuccesfully() throws Exception {
+
+        when(companyService.update(any(), any())).thenReturn(responseDTO);
+
+        mvc.perform(put(String.format("%s/{companyId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDTO)))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
+    }
+
+    @Test
+    void updateCompanyBadRequest() throws Exception {
+
+        mvc.perform(put(String.format("%s/{companyId}", BASE_URL), ID))
+            .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void updateCompanyNotFound() throws Exception {
+        when(companyService.update(any(), any())).thenThrow(new EntityNotFoundException(Company.class, ID));
+
+        mvc.perform(put(String.format("%s/{companyId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDTO)))
+            .andExpect(status().isNotFound());
+    }
 }

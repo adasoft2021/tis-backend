@@ -47,6 +47,12 @@ public class CreateCompanyDTO extends BaseCreateDTO {
         type = "String"
     )
     private String email;
+    @Schema(
+        name = "telephone",
+        description = "telefono de una GE",
+        type = "String"
+    )
+    private String telephone;
     @ArraySchema(
         schema = @Schema(
             type = "String"
