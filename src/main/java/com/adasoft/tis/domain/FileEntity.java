@@ -1,6 +1,6 @@
 package com.adasoft.tis.domain;
 
-import com.adasoft.tis.core.domain.BaseEntity;
+import com.adasoft.tis.core.domain.BaseEmbeddable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @ToString(callSuper = true)
 @NoArgsConstructor
 @Embeddable
-public class FileEntity extends BaseEntity<Long> {
+public class FileEntity extends BaseEmbeddable<Long> {
     @Column
     @NotNull
     String name;

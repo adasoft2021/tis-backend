@@ -1,5 +1,6 @@
-package com.adasoft.tis.controllers.impl;
+package com.adasoft.tis.controllers;
 
+import com.adasoft.tis.controllers.impl.SpaceRestControllerImpl;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.domain.Company;

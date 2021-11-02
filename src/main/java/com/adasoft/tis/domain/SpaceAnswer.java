@@ -19,7 +19,7 @@ import java.util.List;
 @ToString(callSuper = true)
 @NoArgsConstructor
 @Entity
-@Table(name = "space-answers")
+@Table(name = "space_answers")
 public class SpaceAnswer extends BaseEntity<Long> {
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -33,7 +33,7 @@ public class SpaceAnswer extends BaseEntity<Long> {
     @NotNull
     Company createdBy;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = FileEntity.class)
     @CollectionTable(name = "files", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "files")
     @Size(min = 1)
