@@ -1,5 +1,6 @@
 package com.adasoft.tis.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,9 +22,9 @@ import java.util.Set;
 public class Company extends User<Long> {
     @Column(nullable = false)
     String shortName;
-    @Column(nullable = false)
-    String name;
     @Column(nullable = false, unique = true)
+    String name;
+    @Column(nullable = false)
     String companyType;
     @Column
     String address;
@@ -36,5 +37,8 @@ public class Company extends User<Long> {
     @JsonManagedReference
     @OneToMany(mappedBy = "createdBy")
     Set<Publication> publications;
-
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_adviser_id", nullable = false, updatable = false)
+    Adviser adviser;
 }

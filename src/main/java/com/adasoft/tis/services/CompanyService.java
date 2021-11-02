@@ -1,20 +1,22 @@
 package com.adasoft.tis.services;
 
+import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
+import com.adasoft.tis.domain.ClassCode;
 import com.adasoft.tis.domain.Company;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
-import com.adasoft.tis.dto.company.PostCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
+import com.adasoft.tis.repository.ClassCodeRepository;
 import com.adasoft.tis.repository.CompanyRepository;
+import com.adasoft.tis.repository.impl.ClassCodeRepositoryImpl;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
@@ -24,28 +26,21 @@ import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
 public class CompanyService {
     private CompanyRepository companyRepository;
     private ModelMapper companyMapper;
+    private ClassCodeRepository classCodeRepository;
 
-    public CompanyResponseDTO create(final CreateCompanyDTO companyDTO) {
+    public CompanyResponseDTO create(final String registrationCode, final CreateCompanyDTO companyDTO) {
+        checkArgument(registrationCode != null, "El Codigo de Registro no puede ser nulo.");
         checkArgument(companyDTO != null, "El CompanyDTO a crear no puede ser nulo.");
 
+        ClassCode foundCode = classCodeRepository.getByCode(registrationCode)
+            .orElseThrow(() -> new EntityNotFoundException(ClassCode.class, registrationCode));
+        if(companyRepository.existName(companyDTO.getName())){
+            throw new DefaultTisDomainException(HttpStatus.CONFLICT,"Ya existe la grupo empresa "+companyDTO.getName()+" en el sistema.");
+        }
         Company defaultCompany = companyMapper.map(companyDTO, Company.class);
-
+        defaultCompany.setAdviser(foundCode.getCreatedBy());
         Company persistedCompany = companyRepository.save(defaultCompany);
 
-        return companyMapper.map(persistedCompany, CompanyResponseDTO.class);
-    }
-
-    public CompanyResponseDTO post(final PostCompanyDTO companyDTO) {
-        checkArgument(companyDTO != null, "El CompanyDTO a registrar no puede ser nulo.");
-
-        Company defaultCompany = companyMapper.map(companyDTO, Company.class);
-
-        Company findCompany = companyRepository.findbyName(defaultCompany.getName())
-            .orElseThrow(() -> new EntityNotFoundException(Company.class, defaultCompany.getName()));
-        Company persistedCompany = new Company();
-        if(findCompany == null) {
-            persistedCompany = companyRepository.save(defaultCompany);
-        }
         return companyMapper.map(persistedCompany, CompanyResponseDTO.class);
     }
 

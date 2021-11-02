@@ -1,6 +1,7 @@
 package com.adasoft.tis.repository.impl;
 
 import com.adasoft.tis.core.repository.AbstractTisRepository;
+import com.adasoft.tis.domain.ClassCode;
 import com.adasoft.tis.domain.Company;
 import com.adasoft.tis.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,11 @@ public class CompanyRepositoryImpl extends AbstractTisRepository<Company, Long> 
     }
 
     @Override
-    public Company findbyName(final String name){
-        Company foundEntity = entityManager.find(Company.class, name);
-        return foundEntity;
+    public boolean existName(String name){
+        String query = String.format("SELECT CASE WHEN COUNT(e) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM %s e " +
+            "WHERE e.name = :name ", ClassCode.class.getSimpleName());
+        return entityManager.createQuery(query, Boolean.class)
+            .setParameter("name", name).getSingleResult();
     }
 }

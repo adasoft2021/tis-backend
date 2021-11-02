@@ -24,8 +24,9 @@ public class CompanyRestControllerImpl implements CompanyRestController {
     @PostMapping
     @Override
     public ResponseEntity<CompanyResponseDTO> create(
+        @NotNull @PathVariable("registrationCode") final String registrationCode,
         @Valid @RequestBody final CreateCompanyDTO companyDTO) {
-        CompanyResponseDTO responseDTO = companyService.create(companyDTO);
+        CompanyResponseDTO responseDTO = companyService.create(registrationCode,companyDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
