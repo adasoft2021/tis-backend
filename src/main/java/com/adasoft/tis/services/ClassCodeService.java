@@ -5,6 +5,7 @@ import com.adasoft.tis.core.utils.CodeGenerator;
 import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.ClassCode;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.classCode.CreateClassCodeDTO;
 import com.adasoft.tis.repository.AdviserRepository;
 import com.adasoft.tis.repository.ClassCodeRepository;
 import lombok.AllArgsConstructor;
@@ -71,5 +72,20 @@ public class ClassCodeService {
             });
 
         return classCodeMapper.map(foundClassCode, ClassCodeResponseDTO.class);
+    }
+
+    public Object validateClassCode(final CreateClassCodeDTO classCodeDTO) {
+        checkArgument(classCodeDTO != null, "El CreateClassCodeDTO no puede ser nulo.");
+        boolean classCodeExists = classCodeRepository.existByCode(classCodeDTO.getCode());
+        if (!classCodeExists) {
+            throw new EntityNotFoundException(ClassCode.class, 1) {
+                @Override
+                protected String getExceptionDetail() {
+                    String message = super.getExceptionDetail().replace("id", "código de clase");
+                    return message.replace("1", classCodeDTO.getCode());
+                }
+            };
+        }
+        return null;
     }
 }
