@@ -17,8 +17,8 @@ import java.util.Set;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(exclude = {"qualifications"}, callSuper = true)
-@ToString(exclude = {"qualifications"}, callSuper = true)
+@EqualsAndHashCode(exclude = {"qualifications" }, callSuper = true)
+@ToString(exclude = {"qualifications" }, callSuper = true)
 @NoArgsConstructor
 @Entity
 @Table(name = "reviews")

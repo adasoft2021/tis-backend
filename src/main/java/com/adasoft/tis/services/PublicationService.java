@@ -27,7 +27,7 @@ public class PublicationService {
     private ModelMapper publicationMapper;
 
     public PublicationResponseDTO create(final CreatePublicationDTO publicationDTO) {
-        checkArgument(publicationDTO != null, "El PublicationDTO a actualizar no puede ser nulo.");
+        checkArgument(publicationDTO != null, "El PublicationDTO no puede ser nulo.");
 
         Adviser foundAdviser = adviserRepository.findById(publicationDTO.getCreatedById())
             .orElseThrow(() -> new EntityNotFoundException(Adviser.class, publicationDTO.getCreatedById()));
@@ -41,8 +41,8 @@ public class PublicationService {
     }
 
     public PublicationResponseDTO update(final Long publicationId, final UpdatePublicationDTO publicationDTO) {
-        checkArgument(publicationId != null, "El id de Publication a actualizar no puede ser nulo.");
-        checkArgument(publicationDTO != null, "El PublicationDTO a actualizar no puede ser nulo.");
+        checkArgument(publicationId != null, "El id de Publication no puede ser nulo.");
+        checkArgument(publicationDTO != null, "El PublicationDTO no puede ser nulo.");
 
         Publication foundPublication = publicationRepository.findById(publicationId)
             .orElseThrow(() -> new EntityNotFoundException(Publication.class, publicationId));
@@ -54,7 +54,7 @@ public class PublicationService {
     }
 
     public Object delete(final Long publicationId) {
-        checkArgument(publicationId != null, "El id de Publication a actualizar no puede ser nulo.");
+        checkArgument(publicationId != null, "El id de Publication no puede ser nulo.");
 
         Publication foundPublication = publicationRepository.findById(publicationId)
             .orElseThrow(() -> new EntityNotFoundException(Publication.class, publicationId));
@@ -72,9 +72,7 @@ public class PublicationService {
     public Collection<PublicationResponseDTO> getByAdviserId(
         final Long adviserId,
         final Publication.PublicationType type) {
-        checkArgument(adviserId != null, "El id de Adviser a actualizar no puede ser nulo.");
-
-        System.out.printf("AdviserId: %d\n", adviserId);
+        checkArgument(adviserId != null, "El id de Adviser no puede ser nulo.");
 
         adviserRepository.findById(adviserId)
             .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
