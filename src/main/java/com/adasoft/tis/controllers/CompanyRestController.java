@@ -36,14 +36,14 @@ public interface CompanyRestController {
         ),
         @ApiResponse(
             description = "Ya existe esta Company a crear",
-            responseCode = "401",
+            responseCode = "409",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
     })
     ResponseEntity<CompanyResponseDTO> create(
-        @Parameter(description = "Codigo de Registro asociado al asesor", example = "fYGUAG")
+        @Parameter(description = "Codigo de Registro asociado al asesor", example = "abc-cde-fgh")
             String registrationCode,
         @RequestBody(description = "CompanyDTO que contiene los nuevos datos a crear")
             CreateCompanyDTO companyDTO
