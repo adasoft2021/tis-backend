@@ -19,5 +19,4 @@ import javax.persistence.Table;
 @Table(name = "spaces")
 public class Space extends BaseEntity<Long> {
 
-
 }
