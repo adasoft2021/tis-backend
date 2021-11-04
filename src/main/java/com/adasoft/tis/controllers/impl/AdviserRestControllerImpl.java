@@ -6,8 +6,10 @@ import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.AdviserService;
 import com.adasoft.tis.services.ClassCodeService;
+import com.adasoft.tis.services.SpaceAnswerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import java.util.Collection;
 public class AdviserRestControllerImpl implements AdviserRestController {
     private AdviserService adviserService;
     private ClassCodeService classCodeService;
+    private SpaceAnswerService spaceAnswerService;
 
     @PostMapping
     @Override
@@ -74,5 +77,14 @@ public class AdviserRestControllerImpl implements AdviserRestController {
             throw new DefaultTisDomainException(HttpStatus.UNAUTHORIZED, "Falta autorizacion");
         ClassCodeResponseDTO responseDTO = classCodeService.create(adviserId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
+
+    @GetMapping("/{adviserId}/spaces/{spaceId}")
+    @Override
+    public ResponseEntity<Collection<SpaceAnswerResponseDTO>> getSpaceAnswers(
+        @NotNull @PathVariable Long adviserId,
+        @NotNull @PathVariable Long spaceId) {
+        Collection<SpaceAnswerResponseDTO> response = spaceAnswerService.getBySpaceId(adviserId, spaceId);
+        return ResponseEntity.ok(response);
     }
 }
