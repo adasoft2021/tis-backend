@@ -24,7 +24,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @PostMapping
     @Override
     public ResponseEntity<ObservationResponseDTO> create(
-        @NotNull @RequestParam(name = "proposal", required = true) final Long proposalId,
+        @NotNull @RequestParam(name = "proposal") final Long proposalId,
         @Valid @RequestBody final CreateObservationDTO observationDTO) {
         ObservationResponseDTO responseDTO = observationService.create(observationDTO, proposalId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
@@ -58,7 +58,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @GetMapping
     @Override
     public ResponseEntity<Collection<ObservationResponseDTO>> getAllByProposalId(
-        @NotNull @RequestParam(name = "proposal", required = true) final Long proposalId) {
+        @NotNull @RequestParam(name = "proposal") final Long proposalId) {
         Collection<ObservationResponseDTO> responses = observationService.getAllByProposalId(proposalId);
         return ResponseEntity.ok(responses);
     }

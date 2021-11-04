@@ -23,4 +23,13 @@ public class CompanyRepositoryImpl extends AbstractTisRepository<Company, Long> 
         return entityManager.createQuery(jpqlQuery, Company.class)
             .getResultList();
     }
+
+    @Override
+    public boolean existName(String name) {
+        String query = String.format("SELECT CASE WHEN COUNT(e) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM %s e " +
+            "WHERE e.name = :name ", Company.class.getSimpleName());
+        return entityManager.createQuery(query, Boolean.class)
+            .setParameter("name", name).getSingleResult();
+    }
 }

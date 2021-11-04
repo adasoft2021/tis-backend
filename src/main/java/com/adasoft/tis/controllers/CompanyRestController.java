@@ -4,6 +4,7 @@ import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
+import com.adasoft.tis.dto.user.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -23,7 +24,7 @@ public interface CompanyRestController {
             description = "Company creado exitosamente",
             responseCode = "201",
             content = @Content(
-                mediaType = "application/json", schema = @Schema(implementation = CompanyResponseDTO.class)
+                mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class)
             )
         ),
         @ApiResponse(
@@ -32,9 +33,18 @@ public interface CompanyRestController {
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
+        ),
+        @ApiResponse(
+            description = "Ya existe esta Company a crear",
+            responseCode = "409",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
         )
     })
     ResponseEntity<CompanyResponseDTO> create(
+        @Parameter(description = "Codigo de Registro asociado al asesor", example = "abc-cde-fgh")
+            String registrationCode,
         @RequestBody(description = "CompanyDTO que contiene los nuevos datos a crear")
             CreateCompanyDTO companyDTO
     );

@@ -39,13 +39,13 @@ public class CreateCompanyDTO extends BaseCreateDTO {
         description = "direccion de una GE",
         type = "String"
     )
-
     private String address;
     @Schema(
         name = "email",
         description = "correo electronico de una GE",
         type = "String"
     )
+    @NotNull
     private String email;
     @Schema(
         name = "telephone",

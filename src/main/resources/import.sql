@@ -23,15 +23,15 @@ INSERT INTO users (ID, CREATED_AT, DELETED, UPDATED_AT, EMAIL) VALUES ('3', TIME
 INSERT INTO advisers (ID, FIRST_NAME, LAST_NAME)VALUES ( '1', 'Maria Leticia', 'Blanco Coca');
 
 --COMPANIES
-INSERT INTO companies(ID, SHORT_NAME, NAME, COMPANY_TYPE, ADDRESS) VALUES ('2','ADASOFT','ADA SOFTWARE', 'SRL', 'Jordan y Oquendo')
-INSERT INTO partners(ID,PARTNERS) VALUES ('2','Luis Tapia')
-INSERT INTO partners(ID,PARTNERS) VALUES ('2','Violeta Guzman')
-INSERT INTO partners(ID,PARTNERS) VALUES ('2','Leonardo Roldan')
+INSERT INTO companies(ID, SHORT_NAME, NAME, COMPANY_TYPE, ADDRESS, FK_ADVISER_ID) VALUES ('2','ADASOFT','ADA SOFTWARE', 'SRL', 'Jordan y Oquendo', '1')
+INSERT INTO partners(ID,PARTNERS) VALUES ('2','Luis Tapia');
+INSERT INTO partners(ID,PARTNERS) VALUES ('2','Violeta Guzman');
+INSERT INTO partners(ID,PARTNERS) VALUES ('2','Leonardo Roldan');
 
-INSERT INTO companies(ID, SHORT_NAME, NAME, COMPANY_TYPE, ADDRESS) VALUES ('3','Acme','Acme Company', 'SA', 'Jordan y Oquendo');
-INSERT INTO partners(ID,PARTNERS) VALUES ('3','Alguien Asdfd')
-INSERT INTO partners(ID,PARTNERS) VALUES ('3','Alguien Asdf')
-INSERT INTO partners(ID,PARTNERS) VALUES ('3','Aasdfds Bsdfsd')
+INSERT INTO companies(ID, SHORT_NAME, NAME, COMPANY_TYPE, ADDRESS, FK_ADVISER_ID) VALUES ('3','Acme','Acme Company', 'SA', 'Jordan y Oquendo', '1');
+INSERT INTO partners(ID,PARTNERS) VALUES ('3','Alguien Asdfd');
+INSERT INTO partners(ID,PARTNERS) VALUES ('3','Alguien Asdf');
+INSERT INTO partners(ID,PARTNERS) VALUES ('3','Aasdfds Bsdfsd');
 
 -- PROPOSALS
 INSERT INTO proposals (CREATED_AT, DELETED, UPDATED_AT, CREATED_BY, PART, FILE_URL, ADVISER) VALUES ('2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','A','/files/ADASOFTParteA.pdf','1');
