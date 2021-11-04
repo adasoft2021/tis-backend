@@ -200,14 +200,17 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                skip(destination.getAdviser());
             }
         });
         modelMapper.addMappings(new PropertyMap<UpdateCompanyDTO, Company>() {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                skip(destination.getAdviser());
             }
         });
+
         return modelMapper;
     }
 

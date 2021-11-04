@@ -9,7 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class CompanyResponseDTO extends BaseResponseDTO<Long> {
-    private Long id;
     private String shortname;
     private String name;
     private String companyType;

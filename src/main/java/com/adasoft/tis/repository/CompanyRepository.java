@@ -7,4 +7,5 @@ import java.util.Collection;
 
 public interface CompanyRepository extends TisRepository<Company, Long> {
     Collection<Company> getAll();
+    boolean existName(final String name);
 }
