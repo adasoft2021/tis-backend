@@ -253,7 +253,6 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<SpaceAnswer, SpaceAnswerResponseDTO>() {
             @Override
             protected void configure() {
-                skip(destination.getId());
                 map().setCompanyName(source.getCreatedBy().getName());
             }
         });

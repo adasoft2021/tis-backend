@@ -36,7 +36,7 @@ public class SpaceAnswerService {
             .orElseThrow(() -> new EntityNotFoundException(Space.class, spaceDTO.getSpaceId()));
 
         Company foundCompany = companyRepository.findById(spaceDTO.getCreatedById())
-            .orElseThrow(() -> new EntityNotFoundException(Space.class, spaceDTO.getCreatedById()));
+            .orElseThrow(() -> new EntityNotFoundException(Company.class, spaceDTO.getCreatedById()));
 
         SpaceAnswer defaultSpaceAnswer = spaceAnswerMapper.map(spaceDTO, SpaceAnswer.class);
         defaultSpaceAnswer.setSpace(foundSpace);
