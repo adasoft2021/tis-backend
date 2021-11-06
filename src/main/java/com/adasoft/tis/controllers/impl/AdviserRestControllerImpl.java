@@ -1,7 +1,6 @@
 package com.adasoft.tis.controllers.impl;
 
 import com.adasoft.tis.controllers.AdviserRestController;
-import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
@@ -71,10 +70,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @PostMapping("/{adviserId}/class-code")
     @Override
     public ResponseEntity<ClassCodeResponseDTO> createClassCode(
-        @RequestHeader(value = "auth") String token,
         @NotNull @PathVariable("adviserId") Long adviserId) {
-        if (token.equals(""))
-            throw new DefaultTisDomainException(HttpStatus.UNAUTHORIZED, "Falta autorizacion");
         ClassCodeResponseDTO responseDTO = classCodeService.create(adviserId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
