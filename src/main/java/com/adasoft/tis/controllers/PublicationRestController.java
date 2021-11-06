@@ -36,6 +36,13 @@ public interface PublicationRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "El ID del Asesor no existe en el sistema",
             responseCode = "404",
             content = @Content(
@@ -71,6 +78,13 @@ public interface PublicationRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "No se encontró el ID del Publication en el sistema",
             responseCode = "404",
             content = @Content(
@@ -95,6 +109,13 @@ public interface PublicationRestController {
         @ApiResponse(
             description = "Publicación eliminada exitosamente",
             responseCode = "204"
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
         ),
         @ApiResponse(
             description = "No se encontró el ID del Publication en el sistema",
@@ -128,6 +149,13 @@ public interface PublicationRestController {
             content = @Content(
                 mediaType = "application/json",
                 array = @ArraySchema(schema = @Schema(implementation = PublicationResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         ),
         @ApiResponse(

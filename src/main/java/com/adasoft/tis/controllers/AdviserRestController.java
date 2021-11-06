@@ -58,6 +58,13 @@ public interface AdviserRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "No se encontró el ID de Adviser en el sistema",
             responseCode = "404",
             content = @Content(
@@ -88,6 +95,13 @@ public interface AdviserRestController {
         @ApiResponse(
             description = "Fallo al actualizar el Adviser",
             responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
@@ -125,6 +139,13 @@ public interface AdviserRestController {
         @ApiResponse(
             description = "Fallo al eliminar el Adviser",
             responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
@@ -185,7 +206,7 @@ public interface AdviserRestController {
             )
         ),
         @ApiResponse(
-            description = "Falta autorizacion",
+            description = "No autorizado, el token es inválido",
             responseCode = "401",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
@@ -219,6 +240,13 @@ public interface AdviserRestController {
             content = @Content(
                 mediaType = "application/json",
                 array = @ArraySchema(schema = @Schema(implementation = SpaceAnswerResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         ),
         @ApiResponse(
