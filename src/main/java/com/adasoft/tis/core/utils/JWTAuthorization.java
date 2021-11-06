@@ -24,7 +24,7 @@ public class JWTAuthorization implements HandlerInterceptor {
         final HttpServletResponse response,
         final Object handler)
         throws DefaultTisDomainException {
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader("X-Token");
         try {
             if (token == null) {
                 throw new Exception("");
