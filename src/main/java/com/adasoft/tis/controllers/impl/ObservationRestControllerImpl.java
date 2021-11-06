@@ -24,6 +24,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @PostMapping
     @Override
     public ResponseEntity<ObservationResponseDTO> create(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @RequestParam(name = "proposal") final Long proposalId,
         @Valid @RequestBody final CreateObservationDTO observationDTO) {
         ObservationResponseDTO responseDTO = observationService.create(observationDTO, proposalId);
@@ -33,6 +34,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @GetMapping("/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> get(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("observationId") final Long id) {
         ObservationResponseDTO responseDTO = observationService.getById(id);
         return ResponseEntity.ok(responseDTO);
@@ -41,6 +43,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @PutMapping("/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> update(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("observationId") final Long id,
         @Valid @RequestBody final UpdateObservationDTO observationDTO) {
         ObservationResponseDTO responseDTO = observationService.update(id, observationDTO);
@@ -50,6 +53,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @DeleteMapping("/{observationId}")
     @Override
     public ResponseEntity<ObservationResponseDTO> delete(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("observationId") final Long id) {
         ObservationResponseDTO responseDTO = observationService.delete(id);
         return ResponseEntity.ok(responseDTO);
@@ -58,6 +62,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @GetMapping
     @Override
     public ResponseEntity<Collection<ObservationResponseDTO>> getAllByProposalId(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @RequestParam(name = "proposal") final Long proposalId) {
         Collection<ObservationResponseDTO> responses = observationService.getAllByProposalId(proposalId);
         return ResponseEntity.ok(responses);

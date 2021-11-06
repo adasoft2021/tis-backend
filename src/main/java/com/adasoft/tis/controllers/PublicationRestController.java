@@ -50,6 +50,7 @@ public interface PublicationRestController {
         required = true
     ))
     ResponseEntity<PublicationResponseDTO> create(
+        Long userId,
         @RequestBody(description = "PublicationDTO que contiene los nuevos datos a crear")
             CreatePublicationDTO publicationDTO
     );
@@ -84,6 +85,7 @@ public interface PublicationRestController {
         required = true
     ))
     ResponseEntity<PublicationResponseDTO> update(
+        Long userId,
         @Parameter(description = "ID del Publication a actualizar", example = "1")
             Long id,
         @RequestBody(description = "PublicationDTO que contiene los nuevos datos a ser actualizados")
@@ -115,7 +117,9 @@ public interface PublicationRestController {
         schema = @Schema(implementation = String.class),
         required = true
     ))
-    ResponseEntity<?> delete(@Parameter(description = "ID del Publication a eliminar", example = "1") Long id);
+    ResponseEntity<?> delete(
+        Long userId,
+        @Parameter(description = "ID del Publication a eliminar", example = "1") Long id);
 
     @Operation(summary = "Obtener lista publicaciones por ID del Asesor y tipo de Publicación", responses = {
         @ApiResponse(
@@ -141,6 +145,7 @@ public interface PublicationRestController {
         required = true
     ))
     ResponseEntity<Collection<PublicationResponseDTO>> getByAdviserId(
+        Long userId,
         @Parameter(description = "ID del Adviser a obtener sus publicaciones", example = "1")
             Long adviserId,
         @Parameter(description = "Tipo de Publicación a obtener")

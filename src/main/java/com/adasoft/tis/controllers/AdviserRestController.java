@@ -72,6 +72,7 @@ public interface AdviserRestController {
         required = true
     ))
     ResponseEntity<AdviserResponseDTO> get(
+        Long userId,
         @Parameter(description = "ID de Adviser a obtener", example = "1")
             Long id
     );
@@ -106,6 +107,7 @@ public interface AdviserRestController {
         required = true
     ))
     ResponseEntity<AdviserResponseDTO> update(
+        Long userId,
         @Parameter(description = "ID del Adviser a actualizar", example = "1")
             Long id,
         @RequestBody(description = "AdviserDTO que contiene los nuevos datos a ser actualizados")
@@ -142,6 +144,7 @@ public interface AdviserRestController {
         required = true
     ))
     ResponseEntity<AdviserResponseDTO> delete(
+        Long userId,
         @Parameter(description = "ID del Adviser a eliminar", example = "1")
             Long id
     );
@@ -203,6 +206,7 @@ public interface AdviserRestController {
         required = true
     ))
     ResponseEntity<ClassCodeResponseDTO> createClassCode(
+        Long userId,
         @Parameter(description = "ID de Adviser para crear ClassCode", example = "1")
             Long adviserId
     );
@@ -232,6 +236,7 @@ public interface AdviserRestController {
         required = true
     ))
     ResponseEntity<Collection<SpaceAnswerResponseDTO>> getSpaceAnswers(
+        Long userId,
         @Parameter(description = "ID del adviser") Long adviserId,
         @Parameter(description = "ID del space") Long spaceId
     );

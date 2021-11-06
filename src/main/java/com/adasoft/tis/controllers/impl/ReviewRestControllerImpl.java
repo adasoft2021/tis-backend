@@ -21,14 +21,18 @@ public class ReviewRestControllerImpl implements ReviewRestController {
 
     @GetMapping("/{reviewId}")
     @Override
-    public ResponseEntity<ReviewResponseDTO> get(@NotNull @PathVariable("reviewId") Long id) {
+    public ResponseEntity<ReviewResponseDTO> get(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("reviewId") Long id) {
         ReviewResponseDTO responseDTO = reviewService.get(id);
         return ResponseEntity.ok(responseDTO);
     }
 
     @PostMapping
     @Override
-    public ResponseEntity<ReviewResponseDTO> create(@Valid @RequestBody final CreateReviewDTO reviewDTO) {
+    public ResponseEntity<ReviewResponseDTO> create(
+        @RequestAttribute("userId") final Long userId,
+        @Valid @RequestBody final CreateReviewDTO reviewDTO) {
         ReviewResponseDTO responseDTO = reviewService.create(reviewDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
@@ -36,6 +40,7 @@ public class ReviewRestControllerImpl implements ReviewRestController {
     @PutMapping("/{reviewId}")
     @Override
     public ResponseEntity<ReviewResponseDTO> update(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("reviewId") final Long id,
         @Valid @RequestBody final UpdateReviewDTO reviewDTO) {
         ReviewResponseDTO responseDTO = reviewService.update(id, reviewDTO);

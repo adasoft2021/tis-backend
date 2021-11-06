@@ -80,6 +80,7 @@ public interface CompanyRestController {
         required = true
     ))
     ResponseEntity<CompanyResponseDTO> get(
+        Long userId,
         @Parameter(description = "ID de Company a obtener", example = "1")
             Long id
     );
@@ -114,6 +115,7 @@ public interface CompanyRestController {
         required = true
     ))
     ResponseEntity<CompanyResponseDTO> update(
+        Long userId,
         @Parameter(description = "ID del Company a actualizar", example = "1")
             Long id,
         @RequestBody(description = "CompanyDTO que contiene los nuevos datos a ser actualizados")
@@ -150,6 +152,7 @@ public interface CompanyRestController {
         required = true
     ))
     ResponseEntity<CompanyResponseDTO> delete(
+        Long userId,
         @Parameter(description = "ID del Company a eliminar", example = "1")
             Long id
     );

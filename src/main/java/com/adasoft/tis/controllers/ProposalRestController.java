@@ -41,6 +41,7 @@ public interface ProposalRestController {
         required = true
     ))
     ResponseEntity<ProposalResponseDTO> create(
+        Long userId,
         @RequestBody(description = "ProposalDTO que contiene los nuevos datos a crear")
             CreateProposalDTO proposalDTO
     );
@@ -75,6 +76,7 @@ public interface ProposalRestController {
         required = true
     ))
     ResponseEntity<ProposalResponseDTO> get(
+        Long userId,
         @Parameter(description = "ID del Proposal a obtener", example = "1")
             Long id
     );
@@ -103,6 +105,7 @@ public interface ProposalRestController {
         required = true
     ))
     ResponseEntity<Collection<ProposalResponseDTO>> getAllByAdviserId(
+        Long userId,
         @Parameter(description = "ID del Adviser de las Proposals a obtener", example = "1")
             Long id
     );

@@ -53,6 +53,7 @@ public interface SpaceRestController {
         required = true
     ))
     ResponseEntity<SpaceAnswerResponseDTO> createSpaceAnswer(
+        Long userId,
         @Parameter(description = "ID de Space") Long spaceId,
         @RequestBody(description = "DTO de SpaceAnswer a crear") CreateSpaceAnswerDTO createSpaceAnswerDTO);
 }

@@ -38,6 +38,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @GetMapping("/{adviserId}")
     @Override
     public ResponseEntity<AdviserResponseDTO> get(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") final Long id) {
         AdviserResponseDTO responseDTO = adviserService.getById(id);
         return ResponseEntity.ok(responseDTO);
@@ -46,6 +47,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @PutMapping("/{adviserId}")
     @Override
     public ResponseEntity<AdviserResponseDTO> update(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") final Long id,
         @Valid @RequestBody final UpdateAdviserDTO adviserDTO) {
         AdviserResponseDTO responseDTO = adviserService.update(id, adviserDTO);
@@ -55,6 +57,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @DeleteMapping("/{adviserId}")
     @Override
     public ResponseEntity<AdviserResponseDTO> delete(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") final Long id) {
         AdviserResponseDTO responseDTO = adviserService.delete(id);
         return ResponseEntity.ok(responseDTO);
@@ -70,6 +73,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @PostMapping("/{adviserId}/class-code")
     @Override
     public ResponseEntity<ClassCodeResponseDTO> createClassCode(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") Long adviserId) {
         ClassCodeResponseDTO responseDTO = classCodeService.create(adviserId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
@@ -78,6 +82,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @GetMapping("/{adviserId}/spaces/{spaceId}")
     @Override
     public ResponseEntity<Collection<SpaceAnswerResponseDTO>> getSpaceAnswers(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable Long adviserId,
         @NotNull @PathVariable Long spaceId) {
         Collection<SpaceAnswerResponseDTO> response = spaceAnswerService.getBySpaceId(adviserId, spaceId);

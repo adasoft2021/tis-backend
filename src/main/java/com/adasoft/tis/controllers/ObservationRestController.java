@@ -42,6 +42,7 @@ public interface ObservationRestController {
         required = true
     ))
     ResponseEntity<ObservationResponseDTO> create(
+        Long userId,
         @Parameter(description = "ID de Proposal del cual se crea una Observation", example = "1")
             Long proposalId,
         @RequestBody(description = "ObservationDTO que contiene los nuevos datos a crear")
@@ -78,6 +79,7 @@ public interface ObservationRestController {
         required = true
     ))
     ResponseEntity<ObservationResponseDTO> get(
+        Long userId,
         @Parameter(description = "ID de la Observation a obtener", example = "1")
             Long id
     );
@@ -112,6 +114,7 @@ public interface ObservationRestController {
         required = true
     ))
     ResponseEntity<ObservationResponseDTO> update(
+        Long userId,
         @Parameter(description = "ID del Observation a actualizar", example = "1")
             Long id,
         @RequestBody(description = "ObservationDTO que contiene los nuevos datos a ser actualizados")
@@ -148,6 +151,7 @@ public interface ObservationRestController {
         required = true
     ))
     ResponseEntity<ObservationResponseDTO> delete(
+        Long userId,
         @Parameter(description = "ID del Observation a eliminar", example = "1")
             Long id
     );
@@ -184,6 +188,7 @@ public interface ObservationRestController {
         required = true
     ))
     ResponseEntity<Collection<ObservationResponseDTO>> getAllByProposalId(
+        Long userId,
         @Parameter(description = "ID del Proposal de las Observations a obtener", example = "1")
             Long proposalId
     );

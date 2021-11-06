@@ -21,6 +21,7 @@ public class SpaceRestControllerImpl implements SpaceRestController {
     @PostMapping("/{spaceId}")
     @Override
     public ResponseEntity<SpaceAnswerResponseDTO> createSpaceAnswer(
+        @RequestAttribute("userId") final Long userId,
         @PathVariable("spaceId") @NotNull Long spaceId,
         @Valid @RequestBody CreateSpaceAnswerDTO spaceAnswerDTO) {
         SpaceAnswerResponseDTO responseDTO = spaceAnswerService.create(spaceId, spaceAnswerDTO);

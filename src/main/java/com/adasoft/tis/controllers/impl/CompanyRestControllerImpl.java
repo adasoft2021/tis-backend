@@ -33,6 +33,7 @@ public class CompanyRestControllerImpl implements CompanyRestController {
     @GetMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> get(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("companyId") final Long id) {
         CompanyResponseDTO responseDTO = companyService.getById(id);
         return ResponseEntity.ok(responseDTO);
@@ -41,6 +42,7 @@ public class CompanyRestControllerImpl implements CompanyRestController {
     @PutMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> update(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("companyId") final Long id,
         @Valid @RequestBody final UpdateCompanyDTO companyDTO) {
         CompanyResponseDTO responseDTO = companyService.update(id, companyDTO);
@@ -50,6 +52,7 @@ public class CompanyRestControllerImpl implements CompanyRestController {
     @DeleteMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> delete(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("companyId") final Long id) {
         CompanyResponseDTO responseDTO = companyService.delete(id);
         return ResponseEntity.ok(responseDTO);

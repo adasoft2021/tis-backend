@@ -39,6 +39,7 @@ public interface ReviewRestController {
         required = true
     ))
     ResponseEntity<ReviewResponseDTO> get(
+        Long userId,
         @Parameter(description = "ID del Review a obtener", example = "1")
             Long id
     );
@@ -66,6 +67,7 @@ public interface ReviewRestController {
         required = true
     ))
     ResponseEntity<ReviewResponseDTO> create(
+        Long userId,
         @RequestBody(description = "ReviewDTO que contiene los nuevos datos a crear")
             CreateReviewDTO reviewDTO
     );
@@ -114,6 +116,7 @@ public interface ReviewRestController {
         required = true
     ))
     ResponseEntity<ReviewResponseDTO> update(
+        Long userId,
         @Parameter(description = "ID del Review a actualizar", example = "1")
             Long id,
         @RequestBody(description = "ReviewDTO que contiene los nuevos datos a ser actualizados")

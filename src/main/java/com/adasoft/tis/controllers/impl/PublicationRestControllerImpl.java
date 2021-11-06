@@ -23,7 +23,9 @@ public class PublicationRestControllerImpl implements PublicationRestController 
 
     @PostMapping
     @Override
-    public ResponseEntity<PublicationResponseDTO> create(@Valid @RequestBody CreatePublicationDTO publicationDTO) {
+    public ResponseEntity<PublicationResponseDTO> create(
+        @RequestAttribute("userId") final Long userId,
+        @Valid @RequestBody CreatePublicationDTO publicationDTO) {
         PublicationResponseDTO responseDTO = publicationService.create(publicationDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
@@ -31,6 +33,7 @@ public class PublicationRestControllerImpl implements PublicationRestController 
     @PutMapping("/{publicationId}")
     @Override
     public ResponseEntity<PublicationResponseDTO> update(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("publicationId") final Long id,
         @Valid @RequestBody final UpdatePublicationDTO publicationDTO) {
         PublicationResponseDTO responseDTO = publicationService.update(id, publicationDTO);
@@ -40,7 +43,9 @@ public class PublicationRestControllerImpl implements PublicationRestController 
 
     @DeleteMapping("/{publicationId}")
     @Override
-    public ResponseEntity<?> delete(@NotNull @PathVariable("publicationId") final Long id) {
+    public ResponseEntity<?> delete(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("publicationId") final Long id) {
         publicationService.delete(id);
 
         return ResponseEntity.noContent().build();
@@ -49,6 +54,7 @@ public class PublicationRestControllerImpl implements PublicationRestController 
     @GetMapping
     @Override
     public ResponseEntity<Collection<PublicationResponseDTO>> getByAdviserId(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @RequestParam("adviserId") final Long adviserId,
         @NotNull @RequestParam("type") final Publication.PublicationType type) {
         Collection<PublicationResponseDTO> publicationResponseDTOS = publicationService.getByAdviserId(adviserId, type);
