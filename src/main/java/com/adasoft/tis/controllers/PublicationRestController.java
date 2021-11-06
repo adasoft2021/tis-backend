@@ -7,6 +7,7 @@ import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -41,7 +42,13 @@ public interface PublicationRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<PublicationResponseDTO> create(
         @RequestBody(description = "PublicationDTO que contiene los nuevos datos a crear")
             CreatePublicationDTO publicationDTO
@@ -69,7 +76,13 @@ public interface PublicationRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<PublicationResponseDTO> update(
         @Parameter(description = "ID del Publication a actualizar", example = "1")
             Long id,
@@ -95,7 +108,13 @@ public interface PublicationRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<?> delete(@Parameter(description = "ID del Publication a eliminar", example = "1") Long id);
 
     @Operation(summary = "Obtener lista publicaciones por ID del Asesor y tipo de Publicación", responses = {
@@ -114,7 +133,13 @@ public interface PublicationRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<Collection<PublicationResponseDTO>> getByAdviserId(
         @Parameter(description = "ID del Adviser a obtener sus publicaciones", example = "1")
             Long adviserId,

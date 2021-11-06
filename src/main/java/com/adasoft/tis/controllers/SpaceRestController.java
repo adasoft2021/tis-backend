@@ -5,6 +5,7 @@ import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -44,7 +45,13 @@ public interface SpaceRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<SpaceAnswerResponseDTO> createSpaceAnswer(
         @Parameter(description = "ID de Space") Long spaceId,
         @RequestBody(description = "DTO de SpaceAnswer a crear") CreateSpaceAnswerDTO createSpaceAnswerDTO);

@@ -7,6 +7,7 @@ import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -71,7 +72,13 @@ public interface CompanyRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<CompanyResponseDTO> get(
         @Parameter(description = "ID de Company a obtener", example = "1")
             Long id
@@ -99,7 +106,13 @@ public interface CompanyRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<CompanyResponseDTO> update(
         @Parameter(description = "ID del Company a actualizar", example = "1")
             Long id,
@@ -129,7 +142,13 @@ public interface CompanyRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<CompanyResponseDTO> delete(
         @Parameter(description = "ID del Company a eliminar", example = "1")
             Long id

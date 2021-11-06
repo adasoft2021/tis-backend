@@ -64,7 +64,13 @@ public interface AdviserRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<AdviserResponseDTO> get(
         @Parameter(description = "ID de Adviser a obtener", example = "1")
             Long id
@@ -92,7 +98,13 @@ public interface AdviserRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<AdviserResponseDTO> update(
         @Parameter(description = "ID del Adviser a actualizar", example = "1")
             Long id,
@@ -122,7 +134,13 @@ public interface AdviserRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<AdviserResponseDTO> delete(
         @Parameter(description = "ID del Adviser a eliminar", example = "1")
             Long id
@@ -177,12 +195,14 @@ public interface AdviserRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         ),
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<ClassCodeResponseDTO> createClassCode(
-        @Parameter(in = ParameterIn.HEADER,
-            name = "auth",
-            description = "codigo para autorizacion (ninguna)",
-            required = true) String token,
         @Parameter(description = "ID de Adviser para crear ClassCode", example = "1")
             Long adviserId
     );
@@ -204,7 +224,13 @@ public interface AdviserRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<Collection<SpaceAnswerResponseDTO>> getSpaceAnswers(
         @Parameter(description = "ID del adviser") Long adviserId,
         @Parameter(description = "ID del space") Long spaceId
