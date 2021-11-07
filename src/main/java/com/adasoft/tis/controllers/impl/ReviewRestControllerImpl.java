@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
+
 @RestController
 @RequestMapping("/reviews")
 @AllArgsConstructor
@@ -33,6 +35,7 @@ public class ReviewRestControllerImpl implements ReviewRestController {
     public ResponseEntity<ReviewResponseDTO> create(
         @RequestAttribute("userId") final Long userId,
         @Valid @RequestBody final CreateReviewDTO reviewDTO) {
+        checkUserId(userId, reviewDTO.getCreatedById());
         ReviewResponseDTO responseDTO = reviewService.create(reviewDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
@@ -43,7 +46,7 @@ public class ReviewRestControllerImpl implements ReviewRestController {
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("reviewId") final Long id,
         @Valid @RequestBody final UpdateReviewDTO reviewDTO) {
-        ReviewResponseDTO responseDTO = reviewService.update(id, reviewDTO);
+        ReviewResponseDTO responseDTO = reviewService.update(userId, id, reviewDTO);
         return ResponseEntity.ok(responseDTO);
     }
 }

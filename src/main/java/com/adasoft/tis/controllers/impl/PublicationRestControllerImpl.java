@@ -15,6 +15,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
+
 @RestController
 @RequestMapping("/publications")
 @AllArgsConstructor
@@ -26,6 +28,7 @@ public class PublicationRestControllerImpl implements PublicationRestController 
     public ResponseEntity<PublicationResponseDTO> create(
         @RequestAttribute("userId") final Long userId,
         @Valid @RequestBody CreatePublicationDTO publicationDTO) {
+        checkUserId(userId, publicationDTO.getCreatedById());
         PublicationResponseDTO responseDTO = publicationService.create(publicationDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
@@ -36,7 +39,7 @@ public class PublicationRestControllerImpl implements PublicationRestController 
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("publicationId") final Long id,
         @Valid @RequestBody final UpdatePublicationDTO publicationDTO) {
-        PublicationResponseDTO responseDTO = publicationService.update(id, publicationDTO);
+        PublicationResponseDTO responseDTO = publicationService.update(userId, id, publicationDTO);
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -46,7 +49,7 @@ public class PublicationRestControllerImpl implements PublicationRestController 
     public ResponseEntity<?> delete(
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("publicationId") final Long id) {
-        publicationService.delete(id);
+        publicationService.delete(userId, id);
 
         return ResponseEntity.noContent().build();
     }
@@ -57,6 +60,7 @@ public class PublicationRestControllerImpl implements PublicationRestController 
         @RequestAttribute("userId") final Long userId,
         @NotNull @RequestParam("adviserId") final Long adviserId,
         @NotNull @RequestParam("type") final Publication.PublicationType type) {
+        checkUserId(userId, adviserId);
         Collection<PublicationResponseDTO> publicationResponseDTOS = publicationService.getByAdviserId(adviserId, type);
 
         return ResponseEntity.ok(publicationResponseDTOS);

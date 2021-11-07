@@ -27,7 +27,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
         @RequestAttribute("userId") final Long userId,
         @NotNull @RequestParam(name = "proposal") final Long proposalId,
         @Valid @RequestBody final CreateObservationDTO observationDTO) {
-        ObservationResponseDTO responseDTO = observationService.create(observationDTO, proposalId);
+        ObservationResponseDTO responseDTO = observationService.create(userId, observationDTO, proposalId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
@@ -46,7 +46,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("observationId") final Long id,
         @Valid @RequestBody final UpdateObservationDTO observationDTO) {
-        ObservationResponseDTO responseDTO = observationService.update(id, observationDTO);
+        ObservationResponseDTO responseDTO = observationService.update(userId, id, observationDTO);
         return ResponseEntity.ok(responseDTO);
     }
 
@@ -55,7 +55,7 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     public ResponseEntity<ObservationResponseDTO> delete(
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("observationId") final Long id) {
-        ObservationResponseDTO responseDTO = observationService.delete(id);
+        ObservationResponseDTO responseDTO = observationService.delete(userId, id);
         return ResponseEntity.ok(responseDTO);
     }
 

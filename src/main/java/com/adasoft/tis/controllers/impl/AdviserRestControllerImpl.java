@@ -18,6 +18,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
+
 
 @RestController
 @RequestMapping("/advisers")
@@ -40,7 +42,8 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     public ResponseEntity<AdviserResponseDTO> get(
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") final Long id) {
-        AdviserResponseDTO responseDTO = adviserService.getById(id);
+        checkUserId(userId, id);
+        AdviserResponseDTO responseDTO = adviserService.getById(userId);
         return ResponseEntity.ok(responseDTO);
     }
 
@@ -50,7 +53,8 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") final Long id,
         @Valid @RequestBody final UpdateAdviserDTO adviserDTO) {
-        AdviserResponseDTO responseDTO = adviserService.update(id, adviserDTO);
+        checkUserId(userId, id);
+        AdviserResponseDTO responseDTO = adviserService.update(userId, adviserDTO);
         return ResponseEntity.ok(responseDTO);
     }
 
@@ -59,7 +63,8 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     public ResponseEntity<AdviserResponseDTO> delete(
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") final Long id) {
-        AdviserResponseDTO responseDTO = adviserService.delete(id);
+        checkUserId(userId, id);
+        AdviserResponseDTO responseDTO = adviserService.delete(userId);
         return ResponseEntity.ok(responseDTO);
     }
 
@@ -75,7 +80,8 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     public ResponseEntity<ClassCodeResponseDTO> createClassCode(
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") Long adviserId) {
-        ClassCodeResponseDTO responseDTO = classCodeService.create(adviserId);
+        checkUserId(userId, adviserId);
+        ClassCodeResponseDTO responseDTO = classCodeService.create(userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
@@ -85,7 +91,8 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable Long adviserId,
         @NotNull @PathVariable Long spaceId) {
-        Collection<SpaceAnswerResponseDTO> response = spaceAnswerService.getBySpaceId(adviserId, spaceId);
+        checkUserId(userId, adviserId);
+        Collection<SpaceAnswerResponseDTO> response = spaceAnswerService.getBySpaceId(userId, spaceId);
         return ResponseEntity.ok(response);
     }
 }

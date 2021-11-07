@@ -1,5 +1,8 @@
 package com.adasoft.tis.core.utils;
 
+import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
+import org.springframework.http.HttpStatus;
+
 /**
  * Una clase estática que contiene una lógica de utilidad común que se puede utilizar en cualquier otra clase.
  */
@@ -21,6 +24,14 @@ public final class Preconditions {
     public static void checkArgument(final boolean expression, final String errorMessage) {
         if (!expression) {
             throw new IllegalArgumentException(errorMessage);
+        }
+    }
+
+    public static void checkUserId(final Long userId, final Long idToCompare) {
+        if (!userId.equals(idToCompare)) {
+            throw new DefaultTisDomainException(
+                HttpStatus.UNAUTHORIZED,
+                "Usted no tiene autorización para realizar esta acción.");
         }
     }
 }

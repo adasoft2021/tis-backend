@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 
 @AllArgsConstructor
 @Service
@@ -25,11 +26,15 @@ public class ObservationService {
     private ProposalRepository proposalRepository;
     private ModelMapper observationMapper;
 
-    public ObservationResponseDTO create(final CreateObservationDTO observationDTO, final Long proposalId) {
+    public ObservationResponseDTO create(
+        final Long userId,
+        final CreateObservationDTO observationDTO,
+        final Long proposalId) {
         checkArgument(observationDTO != null, "El ObservationDTO a crear no puede ser nulo.");
         checkArgument(proposalId != null, "El ID del Proposal a observar no puede ser nulo.");
         Proposal proposal = proposalRepository.findById(proposalId)
             .orElseThrow(() -> new EntityNotFoundException(Proposal.class, proposalId));
+        checkUserId(userId, proposal.getAdviser());
         Observation defaultObservation = observationMapper.map(observationDTO, Observation.class);
         defaultObservation.setProposal(proposal);
         Observation persistedObservation = observationRepository.save(defaultObservation);
@@ -37,12 +42,17 @@ public class ObservationService {
         return observationMapper.map(persistedObservation, ObservationResponseDTO.class);
     }
 
-    public ObservationResponseDTO update(final Long observationId, final UpdateObservationDTO observationDTO) {
+    public ObservationResponseDTO update(
+        final Long userId,
+        final Long observationId,
+        final UpdateObservationDTO observationDTO) {
         checkArgument(observationId != null, "El id de Observation a actualizar no puede ser nulo.");
         checkArgument(observationDTO != null, "El ObservationDTO a actualizar no puede ser nulo.");
 
         Observation foundObservation = observationRepository.findById(observationId)
             .orElseThrow(() -> new EntityNotFoundException(Observation.class, observationId));
+
+        checkUserId(userId, foundObservation.getProposal().getAdviser());
 
         if (foundObservation.isDeleted()) {
             throw new EntityNotFoundException(Observation.class, observationId);
@@ -54,11 +64,13 @@ public class ObservationService {
         return observationMapper.map(foundObservation, ObservationResponseDTO.class);
     }
 
-    public ObservationResponseDTO delete(final Long observationId) {
+    public ObservationResponseDTO delete(final Long userId, final Long observationId) {
         checkArgument(observationId != null, "El id de Observation a actualizar no puede ser nulo.");
 
         Observation foundObservation = observationRepository.findById(observationId)
             .orElseThrow(() -> new EntityNotFoundException(Observation.class, observationId));
+
+        checkUserId(userId, foundObservation.getProposal().getAdviser());
 
         if (foundObservation.isDeleted()) {
             throw new EntityNotFoundException(Observation.class, observationId);
