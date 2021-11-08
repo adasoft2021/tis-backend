@@ -3,6 +3,7 @@ package com.adasoft.tis.controllers;
 import com.adasoft.tis.controllers.impl.ObservationRestControllerImpl;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
+import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.Observation;
 import com.adasoft.tis.dto.observation.CreateObservationDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
@@ -31,9 +32,14 @@ class ObservationRestControllerImplTest {
     private ObjectMapper objectMapper;
 
     @MockBean
+    private JWTProvider jwtProvider;
+    @MockBean
     private ObservationService observationService;
 
     private static final String BASE_URL = "/observations";
+    private static final String X_TOKEN = "X-Token";
+    private static final String TOKEN_VALUE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MX0.fhc3wykrAnRpcKApKhXiahxaOe8PSHatad31NuIZ0Zg";
+    private static final Long USER_ID = 15615L;
     private static final Long ID = 15615L;
     private static final String TITLE = "SECCION 2";
     private static final String DESCRIPTION = "Descripcion de la observacion";
@@ -55,14 +61,15 @@ class ObservationRestControllerImplTest {
 
     @Test
     void createObservationSuccessfully() throws Exception {
-
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         responseDTO.setCreatedAt(observationDTO.getCreatedAt());
         responseDTO.setUpdatedAt(observationDTO.getUpdatedAt());
         responseDTO.setDeleted(observationDTO.isDeleted());
 
-        when(observationService.create(any(), any())).thenReturn(responseDTO);
+        when(observationService.create(any(), any(), any())).thenReturn(responseDTO);
 
         mvc.perform(post(BASE_URL).param("proposal", PROPOSAL_ID.toString())
+                .header(X_TOKEN, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(observationDTO)))
             .andExpect(status().isCreated())
@@ -71,9 +78,11 @@ class ObservationRestControllerImplTest {
 
     @Test
     void createdObservationBadRequest() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         CreateObservationDTO badObservationDTO = new CreateObservationDTO();
 
         mvc.perform(post(BASE_URL).param("proposal", PROPOSAL_ID.toString())
+                .header(X_TOKEN, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(badObservationDTO)))
             .andExpect(status().isBadRequest())
@@ -83,9 +92,10 @@ class ObservationRestControllerImplTest {
 
     @Test
     void getObservationSuccesfully() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(observationService.getById(any())).thenReturn(responseDTO);
 
-        mvc.perform(get(BASE_URL + "/{proposalId}", ID)
+        mvc.perform(get(BASE_URL + "/{proposalId}", ID).header(X_TOKEN, TOKEN_VALUE)
             ).andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
 
@@ -93,6 +103,7 @@ class ObservationRestControllerImplTest {
 
     @Test
     void getObservationNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         UpdateObservationDTO updateObservationDTO = new UpdateObservationDTO();
 
 
@@ -103,14 +114,15 @@ class ObservationRestControllerImplTest {
             .message(String.format("Observation con id %d no se pudo encontrar o no existe.", ID))
             .build();
 
-        mvc.perform(get(String.format("%s/{observation}", BASE_URL), ID)
-            ).andExpect(status().isNotFound())
+        mvc.perform(get(String.format("%s/{observation}", BASE_URL), ID).header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 
     @Test
     void updateObservationSuccessfully() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         UpdateObservationDTO observationDTO = new UpdateObservationDTO();
         observationDTO.setTitle(TITLE);
         observationDTO.setDescription(DESCRIPTION);
@@ -120,9 +132,11 @@ class ObservationRestControllerImplTest {
         responseDTO.setUpdatedAt(observationDTO.getUpdatedAt());
 
 
-        when(observationService.update(any(), any())).thenReturn(responseDTO);
+        when(observationService.update(any(), any(), any())).thenReturn(responseDTO);
 
-        mvc.perform(put(String.format("%s/{observationId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(put(String.format("%s/{observationId}", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(observationDTO)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -131,9 +145,12 @@ class ObservationRestControllerImplTest {
 
     @Test
     void updateObservationBadRequest() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         UpdateObservationDTO observationDTO = new UpdateObservationDTO();
 
-        mvc.perform(put(String.format("%s/{observationId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(put(String.format("%s/{observationId}", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(observationDTO)))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -142,18 +159,21 @@ class ObservationRestControllerImplTest {
 
     @Test
     void updateObservationNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         UpdateObservationDTO updateObservationDTO = new UpdateObservationDTO();
         updateObservationDTO.setTitle(TITLE);
         updateObservationDTO.setDescription(DESCRIPTION);
 
-        when(observationService.update(any(), any())).thenThrow(new EntityNotFoundException(Observation.class, ID));
+        when(observationService.update(any(), any(), any())).thenThrow(new EntityNotFoundException(Observation.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
             .title("No se pudo encontrar la entidad")
             .message(String.format("Observation con id %d no se pudo encontrar o no existe.", ID))
             .build();
 
-        mvc.perform(put(String.format("%s/{observationId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(put(String.format("%s/{observationId}", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateObservationDTO)))
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
