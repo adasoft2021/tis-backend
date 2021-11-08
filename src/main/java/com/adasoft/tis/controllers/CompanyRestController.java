@@ -43,7 +43,7 @@ public interface CompanyRestController {
             )
         )
     })
-    ResponseEntity<CompanyResponseDTO> create(
+    ResponseEntity<UserResponseDTO> create(
         @Parameter(description = "Codigo de Registro asociado al asesor", example = "abc-cde-fgh")
             String registrationCode,
         @RequestBody(description = "CompanyDTO que contiene los nuevos datos a crear")

@@ -4,6 +4,7 @@ import com.adasoft.tis.controllers.CompanyRestController;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
+import com.adasoft.tis.dto.user.UserResponseDTO;
 import com.adasoft.tis.services.CompanyService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,10 +26,10 @@ public class CompanyRestControllerImpl implements CompanyRestController {
 
     @PostMapping
     @Override
-    public ResponseEntity<CompanyResponseDTO> create(
+    public ResponseEntity<UserResponseDTO> create(
         @NotNull @RequestParam(name = "registrationCode") final String registrationCode,
         @Valid @RequestBody final CreateCompanyDTO companyDTO) {
-        CompanyResponseDTO responseDTO = companyService.create(registrationCode, companyDTO);
+        UserResponseDTO responseDTO = companyService.create(registrationCode, companyDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
