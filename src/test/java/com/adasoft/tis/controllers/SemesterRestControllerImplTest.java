@@ -1,6 +1,7 @@
 package com.adasoft.tis.controllers;
 
 import com.adasoft.tis.controllers.impl.SemesterRestControllerImpl;
+import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.dto.semester.SemesterResponseDTO;
 import com.adasoft.tis.services.SemesterService;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,6 +20,8 @@ class SemesterRestControllerImplTest {
     @Autowired
     private MockMvc mvc;
 
+    @MockBean
+    private JWTProvider jwtProvider;
     @MockBean
     private SemesterService semesterService;
 

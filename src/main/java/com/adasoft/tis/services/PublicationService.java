@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 
 @AllArgsConstructor
 @Service
@@ -40,12 +41,17 @@ public class PublicationService {
         return publicationMapper.map(persistedPublication, PublicationResponseDTO.class);
     }
 
-    public PublicationResponseDTO update(final Long publicationId, final UpdatePublicationDTO publicationDTO) {
+    public PublicationResponseDTO update(
+        final Long userId,
+        final Long publicationId,
+        final UpdatePublicationDTO publicationDTO) {
         checkArgument(publicationId != null, "El id de Publication no puede ser nulo.");
         checkArgument(publicationDTO != null, "El PublicationDTO no puede ser nulo.");
 
         Publication foundPublication = publicationRepository.findById(publicationId)
             .orElseThrow(() -> new EntityNotFoundException(Publication.class, publicationId));
+
+        checkUserId(userId, foundPublication.getCreatedBy().getId());
 
         publicationMapper.map(publicationDTO, foundPublication);
 
@@ -53,11 +59,13 @@ public class PublicationService {
         return publicationMapper.map(foundPublication, PublicationResponseDTO.class);
     }
 
-    public Object delete(final Long publicationId) {
+    public Object delete(final Long userId, final Long publicationId) {
         checkArgument(publicationId != null, "El id de Publication no puede ser nulo.");
 
         Publication foundPublication = publicationRepository.findById(publicationId)
             .orElseThrow(() -> new EntityNotFoundException(Publication.class, publicationId));
+
+        checkUserId(userId, foundPublication.getCreatedBy().getId());
 
         if (foundPublication.isDeleted()) {
             throw new DefaultTisDomainException(HttpStatus.NOT_ACCEPTABLE, "La Publicación no puede ser eliminada.");

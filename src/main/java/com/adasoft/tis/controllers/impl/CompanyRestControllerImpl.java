@@ -14,6 +14,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
+
 
 @RestController
 @RequestMapping("/companies")
@@ -33,25 +35,31 @@ public class CompanyRestControllerImpl implements CompanyRestController {
     @GetMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> get(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("companyId") final Long id) {
-        CompanyResponseDTO responseDTO = companyService.getById(id);
+        checkUserId(userId, id);
+        CompanyResponseDTO responseDTO = companyService.getById(userId);
         return ResponseEntity.ok(responseDTO);
     }
 
     @PutMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> update(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("companyId") final Long id,
         @Valid @RequestBody final UpdateCompanyDTO companyDTO) {
-        CompanyResponseDTO responseDTO = companyService.update(id, companyDTO);
+        checkUserId(userId, id);
+        CompanyResponseDTO responseDTO = companyService.update(userId, companyDTO);
         return ResponseEntity.ok(responseDTO);
     }
 
     @DeleteMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> delete(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("companyId") final Long id) {
-        CompanyResponseDTO responseDTO = companyService.delete(id);
+        checkUserId(userId, id);
+        CompanyResponseDTO responseDTO = companyService.delete(userId);
         return ResponseEntity.ok(responseDTO);
     }
 

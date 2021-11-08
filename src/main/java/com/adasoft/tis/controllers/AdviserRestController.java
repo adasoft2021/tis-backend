@@ -58,14 +58,28 @@ public interface AdviserRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "No se encontró el ID de Adviser en el sistema",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<AdviserResponseDTO> get(
+        Long userId,
         @Parameter(description = "ID de Adviser a obtener", example = "1")
             Long id
     );
@@ -86,14 +100,28 @@ public interface AdviserRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "No se encontró el ID del Adviser en el sistema",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<AdviserResponseDTO> update(
+        Long userId,
         @Parameter(description = "ID del Adviser a actualizar", example = "1")
             Long id,
         @RequestBody(description = "AdviserDTO que contiene los nuevos datos a ser actualizados")
@@ -116,14 +144,28 @@ public interface AdviserRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "No se encontró el ID del Adviser en el sistema",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<AdviserResponseDTO> delete(
+        Long userId,
         @Parameter(description = "ID del Adviser a eliminar", example = "1")
             Long id
     );
@@ -164,7 +206,7 @@ public interface AdviserRestController {
             )
         ),
         @ApiResponse(
-            description = "Falta autorizacion",
+            description = "No autorizado, el token es inválido",
             responseCode = "401",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
@@ -177,12 +219,15 @@ public interface AdviserRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         ),
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<ClassCodeResponseDTO> createClassCode(
-        @Parameter(in = ParameterIn.HEADER,
-            name = "auth",
-            description = "codigo para autorizacion (ninguna)",
-            required = true) String token,
+        Long userId,
         @Parameter(description = "ID de Adviser para crear ClassCode", example = "1")
             Long adviserId
     );
@@ -198,14 +243,28 @@ public interface AdviserRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "No existe la entidad",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<Collection<SpaceAnswerResponseDTO>> getSpaceAnswers(
+        Long userId,
         @Parameter(description = "ID del adviser") Long adviserId,
         @Parameter(description = "ID del space") Long spaceId
     );

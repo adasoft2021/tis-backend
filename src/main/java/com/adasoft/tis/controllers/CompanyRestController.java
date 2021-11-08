@@ -7,6 +7,7 @@ import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -65,14 +66,28 @@ public interface CompanyRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "No se encontró el ID de Company en el sistema",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<CompanyResponseDTO> get(
+        Long userId,
         @Parameter(description = "ID de Company a obtener", example = "1")
             Long id
     );
@@ -93,14 +108,28 @@ public interface CompanyRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "No se encontró el ID del Company en el sistema",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<CompanyResponseDTO> update(
+        Long userId,
         @Parameter(description = "ID del Company a actualizar", example = "1")
             Long id,
         @RequestBody(description = "CompanyDTO que contiene los nuevos datos a ser actualizados")
@@ -123,14 +152,28 @@ public interface CompanyRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "No se encontró el ID del Company en el sistema",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<CompanyResponseDTO> delete(
+        Long userId,
         @Parameter(description = "ID del Company a eliminar", example = "1")
             Long id
     );

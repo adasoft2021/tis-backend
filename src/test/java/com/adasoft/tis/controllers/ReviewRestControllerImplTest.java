@@ -4,6 +4,7 @@ import com.adasoft.tis.controllers.impl.ReviewRestControllerImpl;
 import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
+import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
@@ -37,9 +38,14 @@ class ReviewRestControllerImplTest {
     private ObjectMapper objectMapper;
 
     @MockBean
+    private JWTProvider jwtProvider;
+    @MockBean
     private ReviewService reviewService;
 
     private static final String BASE_URL = "/reviews";
+    private static final String X_TOKEN = "X-Token";
+    private static final String TOKEN_VALUE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MX0.fhc3wykrAnRpcKApKhXiahxaOe8PSHatad31NuIZ0Zg";
+    private static final Long USER_ID = 982451052632054485L;
 
     private static final CreateReviewDTO CREATE_REVIEW_DTO = new CreateReviewDTO();
     private static final UpdateReviewDTO UPDATE_REVIEW_DTO = new UpdateReviewDTO();
@@ -81,15 +87,17 @@ class ReviewRestControllerImplTest {
 
     @Test
     void getReviewSuccessfully() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(reviewService.get(any())).thenReturn(REVIEW_RESPONSE_DTO);
 
-        mvc.perform(get(String.format("%s/{reviewId}", BASE_URL), ID))
+        mvc.perform(get(String.format("%s/{reviewId}", BASE_URL), ID).header(X_TOKEN, TOKEN_VALUE))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO)));
     }
 
     @Test
     void getReviewNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(reviewService.get(any())).thenThrow(new EntityNotFoundException(Review.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -97,7 +105,7 @@ class ReviewRestControllerImplTest {
             .message(String.format("Review con id %d no se pudo encontrar o no existe.", ID))
             .build();
 
-        mvc.perform(get(String.format("%s/{reviewId}", BASE_URL), ID))
+        mvc.perform(get(String.format("%s/{reviewId}", BASE_URL), ID).header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
@@ -105,9 +113,11 @@ class ReviewRestControllerImplTest {
 
     @Test
     void createReviewSuccessfully() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(reviewService.create(any())).thenReturn(REVIEW_RESPONSE_DTO);
 
         mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+                .header(X_TOKEN, TOKEN_VALUE)
                 .content(objectMapper.writeValueAsString(CREATE_REVIEW_DTO)))
             .andExpect(status().isCreated())
             .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO)));
@@ -115,9 +125,10 @@ class ReviewRestControllerImplTest {
 
     @Test
     void createdReviewBadRequest() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         CreateReviewDTO reviewDTO = new CreateReviewDTO();
 
-        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL).header(X_TOKEN, TOKEN_VALUE).contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(reviewDTO)))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -126,9 +137,11 @@ class ReviewRestControllerImplTest {
 
     @Test
     void updateReviewSuccessfully() throws Exception {
-        when(reviewService.update(any(), any())).thenReturn(REVIEW_RESPONSE_DTO);
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.update(any(), any(), any())).thenReturn(REVIEW_RESPONSE_DTO);
 
-        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -137,9 +150,12 @@ class ReviewRestControllerImplTest {
 
     @Test
     void updateReviewBadRequest() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         UpdateReviewDTO reviewDTO = new UpdateReviewDTO();
 
-        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(reviewDTO)))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -148,14 +164,17 @@ class ReviewRestControllerImplTest {
 
     @Test
     void updateReviewNotFound() throws Exception {
-        when(reviewService.update(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.update(any(), any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
             .title("No se pudo encontrar la entidad")
             .message(String.format("Review con id %d no se pudo encontrar o no existe.", ID))
             .build();
 
-        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -164,7 +183,8 @@ class ReviewRestControllerImplTest {
 
     @Test
     void updateReviewMethodNotAllowed() throws Exception {
-        when(reviewService.update(any(), any()))
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.update(any(), any(), any()))
             .thenThrow(new DefaultTisDomainException(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "Usted ya no puede hacer ningún cambio en la entidad Review."));
@@ -174,7 +194,9 @@ class ReviewRestControllerImplTest {
             .message("Usted ya no puede hacer ningún cambio en la entidad Review.")
             .build();
 
-        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
             .andExpect(status().isMethodNotAllowed())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -183,7 +205,8 @@ class ReviewRestControllerImplTest {
 
     @Test
     void updateReviewNotAcceptable() throws Exception {
-        when(reviewService.update(any(), any()))
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.update(any(), any(), any()))
             .thenThrow(new DefaultTisDomainException(
                 HttpStatus.NOT_ACCEPTABLE,
                 "No está permitido editar la entidad Qualification."));
@@ -193,7 +216,9 @@ class ReviewRestControllerImplTest {
             .message("No está permitido editar la entidad Qualification.")
             .build();
 
-        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(UPDATE_REVIEW_DTO)))
             .andExpect(status().isNotAcceptable())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))

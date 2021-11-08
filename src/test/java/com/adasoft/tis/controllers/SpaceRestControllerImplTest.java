@@ -3,6 +3,7 @@ package com.adasoft.tis.controllers;
 import com.adasoft.tis.controllers.impl.SpaceRestControllerImpl;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
+import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.Company;
 import com.adasoft.tis.domain.FileEntity;
 import com.adasoft.tis.domain.Space;
@@ -35,9 +36,14 @@ class SpaceRestControllerImplTest {
     private ObjectMapper objectMapper;
 
     @MockBean
+    private JWTProvider jwtProvider;
+    @MockBean
     private SpaceAnswerService spaceAnswerService;
 
     private static final String BASE_URL = "/spaces";
+    private static final String X_TOKEN = "X-Token";
+    private static final String TOKEN_VALUE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MX0.fhc3wykrAnRpcKApKhXiahxaOe8PSHatad31NuIZ0Zg";
+    private static final Long USER_ID = 3L;
     private static final Long ID = 1L;
     private static final String BASE_URL_ANSWERS = BASE_URL + "/" + ID;
     private static final Long CREATED_BY_ID = 3L;
@@ -59,9 +65,10 @@ class SpaceRestControllerImplTest {
 
     @Test
     void createSpaceAnswerSuccessfully() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(spaceAnswerService.create(any(), any())).thenReturn(RESPONSE_DTO);
 
-        mvc.perform(post(BASE_URL_ANSWERS).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL_ANSWERS).header(X_TOKEN, TOKEN_VALUE).contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CREATE_DTO)))
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -70,9 +77,10 @@ class SpaceRestControllerImplTest {
 
     @Test
     void createSpaceAnswerBadRequest() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         CreateSpaceAnswerDTO createBadDTO = new CreateSpaceAnswerDTO();
 
-        mvc.perform(post(BASE_URL_ANSWERS).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL_ANSWERS).header(X_TOKEN, TOKEN_VALUE).contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createBadDTO)))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -81,6 +89,7 @@ class SpaceRestControllerImplTest {
 
     @Test
     void createSpaceAnswerSpaceNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(spaceAnswerService.create(any(), any())).thenThrow(new EntityNotFoundException(Space.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -88,7 +97,7 @@ class SpaceRestControllerImplTest {
             .message(String.format("Space con id %d no se pudo encontrar o no existe.", ID))
             .build();
 
-        mvc.perform(post(BASE_URL_ANSWERS).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL_ANSWERS).header(X_TOKEN, TOKEN_VALUE).contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CREATE_DTO)))
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -97,6 +106,7 @@ class SpaceRestControllerImplTest {
 
     @Test
     void createSpaceAnswerCompanyNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(spaceAnswerService.create(any(), any())).thenThrow(new EntityNotFoundException(Company.class, CREATED_BY_ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -104,7 +114,7 @@ class SpaceRestControllerImplTest {
             .message(String.format("Company con id %d no se pudo encontrar o no existe.", CREATED_BY_ID))
             .build();
 
-        mvc.perform(post(BASE_URL_ANSWERS).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL_ANSWERS).header(X_TOKEN, TOKEN_VALUE).contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CREATE_DTO)))
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))

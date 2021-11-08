@@ -3,6 +3,7 @@ package com.adasoft.tis.controllers;
 import com.adasoft.tis.controllers.impl.PublicationRestControllerImpl;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
+import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Publication;
 import com.adasoft.tis.dto.publication.CreatePublicationDTO;
@@ -36,9 +37,14 @@ class PublicationRestControllerImplTest {
     private ObjectMapper objectMapper;
 
     @MockBean
+    private JWTProvider jwtProvider;
+    @MockBean
     private PublicationService publicationService;
 
     private static final String BASE_URL = "/publications";
+    private static final String X_TOKEN = "X-Token";
+    private static final String TOKEN_VALUE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MX0.fhc3wykrAnRpcKApKhXiahxaOe8PSHatad31NuIZ0Zg";
+    private static final Long USER_ID = 1996128482800373344L;
 
     private static final CreatePublicationDTO CREATE_PUBLICATION_DTO = new CreatePublicationDTO();
     private static final UpdatePublicationDTO UPDATE_PUBLICATION_DTO = new UpdatePublicationDTO();
@@ -82,9 +88,10 @@ class PublicationRestControllerImplTest {
 
     @Test
     void createPublicationSuccessfully() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(publicationService.create(any())).thenReturn(PUBLICATION_RESPONSE_DTO);
 
-        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL).header(X_TOKEN, TOKEN_VALUE).contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CREATE_PUBLICATION_DTO)))
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -93,9 +100,10 @@ class PublicationRestControllerImplTest {
 
     @Test
     void createPublicationBadRequest() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         CreatePublicationDTO createPublicationDTO = new CreatePublicationDTO();
 
-        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL).header(X_TOKEN, TOKEN_VALUE).contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createPublicationDTO)))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -104,6 +112,7 @@ class PublicationRestControllerImplTest {
 
     @Test
     void createPublicationNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(publicationService.create(any())).thenThrow(new EntityNotFoundException(Adviser.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -111,7 +120,7 @@ class PublicationRestControllerImplTest {
             .message(String.format("Adviser con id %d no se pudo encontrar o no existe.", ID))
             .build();
 
-        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL).header(X_TOKEN, TOKEN_VALUE).contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CREATE_PUBLICATION_DTO)))
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -120,9 +129,11 @@ class PublicationRestControllerImplTest {
 
     @Test
     void updatePublicationSuccessfully() throws Exception {
-        when(publicationService.update(any(), any())).thenReturn(PUBLICATION_RESPONSE_DTO);
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(publicationService.update(any(), any(), any())).thenReturn(PUBLICATION_RESPONSE_DTO);
 
         mvc.perform(put(String.format("%s/{publicationId}", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(UPDATE_PUBLICATION_DTO)))
             .andExpect(status().isOk())
@@ -132,9 +143,11 @@ class PublicationRestControllerImplTest {
 
     @Test
     void updatePublicationBadRequest() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         UpdatePublicationDTO updatePublicationDTO = new UpdatePublicationDTO();
 
         mvc.perform(put(String.format("%s/{publicationId}", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatePublicationDTO)))
             .andExpect(status().isBadRequest())
@@ -144,7 +157,8 @@ class PublicationRestControllerImplTest {
 
     @Test
     void updatePublicationNotFound() throws Exception {
-        when(publicationService.update(any(), any())).thenThrow(new EntityNotFoundException(Publication.class, ID));
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(publicationService.update(any(), any(), any())).thenThrow(new EntityNotFoundException(Publication.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
             .title("No se pudo encontrar la entidad")
@@ -152,6 +166,7 @@ class PublicationRestControllerImplTest {
             .build();
 
         mvc.perform(put(String.format("%s/{publicationId}", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(UPDATE_PUBLICATION_DTO)))
             .andExpect(status().isNotFound())
@@ -161,20 +176,22 @@ class PublicationRestControllerImplTest {
 
     @Test
     void deletePublicationSuccessfully() throws Exception {
-        mvc.perform(delete(String.format("%s/{publicationId}", BASE_URL), ID))
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        mvc.perform(delete(String.format("%s/{publicationId}", BASE_URL), ID).header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isNoContent());
     }
 
     @Test
     void deletePublicationNotFound() throws Exception {
-        when(publicationService.delete(any())).thenThrow(new EntityNotFoundException(Publication.class, ID));
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(publicationService.delete(any(), any())).thenThrow(new EntityNotFoundException(Publication.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
             .title("No se pudo encontrar la entidad")
             .message(String.format("Publication con id %d no se pudo encontrar o no existe.", ID))
             .build();
 
-        mvc.perform(delete(String.format("%s/{publicationId}", BASE_URL), ID))
+        mvc.perform(delete(String.format("%s/{publicationId}", BASE_URL), ID).header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
@@ -182,13 +199,15 @@ class PublicationRestControllerImplTest {
 
     @Test
     void getByAdviserIdSuccessfully() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         Collection<PublicationResponseDTO> publications = new HashSet<>();
         publications.add(PUBLICATION_RESPONSE_DTO);
         when(publicationService.getByAdviserId(any(), any())).thenReturn(publications);
 
         mvc.perform(get(BASE_URL)
                 .queryParam("adviserId", String.valueOf(ID))
-                .queryParam("type", Publication.PublicationType.ANNOUNCEMENT.toString()))
+                .queryParam("type", Publication.PublicationType.ANNOUNCEMENT.toString())
+                .header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(publications)));
@@ -196,6 +215,7 @@ class PublicationRestControllerImplTest {
 
     @Test
     void getByAdviserIdNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(publicationService.getByAdviserId(any(), any())).thenThrow(new EntityNotFoundException(Adviser.class, ID));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -205,7 +225,8 @@ class PublicationRestControllerImplTest {
 
         mvc.perform(get(BASE_URL)
                 .queryParam("adviserId", String.valueOf(ID))
-                .queryParam("type", Publication.PublicationType.ANNOUNCEMENT.toString()))
+                .queryParam("type", Publication.PublicationType.ANNOUNCEMENT.toString())
+                .header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
