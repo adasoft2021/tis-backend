@@ -94,7 +94,6 @@ class PublicationRestControllerImplTest {
     @Test
     void createPublicationBadRequest() throws Exception {
         CreatePublicationDTO createPublicationDTO = new CreatePublicationDTO();
-
         mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createPublicationDTO)))
             .andExpect(status().isBadRequest())
@@ -121,7 +120,6 @@ class PublicationRestControllerImplTest {
     @Test
     void updatePublicationSuccessfully() throws Exception {
         when(publicationService.update(any(), any())).thenReturn(PUBLICATION_RESPONSE_DTO);
-
         mvc.perform(put(String.format("%s/{publicationId}", BASE_URL), ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(UPDATE_PUBLICATION_DTO)))
@@ -133,7 +131,6 @@ class PublicationRestControllerImplTest {
     @Test
     void updatePublicationBadRequest() throws Exception {
         UpdatePublicationDTO updatePublicationDTO = new UpdatePublicationDTO();
-
         mvc.perform(put(String.format("%s/{publicationId}", BASE_URL), ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatePublicationDTO)))
@@ -145,7 +142,6 @@ class PublicationRestControllerImplTest {
     @Test
     void updatePublicationNotFound() throws Exception {
         when(publicationService.update(any(), any())).thenThrow(new EntityNotFoundException(Publication.class, ID));
-
         ErrorResponse errorResponse = ErrorResponse.builder()
             .title("No se pudo encontrar la entidad")
             .message(String.format("Publication con id %d no se pudo encontrar o no existe.", ID))
@@ -168,7 +164,6 @@ class PublicationRestControllerImplTest {
     @Test
     void deletePublicationNotFound() throws Exception {
         when(publicationService.delete(any())).thenThrow(new EntityNotFoundException(Publication.class, ID));
-
         ErrorResponse errorResponse = ErrorResponse.builder()
             .title("No se pudo encontrar la entidad")
             .message(String.format("Publication con id %d no se pudo encontrar o no existe.", ID))
@@ -197,7 +192,6 @@ class PublicationRestControllerImplTest {
     @Test
     void getByAdviserIdNotFound() throws Exception {
         when(publicationService.getByAdviserId(any(), any())).thenThrow(new EntityNotFoundException(Adviser.class, ID));
-
         ErrorResponse errorResponse = ErrorResponse.builder()
             .title("No se pudo encontrar la entidad")
             .message(String.format("Adviser con id %d no se pudo encontrar o no existe.", ID))
@@ -216,7 +210,6 @@ class PublicationRestControllerImplTest {
         Collection<PublicationResponseDTO> publications = new HashSet<>();
         publications.add(PUBLICATION_RESPONSE_DTO);
         when(publicationService.getByAdviserIdSemester(any(), any(), any())).thenReturn(publications);
-
         mvc.perform(get(BASE_URL + "/published")
                 .queryParam("adviserId", String.valueOf(ID))
                 .queryParam("type", Publication.PublicationType.ANNOUNCEMENT.toString())
