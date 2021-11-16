@@ -41,8 +41,9 @@ public class Review extends BaseEntity<Long> {
     @JoinColumn(name = "fk_company_id", nullable = false, updatable = false)
     private Company company;
 
+
     @JsonManagedReference
-    @OneToMany
+    @ManyToMany
     private Set<Space> spaces;
 
     @JsonManagedReference

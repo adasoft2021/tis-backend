@@ -40,8 +40,6 @@ INSERT INTO partners(ID,PARTNERS) VALUES ('3','Aasdfds Bsdfsd');
 INSERT INTO proposals (CREATED_AT, DELETED, UPDATED_AT, CREATED_BY, PART, FILE_URL, ADVISER) VALUES ('2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','A','/files/ADASOFTParteA.pdf','1');
 INSERT INTO proposals (CREATED_AT, DELETED, UPDATED_AT, CREATED_BY, PART, FILE_URL, ADVISER) VALUES ('2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','B','/files/ADASOFTParteB.pdf','1');
 
--- OBSERVATIONS
-INSERT INTO observations (ID, CREATED_AT, DELETED, UPDATED_AT, FK_PROPOSAL_ID, TITLE, DESCRIPTION) VALUES ('1','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','seccion 1','esta es una observacion');
 
 -- PUBLICATIONS
 INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, SEMESTER, FILE_URL, TYPE) VALUES ('1','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Título de una nueva convocatoria','2021-09-06 08:00:00','CPTIS-0609-2021','2-2021','https://drive.google.com/file/d/1Y1UxDtPa7Qr7uPzJ32D6pB7nwbCrrXxe/view?usp=sharing','0');
@@ -66,3 +64,10 @@ INSERT INTO files (ID, DELETED, NAME, URL) VALUES ('1', 0, 'AdaSoftParteA.pdf', 
 INSERT INTO files (ID, DELETED, NAME, URL) VALUES ('1', 0, 'AdaSoftParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/Fundempresa%20TIS.pdf?alt=media&token=df9e5f85-1e50-4434-aaa1-450375effff1');
 INSERT INTO files (ID, DELETED, NAME, URL) VALUES ('2', 0, 'AdaSoftParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
 INSERT INTO files (ID, DELETED, NAME, URL) VALUES ('3', 0, 'acmeParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
+
+--REVIEW
+INSERT INTO reviews (ID,CREATED_AT, DELETED, UPDATED_AT, PUBLISHED, TITLE, FK_COMPANY_ID, FK_ADVISER_ID) VALUES ('1', '2021-11-16 15:45:51.012352',FALSE, '2021-11-16 15:45:51.012352', FALSE, 'Orden de cambio', '2', '1');
+INSERT INTO reviews_spaces(REVIEW_ID,SPACES_ID) VALUES ('1', '1');
+
+-- OBSERVATIONS
+INSERT INTO observations (ID, CREATED_AT, DELETED, UPDATED_AT, FK_PROPOSAL_ID, FK_REVIEW_ID, TITLE, DESCRIPTION) VALUES ('1','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','1','seccion 1','esta es una observacion');
