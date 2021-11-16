@@ -21,7 +21,10 @@ public class Project extends BaseEntity<Long> {
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
-    private Publication.PublicationType announcement;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_publication_id", nullable = false, updatable = false)
+    private Publication announcement;
     @Column(nullable = false)
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

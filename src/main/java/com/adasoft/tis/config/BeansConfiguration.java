@@ -187,7 +187,6 @@ public class BeansConfiguration {
         });
         return modelMapper;
     }
-
     @Bean("companyMapper")
     public ModelMapper companyMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -214,8 +213,6 @@ public class BeansConfiguration {
             }
         });
         modelMapper.addMappings(new PropertyMap<Company, UserResponseDTO>() {
-
-
             @Override
             protected void configure() {
                 skip(destination.getToken());
