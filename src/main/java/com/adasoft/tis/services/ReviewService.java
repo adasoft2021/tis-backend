@@ -2,13 +2,19 @@ package com.adasoft.tis.services;
 
 import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
+import com.adasoft.tis.domain.Adviser;
+import com.adasoft.tis.domain.Company;
 import com.adasoft.tis.domain.Review;
+import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
+import com.adasoft.tis.repository.AdviserRepository;
+import com.adasoft.tis.repository.CompanyRepository;
 import com.adasoft.tis.repository.ReviewRepository;
+import com.adasoft.tis.repository.SpaceRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -29,6 +35,9 @@ public class ReviewService {
 
     private QualificationService qualificationService;
     private ModelMapper qualificationMapper;
+    private AdviserRepository adviserRepository;
+    private CompanyRepository companyRepository;
+    private SpaceRepository spaceRepository;
 
     private Collection<QualificationResponseDTO> updateQualifications(
         final Review review,
@@ -72,13 +81,25 @@ public class ReviewService {
 
     public ReviewResponseDTO create(final CreateReviewDTO reviewDTO) {
         checkArgument(reviewDTO != null, "El ReviewDTO a crear no puede ser nulo.");
+        checkArgument(reviewDTO.getCompanyId() != null, "companyId no puede ser nulo.");
 
+        Adviser foundAdviser = adviserRepository.findById(reviewDTO.getCreatedById())
+            .orElseThrow(() -> new EntityNotFoundException(Adviser.class, reviewDTO.getCreatedById()));
+        Company foundCompany = companyRepository.findById(reviewDTO.getCompanyId())
+            .orElseThrow(() -> new EntityNotFoundException(Company.class, reviewDTO.getCompanyId()));
         Review defaultReview = reviewMapper.map(reviewDTO, Review.class);
-
+        defaultReview.setCreatedBy(foundAdviser);
+        defaultReview.setCompany(foundCompany);
+        defaultReview.setPublished(false);
+        HashSet<Space> spaces = new HashSet<Space>();
+        for (Long s : reviewDTO.getSpaces()) {
+            Space foundSpace = spaceRepository.findById(s)
+                .orElseThrow(() -> new EntityNotFoundException(Space.class, s));
+            spaces.add(foundSpace);
+        }
+        defaultReview.setSpaces(spaces);
         Review persistedReview = reviewRepository.save(defaultReview);
-
         Collection<QualificationResponseDTO> qualificationResponseDTOS = qualificationService.createAll(persistedReview);
-
         ReviewResponseDTO responseDTO = reviewMapper.map(persistedReview, ReviewResponseDTO.class);
         responseDTO.setQualifications(new HashSet<>(qualificationResponseDTOS));
 

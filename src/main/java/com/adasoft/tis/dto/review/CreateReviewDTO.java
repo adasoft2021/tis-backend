@@ -56,7 +56,7 @@ public class CreateReviewDTO extends BaseCreateDTO {
     @NotNull
     private String title;
     @Schema(
-        name = "space",
+        name = "spaces",
         description = "ID de spaces en revision",
         required = true,
         type = "Collection"

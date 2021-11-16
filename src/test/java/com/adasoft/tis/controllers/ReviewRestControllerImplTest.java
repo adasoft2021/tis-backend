@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -60,6 +61,9 @@ class ReviewRestControllerImplTest {
     @BeforeAll
     static void setup() {
         CREATE_REVIEW_DTO.setCreatedById(CREATED_BY_ID);
+        CREATE_REVIEW_DTO.setCompanyId(2L);
+        CREATE_REVIEW_DTO.setSpaces(List.of(3L));
+        CREATE_REVIEW_DTO.setTitle("titulo");
 
         Collection<UpdateQualificationDTO> qualificationDTOS = new HashSet<>();
         for (int i = 0; i < 7; i++) {
