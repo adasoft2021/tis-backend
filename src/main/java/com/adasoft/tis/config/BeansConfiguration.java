@@ -20,8 +20,10 @@ import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
+import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
+import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
@@ -40,10 +42,21 @@ public class BeansConfiguration {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
 
         modelMapper.addMappings(new PropertyMap<Review, ReviewResponseDTO>() {
+
             @Override
             protected void configure() {
                 skip(destination.getQualifications());
+                skip(destination.getObservations());
+                skip(destination.getSpaces());
                 map().setCreatedById(source.getCreatedBy().getId());
+                map().setCompanyId(source.getCompany().getId());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<Review, ReviewCompactResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
             }
         });
 
@@ -280,6 +293,19 @@ public class BeansConfiguration {
             }
         });
 
+        return modelMapper;
+    }
+
+    @Bean("spaceMapper")
+    public ModelMapper spaceMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Space, SpaceCompactResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+            }
+        });
         return modelMapper;
     }
 

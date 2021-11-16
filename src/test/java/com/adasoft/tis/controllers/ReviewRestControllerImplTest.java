@@ -85,7 +85,6 @@ class ReviewRestControllerImplTest {
         REVIEW_RESPONSE_DTO.setCreatedAt(CREATE_REVIEW_DTO.getCreatedAt());
         REVIEW_RESPONSE_DTO.setUpdatedAt(CREATE_REVIEW_DTO.getUpdatedAt());
         REVIEW_RESPONSE_DTO.setComment(COMMENT);
-        REVIEW_RESPONSE_DTO.setTotalScore(TOTAL_SCORE);
         REVIEW_RESPONSE_DTO.setQualifications(new HashSet<>());
     }
 
