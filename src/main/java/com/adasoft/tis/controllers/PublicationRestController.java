@@ -7,6 +7,7 @@ import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,14 +36,28 @@ public interface PublicationRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "El ID del Asesor no existe en el sistema",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<PublicationResponseDTO> create(
+        Long userId,
         @RequestBody(description = "PublicationDTO que contiene los nuevos datos a crear")
             CreatePublicationDTO publicationDTO
     );
@@ -63,14 +78,28 @@ public interface PublicationRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "No se encontró el ID del Publication en el sistema",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<PublicationResponseDTO> update(
+        Long userId,
         @Parameter(description = "ID del Publication a actualizar", example = "1")
             Long id,
         @RequestBody(description = "PublicationDTO que contiene los nuevos datos a ser actualizados")
@@ -80,6 +109,13 @@ public interface PublicationRestController {
         @ApiResponse(
             description = "Publicación eliminada exitosamente",
             responseCode = "204"
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
         ),
         @ApiResponse(
             description = "No se encontró el ID del Publication en el sistema",
@@ -95,8 +131,16 @@ public interface PublicationRestController {
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
-    ResponseEntity<?> delete(@Parameter(description = "ID del Publication a eliminar", example = "1") Long id);
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<?> delete(
+        Long userId,
+        @Parameter(description = "ID del Publication a eliminar", example = "1") Long id);
 
     @Operation(summary = "Obtener lista publicaciones por ID del Asesor y tipo de Publicación", responses = {
         @ApiResponse(
@@ -108,14 +152,28 @@ public interface PublicationRestController {
             )
         ),
         @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
             description = "No se encontró el ID del Asesor en el sistema",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<Collection<PublicationResponseDTO>> getByAdviserId(
+        Long userId,
         @Parameter(description = "ID del Adviser a obtener sus publicaciones", example = "1")
             Long adviserId,
         @Parameter(description = "Tipo de Publicación a obtener")

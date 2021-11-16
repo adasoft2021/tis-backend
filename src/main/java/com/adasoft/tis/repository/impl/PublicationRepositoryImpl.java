@@ -30,7 +30,7 @@ public class PublicationRepositoryImpl extends AbstractTisRepository<Publication
 
     @Override
     public Collection<Publication> getByAdviserIdSemester(Long adviserId, Publication.PublicationType type, String semester) {
-        String jpqlQuery = "SELECT p FROM Publication p WHERE p.createdBy.id = :adviserId and p.type = :type and p.semester = :semester and p.date >= :current and p.deleted = false";
+        String jpqlQuery = "SELECT p FROM Publication p WHERE p.createdBy.id = :adviserId and p.type = :type and p.semester = :semester and p.date <= :current and p.deleted = false";
         return entityManager.createQuery(jpqlQuery, Publication.class)
             .setParameter("adviserId", adviserId)
             .setParameter("type", type)

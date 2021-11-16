@@ -26,6 +26,7 @@ import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
+import com.adasoft.tis.dto.user.UserResponseDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
@@ -210,6 +211,17 @@ public class BeansConfiguration {
             protected void configure() {
                 skip(destination.getId());
                 skip(destination.getAdviser());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<Company, UserResponseDTO>() {
+
+
+            @Override
+            protected void configure() {
+                skip(destination.getToken());
+                skip(destination.getUserType());
+                map().setUserName(source.getName());
+
             }
         });
 

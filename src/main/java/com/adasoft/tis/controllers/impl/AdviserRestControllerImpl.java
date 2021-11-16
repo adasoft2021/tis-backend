@@ -1,7 +1,6 @@
 package com.adasoft.tis.controllers.impl;
 
 import com.adasoft.tis.controllers.AdviserRestController;
-import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 
 
 @RestController
@@ -39,25 +40,31 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @GetMapping("/{adviserId}")
     @Override
     public ResponseEntity<AdviserResponseDTO> get(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") final Long id) {
-        AdviserResponseDTO responseDTO = adviserService.getById(id);
+        checkUserId(userId, id);
+        AdviserResponseDTO responseDTO = adviserService.getById(userId);
         return ResponseEntity.ok(responseDTO);
     }
 
     @PutMapping("/{adviserId}")
     @Override
     public ResponseEntity<AdviserResponseDTO> update(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") final Long id,
         @Valid @RequestBody final UpdateAdviserDTO adviserDTO) {
-        AdviserResponseDTO responseDTO = adviserService.update(id, adviserDTO);
+        checkUserId(userId, id);
+        AdviserResponseDTO responseDTO = adviserService.update(userId, adviserDTO);
         return ResponseEntity.ok(responseDTO);
     }
 
     @DeleteMapping("/{adviserId}")
     @Override
     public ResponseEntity<AdviserResponseDTO> delete(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") final Long id) {
-        AdviserResponseDTO responseDTO = adviserService.delete(id);
+        checkUserId(userId, id);
+        AdviserResponseDTO responseDTO = adviserService.delete(userId);
         return ResponseEntity.ok(responseDTO);
     }
 
@@ -71,20 +78,21 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     @PostMapping("/{adviserId}/class-code")
     @Override
     public ResponseEntity<ClassCodeResponseDTO> createClassCode(
-        @RequestHeader(value = "auth") String token,
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") Long adviserId) {
-        if (token.equals(""))
-            throw new DefaultTisDomainException(HttpStatus.UNAUTHORIZED, "Falta autorizacion");
-        ClassCodeResponseDTO responseDTO = classCodeService.create(adviserId);
+        checkUserId(userId, adviserId);
+        ClassCodeResponseDTO responseDTO = classCodeService.create(userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @GetMapping("/{adviserId}/spaces/{spaceId}")
     @Override
     public ResponseEntity<Collection<SpaceAnswerResponseDTO>> getSpaceAnswers(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable Long adviserId,
         @NotNull @PathVariable Long spaceId) {
-        Collection<SpaceAnswerResponseDTO> response = spaceAnswerService.getBySpaceId(adviserId, spaceId);
+        checkUserId(userId, adviserId);
+        Collection<SpaceAnswerResponseDTO> response = spaceAnswerService.getBySpaceId(userId, spaceId);
         return ResponseEntity.ok(response);
     }
 }

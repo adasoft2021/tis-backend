@@ -2,11 +2,13 @@ package com.adasoft.tis.services;
 
 import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
+import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.ClassCode;
 import com.adasoft.tis.domain.Company;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
+import com.adasoft.tis.dto.user.UserResponseDTO;
 import com.adasoft.tis.repository.ClassCodeRepository;
 import com.adasoft.tis.repository.CompanyRepository;
 import lombok.AllArgsConstructor;
@@ -25,9 +27,10 @@ public class CompanyService {
     private CompanyRepository companyRepository;
     private ModelMapper companyMapper;
     private ClassCodeRepository classCodeRepository;
+    private JWTProvider jwtProvider;
 
 
-    public CompanyResponseDTO create(final String registrationCode, final CreateCompanyDTO companyDTO) {
+    public UserResponseDTO create(final String registrationCode, final CreateCompanyDTO companyDTO) {
         checkArgument(registrationCode != null, "El Codigo de Registro no puede ser nulo.");
         checkArgument(companyDTO != null, "El CompanyDTO a crear no puede ser nulo.");
 
@@ -44,7 +47,11 @@ public class CompanyService {
         defaultCompany.setAdviser(foundCode.getCreatedBy());
         Company persistedCompany = companyRepository.save(defaultCompany);
 
-        return companyMapper.map(persistedCompany, CompanyResponseDTO.class);
+        UserResponseDTO responseDTO = companyMapper.map(persistedCompany, UserResponseDTO.class);
+        responseDTO.setToken(jwtProvider.create(persistedCompany.getId()));
+        Class<?> companyClass = Company.class;
+        responseDTO.setUserType(companyClass.getSimpleName().toUpperCase());
+        return responseDTO;
     }
 
     public CompanyResponseDTO update(final Long companyId, final UpdateCompanyDTO companyDTO) {

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
+
 @RestController
 @RequestMapping("/spaces")
 @AllArgsConstructor
@@ -21,8 +23,10 @@ public class SpaceRestControllerImpl implements SpaceRestController {
     @PostMapping("/{spaceId}")
     @Override
     public ResponseEntity<SpaceAnswerResponseDTO> createSpaceAnswer(
+        @RequestAttribute("userId") final Long userId,
         @PathVariable("spaceId") @NotNull Long spaceId,
         @Valid @RequestBody CreateSpaceAnswerDTO spaceAnswerDTO) {
+        checkUserId(userId, spaceAnswerDTO.getCreatedById());
         SpaceAnswerResponseDTO responseDTO = spaceAnswerService.create(spaceId, spaceAnswerDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }

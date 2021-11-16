@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserResponseDTO extends BaseResponseDTO<Long> {
-
-    private String name;
     private String token;
+    private String userName;
+    private String userType;
 }

@@ -4,6 +4,7 @@ import com.adasoft.tis.controllers.CompanyRestController;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
+import com.adasoft.tis.dto.user.UserResponseDTO;
 import com.adasoft.tis.services.CompanyService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
+
 
 @RestController
 @RequestMapping("/companies")
@@ -23,35 +26,41 @@ public class CompanyRestControllerImpl implements CompanyRestController {
 
     @PostMapping
     @Override
-    public ResponseEntity<CompanyResponseDTO> create(
+    public ResponseEntity<UserResponseDTO> create(
         @NotNull @RequestParam(name = "registrationCode") final String registrationCode,
         @Valid @RequestBody final CreateCompanyDTO companyDTO) {
-        CompanyResponseDTO responseDTO = companyService.create(registrationCode, companyDTO);
+        UserResponseDTO responseDTO = companyService.create(registrationCode, companyDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @GetMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> get(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("companyId") final Long id) {
-        CompanyResponseDTO responseDTO = companyService.getById(id);
+        checkUserId(userId, id);
+        CompanyResponseDTO responseDTO = companyService.getById(userId);
         return ResponseEntity.ok(responseDTO);
     }
 
     @PutMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> update(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("companyId") final Long id,
         @Valid @RequestBody final UpdateCompanyDTO companyDTO) {
-        CompanyResponseDTO responseDTO = companyService.update(id, companyDTO);
+        checkUserId(userId, id);
+        CompanyResponseDTO responseDTO = companyService.update(userId, companyDTO);
         return ResponseEntity.ok(responseDTO);
     }
 
     @DeleteMapping("/{companyId}")
     @Override
     public ResponseEntity<CompanyResponseDTO> delete(
+        @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("companyId") final Long id) {
-        CompanyResponseDTO responseDTO = companyService.delete(id);
+        checkUserId(userId, id);
+        CompanyResponseDTO responseDTO = companyService.delete(userId);
         return ResponseEntity.ok(responseDTO);
     }
 

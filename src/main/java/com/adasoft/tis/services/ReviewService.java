@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 
 @AllArgsConstructor
 @Service
@@ -97,12 +98,17 @@ public class ReviewService {
         return responseDTO;
     }
 
-    public ReviewResponseDTO update(final Long reviewId, final UpdateReviewDTO reviewDTO) {
+    public ReviewResponseDTO update(
+        final Long userId,
+        final Long reviewId,
+        final UpdateReviewDTO reviewDTO) {
         checkArgument(reviewId != null, "El id de Review a actualizar no puede ser nulo.");
         checkArgument(reviewDTO != null, "El ReviewDTO a actualizar no puede ser nulo.");
 
         Review foundReview = reviewRepository.findById(reviewId)
             .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
+
+        checkUserId(userId, foundReview.getCreatedBy());
 
         reviewMapper.map(reviewDTO, foundReview);
         return updateReview(foundReview, reviewDTO.getQualifications());

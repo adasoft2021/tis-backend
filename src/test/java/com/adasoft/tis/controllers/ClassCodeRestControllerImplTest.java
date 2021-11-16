@@ -3,6 +3,7 @@ package com.adasoft.tis.controllers;
 import com.adasoft.tis.controllers.impl.ClassCodeRestControllerImpl;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
+import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.ClassCode;
 import com.adasoft.tis.dto.classCode.CreateClassCodeDTO;
 import com.adasoft.tis.services.ClassCodeService;
@@ -28,9 +29,14 @@ class ClassCodeRestControllerImplTest {
     private ObjectMapper objectMapper;
 
     @MockBean
+    private JWTProvider jwtProvider;
+    @MockBean
     private ClassCodeService classCodeService;
 
     private static final String BASE_URL = "/class-codes";
+    private static final String X_TOKEN = "X-Token";
+    private static final String TOKEN_VALUE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MX0.fhc3wykrAnRpcKApKhXiahxaOe8PSHatad31NuIZ0Zg";
+    private static final Long USER_ID = 6430556344271188064L;
 
     private static final CreateClassCodeDTO CREATE_CLASS_CODE_DTO = new CreateClassCodeDTO();
 
@@ -50,9 +56,10 @@ class ClassCodeRestControllerImplTest {
 
     @Test
     void validateClassCodeBadRequest() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         CreateClassCodeDTO classCodeDTO = new CreateClassCodeDTO();
 
-        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON).header(X_TOKEN, TOKEN_VALUE)
                 .content(objectMapper.writeValueAsString(classCodeDTO)))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
