@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class ProjectResponseDTO extends BaseResponseDTO<Long> {
     private String title;
-    private Publication.PublicationType announcement;
+    private Publication announcement;
     private Publication specificationSheet;
 }
