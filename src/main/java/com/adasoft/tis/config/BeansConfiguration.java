@@ -43,15 +43,17 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getQualifications());
-                map().setCreatedById(source.getCreatedBy());
+                map().setCreatedById(source.getCreatedBy().getId());
             }
         });
 
         modelMapper.addMappings(new PropertyMap<CreateReviewDTO, Review>() {
+
             @Override
             protected void configure() {
                 skip(destination.getId());
-                map().setCreatedBy(source.getCreatedById());
+                skip(destination.getCompany());
+                skip(destination.getCreatedBy());
             }
         });
 

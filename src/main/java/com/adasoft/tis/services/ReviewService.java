@@ -33,7 +33,7 @@ public class ReviewService {
     private Collection<QualificationResponseDTO> updateQualifications(
         final Review review,
         final Collection<UpdateQualificationDTO> qualificationDTOS) {
-        if (review.getTotalScore() != null) {
+        if (review.getPublished()) {
             throw new DefaultTisDomainException(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "Usted ya no puede hacer ningún cambio en la entidad Review.");
@@ -47,19 +47,6 @@ public class ReviewService {
         final Collection<UpdateQualificationDTO> qualificationDTOS) {
         Collection<QualificationResponseDTO> qualificationResponseDTOS = updateQualifications(review, qualificationDTOS);
 
-        boolean fullNotes = true;
-        int totalScore = 0;
-        for (QualificationResponseDTO qualificationResponseDTO : qualificationResponseDTOS) {
-            if (qualificationResponseDTO.getScore() != null) {
-                totalScore += qualificationResponseDTO.getScore();
-                continue;
-            }
-            fullNotes = false;
-            break;
-        }
-        if (fullNotes) {
-            review.setTotalScore(totalScore);
-        }
         reviewRepository.update(review);
 
         ReviewResponseDTO responseDTO = reviewMapper.map(review, ReviewResponseDTO.class);
@@ -108,7 +95,7 @@ public class ReviewService {
         Review foundReview = reviewRepository.findById(reviewId)
             .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
 
-        checkUserId(userId, foundReview.getCreatedBy());
+        checkUserId(userId, foundReview.getCreatedBy().getId());
 
         reviewMapper.map(reviewDTO, foundReview);
         return updateReview(foundReview, reviewDTO.getQualifications());
