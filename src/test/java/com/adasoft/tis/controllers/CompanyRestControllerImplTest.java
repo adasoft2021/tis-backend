@@ -5,9 +5,11 @@ import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.Company;
+import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
+import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.services.CompanyService;
 import com.adasoft.tis.services.ReviewService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -178,5 +180,46 @@ class CompanyRestControllerImplTest {
         mvc.perform(get(String.format("%s/{companyId}/reviews", BASE_URL), ID)
             .header(X_TOKEN, TOKEN_VALUE)).andExpect(status().isUnauthorized());
 
+    }
+
+    @Test
+    void getReviewSuccesfully() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(ID);
+        ReviewResponseDTO reviewResponse = new ReviewResponseDTO();
+        when(reviewService.getCompanyReview(any(), any())).thenReturn(reviewResponse);
+        mvc.perform(get(String.format("%s/{companyId}/reviews/{reviewID}", BASE_URL), ID, 1)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(reviewResponse)));
+    }
+
+    @Test
+    void getReviewUnauthorized() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(2L);
+        mvc.perform(get(String.format("%s/{companyId}/reviews/{reviewID}", BASE_URL), ID, 1)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getReviewCompanyNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(ID);
+        ReviewResponseDTO reviewResponse = new ReviewResponseDTO();
+        when(reviewService.getCompanyReview(any(), any()))
+            .thenThrow(new EntityNotFoundException(Company.class, ID));
+        mvc.perform(get(String.format("%s/{companyId}/reviews/{reviewID}", BASE_URL), ID, 1)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getReviewNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(ID);
+        ReviewResponseDTO reviewResponse = new ReviewResponseDTO();
+        when(reviewService.getCompanyReview(any(), any()))
+            .thenThrow(new EntityNotFoundException(Review.class, 1));
+        mvc.perform(get(String.format("%s/{companyId}/reviews/{reviewID}", BASE_URL), ID, 1)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound());
     }
 }

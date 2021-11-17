@@ -5,6 +5,7 @@ import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
+import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
 import com.adasoft.tis.services.CompanyService;
 import com.adasoft.tis.services.ReviewService;
@@ -82,5 +83,16 @@ public class CompanyRestControllerImpl implements CompanyRestController {
         checkUserId(userId, id);
         Collection<ReviewCompactResponseDTO> responses = reviewService.getCompanyReviews(id);
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/{companyId}/reviews/{reviewId}")
+    @Override
+    public ResponseEntity<ReviewResponseDTO> getReview(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("companyId") final Long companyId,
+        @NotNull @PathVariable("reviewId") Long reviewId) {
+        checkUserId(userId, companyId);
+        ReviewResponseDTO response = reviewService.getCompanyReview(companyId, reviewId);
+        return ResponseEntity.ok(response);
     }
 }

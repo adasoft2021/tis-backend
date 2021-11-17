@@ -5,6 +5,7 @@ import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
+import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -210,4 +211,48 @@ public interface CompanyRestController {
     ResponseEntity<Collection<ReviewCompactResponseDTO>> getCompanyReviews(
         Long userId,
         @Parameter(description = "ID de la GE") Long id);
+
+    @Operation(summary = "Devolver revision", responses = {
+        @ApiResponse(
+            description = "Revision devuelta exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ReviewResponseDTO.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No se encontró el ID del Company en el sistema",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No se encontró el ID del Review en el sistema",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<ReviewResponseDTO> getReview(
+        Long userId,
+        @Parameter(description = "ID de la GE") Long companyId,
+        @Parameter(description = "ID de la revision") Long reviewId);
+
+
 }
