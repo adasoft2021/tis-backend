@@ -15,8 +15,8 @@ public class ReviewResponseDTO extends BaseResponseDTO<Long> {
     private String title;
     private Boolean published;
     private String comment;
-    private long createdById;
-    private long companyId;
+    private String adviserName;
+    private String companyName;
     private Set<SpaceCompactResponseDTO> spaces;
     private Set<QualificationResponseDTO> qualifications;
     private Set<ObservationResponseDTO> observations;

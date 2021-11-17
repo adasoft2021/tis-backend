@@ -48,8 +48,8 @@ public class BeansConfiguration {
                 skip(destination.getQualifications());
                 skip(destination.getObservations());
                 skip(destination.getSpaces());
-                map().setCreatedById(source.getCreatedBy().getId());
-                map().setCompanyId(source.getCompany().getId());
+                map().setAdviserName(source.getCreatedBy().getFirstName() + " " + source.getCreatedBy().getLastName());
+                map().setCompanyName(source.getCompany().getName());
             }
         });
 
