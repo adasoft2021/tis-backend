@@ -9,6 +9,7 @@ import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
+import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
 import com.adasoft.tis.repository.AdviserRepository;
@@ -91,7 +92,7 @@ public class ReviewService {
         defaultReview.setCreatedBy(foundAdviser);
         defaultReview.setCompany(foundCompany);
         defaultReview.setPublished(false);
-        HashSet<Space> spaces = new HashSet<Space>();
+        HashSet<Space> spaces = new HashSet<>();
         for (Long s : reviewDTO.getSpaces()) {
             Space foundSpace = spaceRepository.findById(s)
                 .orElseThrow(() -> new EntityNotFoundException(Space.class, s));
@@ -120,5 +121,17 @@ public class ReviewService {
 
         reviewMapper.map(reviewDTO, foundReview);
         return updateReview(foundReview, reviewDTO.getQualifications());
+    }
+
+    public Collection<ReviewCompactResponseDTO> getCompanyReviews(Long id) {
+        checkArgument(id != null, "El id de Company no puede ser nulo.");
+
+        companyRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Company.class, id));
+
+        Collection<Review> reviews = reviewRepository.findByCompany(id);
+
+        return reviews.stream().map(review -> reviewMapper.map(review, ReviewCompactResponseDTO.class))
+            .collect(Collectors.toSet());
     }
 }

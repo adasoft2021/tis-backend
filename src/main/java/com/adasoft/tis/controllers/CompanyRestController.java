@@ -4,6 +4,7 @@ import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
+import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -189,4 +190,24 @@ public interface CompanyRestController {
         ),
     })
     ResponseEntity<Collection<CompanyResponseDTO>> getAll();
+
+    @Operation(summary = "Obtener todas los Company", responses = {
+        @ApiResponse(
+            description = "Companys devueltos exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = ReviewCompactResponseDTO.class))
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<ReviewCompactResponseDTO>> getCompanyReviews(
+        Long userId,
+        @Parameter(description = "ID de la GE") Long id);
 }
