@@ -20,11 +20,15 @@ public class SpaceRepositoryImpl extends AbstractTisRepository<Space, Long>
     @Override
     public Collection<Space> findByAdviser(Long adviserId, Space.SpaceType spaceType) {
         String jpqlQuery = "SELECT s FROM Space s WHERE s.createdBy.id = :adviserId";
-        if (!spaceType.equals(Space.SpaceType.ALL))
+        if (!spaceType.equals(Space.SpaceType.ALL)) {
             jpqlQuery += " and s.spaceType = :spaceType";
+            return entityManager.createQuery(jpqlQuery, Space.class)
+                .setParameter("adviserId", adviserId)
+                .setParameter("spaceType", spaceType)
+                .getResultList();
+        }
         return entityManager.createQuery(jpqlQuery, Space.class)
             .setParameter("adviserId", adviserId)
-            .setParameter("spaceType", spaceType)
             .getResultList();
     }
 }
