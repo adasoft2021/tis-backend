@@ -11,4 +11,6 @@ import java.time.LocalDateTime;
 public class SpaceResponseDTO extends BaseResponseDTO<Long> {
     private String title;
     private Long projectId;
+    private LocalDateTime limitDate;
+    private String description;
 }
