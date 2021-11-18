@@ -155,7 +155,7 @@ class ReviewRestControllerImplTest {
     void updateReviewBadRequest() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         UpdateReviewDTO reviewDTO = new UpdateReviewDTO();
-
+        reviewDTO.setQualifications(new HashSet<>());
         mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID)
                 .header(X_TOKEN, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -226,6 +226,23 @@ class ReviewRestControllerImplTest {
             .andExpect(status().isNotAcceptable())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+    }
+
+    @Test
+    void updateReviewOnlyComment() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        UpdateReviewDTO updateComment = new UpdateReviewDTO();
+        updateComment.setComment("Este es el comentario de la revision");
+        ReviewResponseDTO reviewWithComment = new ReviewResponseDTO();
+        reviewWithComment.setComment(updateComment.getComment());
+        when(reviewService.update(any(), any(), any())).thenReturn(reviewWithComment);
+
+        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateComment)))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(reviewWithComment)));
     }
 
     @Test

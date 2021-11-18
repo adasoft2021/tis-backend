@@ -56,7 +56,7 @@ public class ReviewService {
         return qualificationService.updateAll(review, qualificationDTOS);
     }
 
-    private ReviewResponseDTO updateReview(
+    private ReviewResponseDTO updateReviewQualifications(
         final Review review,
         final Collection<UpdateQualificationDTO> qualificationDTOS) {
         Collection<QualificationResponseDTO> qualificationResponseDTOS = updateQualifications(review, qualificationDTOS);
@@ -114,7 +114,7 @@ public class ReviewService {
         Review persistedReview = reviewRepository.save(defaultReview);
         Collection<QualificationResponseDTO> qualificationResponseDTOS = qualificationService.createAll(persistedReview);
         ReviewResponseDTO responseDTO = reviewMapper.map(persistedReview, ReviewResponseDTO.class);
-        responseDTO = getReviewResponseDTO(defaultReview, responseDTO);
+        getReviewResponseDTO(defaultReview, responseDTO);
         responseDTO.setQualifications(new HashSet<>(qualificationResponseDTOS));
         return responseDTO;
     }
@@ -132,7 +132,7 @@ public class ReviewService {
         checkUserId(userId, foundReview.getCreatedBy().getId());
 
         reviewMapper.map(reviewDTO, foundReview);
-        return updateReview(foundReview, reviewDTO.getQualifications());
+        return updateReviewQualifications(foundReview, reviewDTO.getQualifications());
     }
 
     public Collection<ReviewCompactResponseDTO> getCompanyReviews(Long id) {
