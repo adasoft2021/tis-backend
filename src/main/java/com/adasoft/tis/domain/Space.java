@@ -1,6 +1,7 @@
 package com.adasoft.tis.domain;
 
 import com.adasoft.tis.core.domain.BaseEntity;
+import com.adasoft.tis.domain.proyect.Project;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +10,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
@@ -19,10 +20,23 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "spaces")
 public class Space extends BaseEntity<Long> {
+    @Column(nullable = false)
+    private String title;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_proyect_id", nullable = false, updatable = false)
+    private Project project;
+
+    @Column(nullable = false)
+    private LocalDateTime limitDate;
+
+    @Column(nullable = false)
+    private String description;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_adviser_id", nullable = false, updatable = false)
-    @NotNull
     private Adviser createdBy;
 
     @Column

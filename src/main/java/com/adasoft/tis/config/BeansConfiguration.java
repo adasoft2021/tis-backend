@@ -22,6 +22,9 @@ import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
+import com.adasoft.tis.dto.space.CreateSpaceDTO;
+import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.space.SpaceResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
@@ -280,6 +283,35 @@ public class BeansConfiguration {
 
         return modelMapper;
     }
+
+    @Bean("spaceMapper")
+    public ModelMapper spaceMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Space, SpaceResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setProjectId(source.getProject().getId());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<Space, SpaceCompactResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setProjectId(source.getProject().getId());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreateSpaceDTO, Space>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+                skip(destination.getProject());
+                skip(destination.getCreatedBy());
+            }
+        });
+
+        return modelMapper;
+    }
+
 
     @Bean("codeGenerator")
     @Scope("singleton")
