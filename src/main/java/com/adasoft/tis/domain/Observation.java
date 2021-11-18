@@ -28,8 +28,4 @@ public class Observation extends BaseEntity<Long> {
     @JoinColumn(name = "fk_review_id", nullable = false, updatable = false)
     Review review;
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_proposal_id", nullable = false, updatable = false)
-    Proposal proposal;
 }

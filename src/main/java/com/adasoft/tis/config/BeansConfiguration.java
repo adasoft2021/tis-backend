@@ -123,7 +123,7 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Observation, ObservationResponseDTO>() {
             @Override
             protected void configure() {
-                map().setProposalId(source.getProposal().getId());
+                map().setReviewId(source.getReview().getId());
             }
         });
 

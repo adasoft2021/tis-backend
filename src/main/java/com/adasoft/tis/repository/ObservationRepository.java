@@ -6,5 +6,5 @@ import com.adasoft.tis.domain.Observation;
 import java.util.List;
 
 public interface ObservationRepository extends TisRepository<Observation, Long> {
-    public List<Observation> getAllByProposalId(Long proposalId);
+    List<Observation> getAllByReviewId(Long reviewId);
 }

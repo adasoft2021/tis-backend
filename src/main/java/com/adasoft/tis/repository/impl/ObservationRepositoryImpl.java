@@ -17,11 +17,11 @@ public class ObservationRepositoryImpl extends AbstractTisRepository<Observation
     }
 
     @Override
-    public List<Observation> getAllByProposalId(Long proposalId) {
-        String jpqlQuery = "SELECT q FROM Observation q WHERE q.proposal.id = :proposalId";
+    public List<Observation> getAllByReviewId(Long reviewId) {
+        String jpqlQuery = "SELECT q FROM Observation q WHERE q.review.id = :reviewId";
 
         return entityManager.createQuery(jpqlQuery, Observation.class)
-            .setParameter("proposalId", proposalId)
+            .setParameter("reviewId", reviewId)
             .getResultList();
     }
 }
