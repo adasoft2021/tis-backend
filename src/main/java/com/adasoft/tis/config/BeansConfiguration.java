@@ -23,7 +23,9 @@ import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
+import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.space.SpaceResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
@@ -42,7 +44,6 @@ public class BeansConfiguration {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
 
         modelMapper.addMappings(new PropertyMap<Review, ReviewResponseDTO>() {
-
             @Override
             protected void configure() {
                 skip(destination.getQualifications());
@@ -61,7 +62,6 @@ public class BeansConfiguration {
         });
 
         modelMapper.addMappings(new PropertyMap<CreateReviewDTO, Review>() {
-
             @Override
             protected void configure() {
                 skip(destination.getId());
@@ -300,14 +300,30 @@ public class BeansConfiguration {
     public ModelMapper spaceMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Space, SpaceResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setProjectId(source.getProject().getId());
+            }
+        });
         modelMapper.addMappings(new PropertyMap<Space, SpaceCompactResponseDTO>() {
             @Override
             protected void configure() {
-                map().setId(source.getId());
+                map().setProjectId(source.getProject().getId());
             }
         });
+        modelMapper.addMappings(new PropertyMap<CreateSpaceDTO, Space>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+                skip(destination.getProject());
+                skip(destination.getCreatedBy());
+            }
+        });
+
         return modelMapper;
     }
+
 
     @Bean("codeGenerator")
     @Scope("singleton")
