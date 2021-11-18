@@ -20,9 +20,7 @@ import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 @AllArgsConstructor
 public class ReviewRestControllerImpl implements ReviewRestController {
     private ReviewService reviewService;
-    private Long userId;
-    private Long id;
-
+    
     @GetMapping("/{reviewId}")
     @Override
     public ResponseEntity<ReviewResponseDTO> get(

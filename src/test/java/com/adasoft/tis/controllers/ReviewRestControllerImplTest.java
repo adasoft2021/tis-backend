@@ -5,6 +5,7 @@ import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.core.utils.JWTProvider;
+import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
@@ -54,7 +55,6 @@ class ReviewRestControllerImplTest {
 
     private static final long ID = 1996128482800373344L;
     private static final int SCORE = 10;
-    private static final int TOTAL_SCORE = 70;
     private static final String COMMENT = "Este es un comentario.";
     private static final long CREATED_BY_ID = 982451052632054485L;
 
@@ -229,10 +229,53 @@ class ReviewRestControllerImplTest {
     }
 
     @Test
-    void publish() throws Exception {
-        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID)
+    void publishSuccessfull() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.publish(any(), any())).thenReturn(REVIEW_RESPONSE_DTO);
+        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID)
                 .header(X_TOKEN, TOKEN_VALUE))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO)));
+    }
 
+    @Test
+    void publishReviewNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.publish(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
+        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void publishAdviserNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.publish(any(), any())).thenThrow(new EntityNotFoundException(Adviser.class, USER_ID));
+        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void publishUnauthorized() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.publish(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
+        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void publishAlreadyPublished() throws Exception {
+
+        when(reviewService.publish(any(), any()))
+            .thenThrow(
+                new DefaultTisDomainException(
+                    HttpStatus.METHOD_NOT_ALLOWED,
+                    "Usted ya no puede hacer ningún cambio en la entidad Review."));
+        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isMethodNotAllowed());
     }
 }
