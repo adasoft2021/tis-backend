@@ -24,12 +24,12 @@ public class Space extends BaseEntity<Long> {
     @JoinColumn(name = "fk_adviser_id", nullable = false, updatable = false)
     @NotNull
     private Adviser createdBy;
-    
+
     @Column
     private SpaceType spaceType;
 
     public enum SpaceType {
-        ALL;
+        ALL
     }
 
 }
