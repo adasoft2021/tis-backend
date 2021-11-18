@@ -149,7 +149,7 @@ public class ReviewService {
 
     public ReviewResponseDTO getCompanyReview(Long companyId, Long reviewId) {
         checkArgument(companyId != null, "El id de Company no puede ser nulo.");
-        checkArgument(companyId != null, "El id de Company no puede ser nulo.");
+        checkArgument(reviewId != null, "El id de Review no puede ser nulo.");
         Company foundCompany = companyRepository.findById(companyId)
             .orElseThrow(() -> new EntityNotFoundException(Company.class, companyId));
         Review foundReview = reviewRepository.findById(reviewId)
@@ -158,5 +158,21 @@ public class ReviewService {
             throw new EntityNotFoundException(Review.class, reviewId);
         ReviewResponseDTO responseDTO = reviewMapper.map(foundReview, ReviewResponseDTO.class);
         return getReviewResponseDTO(foundReview, responseDTO);
+    }
+
+    public ReviewResponseDTO publish(Long userId, Long id) {
+        checkArgument(userId != null, "El id de Usuario no puede ser nulo.");
+        checkArgument(id != null, "El id de Review no puede ser nulo.");
+        Review foundReview = reviewRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Review.class, id));
+        checkUserId(userId, foundReview.getCreatedBy().getId());
+        if (foundReview.getPublished()) {
+            throw new DefaultTisDomainException(
+                HttpStatus.METHOD_NOT_ALLOWED,
+                "Usted ya no puede hacer ningún cambio en la entidad Review.");
+        }
+        foundReview.setPublished(true);
+        reviewRepository.save(foundReview);
+        return getReviewResponseDTO(foundReview, reviewMapper.map(foundReview, ReviewResponseDTO.class));
     }
 }

@@ -227,4 +227,12 @@ class ReviewRestControllerImplTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
+
+    @Test
+    void publish() throws Exception {
+        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk());
+
+    }
 }

@@ -143,4 +143,53 @@ public interface ReviewRestController {
         @RequestBody(description = "ReviewDTO que contiene los nuevos datos a ser actualizados")
             UpdateReviewDTO reviewDTO
     );
+
+    @Operation(summary = "Actualizacion del estado a publicado de revisión por su ID", responses = {
+        @ApiResponse(
+            description = "Review actualizado exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ReviewResponseDTO.class)
+            )
+        ),
+        @ApiResponse(
+            description = "Fallo al actualizar el Review",
+            responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No se encontró el ID del Review o del Qualification en el sistema",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "Ya se realizó la revisión de todas las notas parciales",
+            responseCode = "405",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<ReviewResponseDTO> publish(
+        Long userId,
+        @Parameter(description = "ID del Review a actualizar", example = "1")
+            Long id
+    );
 }
