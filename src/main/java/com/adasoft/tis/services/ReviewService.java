@@ -47,7 +47,7 @@ public class ReviewService {
     private Collection<QualificationResponseDTO> updateQualifications(
         final Review review,
         final Collection<UpdateQualificationDTO> qualificationDTOS) {
-        if (review.getPublished()) {
+        if (review.isPublished()) {
             throw new DefaultTisDomainException(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "Usted ya no puede hacer ningún cambio en la entidad Review.");
@@ -79,6 +79,9 @@ public class ReviewService {
     }
 
     private ReviewResponseDTO getReviewResponseDTO(Review foundReview, ReviewResponseDTO responseDTO) {
+        responseDTO.setAdviserName(String.format("%s %s",
+            foundReview.getCreatedBy().getFirstName(),
+            foundReview.getCreatedBy().getLastName()));
         Collection<QualificationResponseDTO> qualifications = foundReview.getQualifications()
             .stream().map(qualification -> qualificationMapper.map(qualification, QualificationResponseDTO.class))
             .collect(Collectors.toSet());
@@ -154,7 +157,7 @@ public class ReviewService {
             .orElseThrow(() -> new EntityNotFoundException(Company.class, companyId));
         Review foundReview = reviewRepository.findById(reviewId)
             .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
-        if (!foundReview.getCompany().equals(foundCompany) || !foundReview.getPublished())
+        if (!foundReview.getCompany().equals(foundCompany) || !foundReview.isPublished())
             throw new EntityNotFoundException(Review.class, reviewId);
         ReviewResponseDTO responseDTO = reviewMapper.map(foundReview, ReviewResponseDTO.class);
         return getReviewResponseDTO(foundReview, responseDTO);
@@ -166,7 +169,7 @@ public class ReviewService {
         Review foundReview = reviewRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(Review.class, id));
         checkUserId(userId, foundReview.getCreatedBy().getId());
-        if (foundReview.getPublished()) {
+        if (foundReview.isPublished()) {
             throw new DefaultTisDomainException(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "Usted ya no puede hacer ningún cambio en la entidad Review.");

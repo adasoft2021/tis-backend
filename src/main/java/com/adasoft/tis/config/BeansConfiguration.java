@@ -49,15 +49,17 @@ public class BeansConfiguration {
                 skip(destination.getQualifications());
                 skip(destination.getObservations());
                 skip(destination.getSpaces());
-                map().setAdviserName(source.getCreatedBy().getFirstName() + " " + source.getCreatedBy().getLastName());
+
                 map().setCompanyName(source.getCompany().getName());
+
+
             }
         });
 
         modelMapper.addMappings(new PropertyMap<Review, ReviewCompactResponseDTO>() {
             @Override
             protected void configure() {
-                map().setId(source.getId());
+
             }
         });
 
@@ -67,6 +69,10 @@ public class BeansConfiguration {
                 skip(destination.getId());
                 skip(destination.getCompany());
                 skip(destination.getCreatedBy());
+                skip(destination.getQualifications());
+                skip(destination.getObservations());
+                skip(destination.getSpaces());
+                map().setPublished(false);
             }
         });
 
@@ -75,6 +81,7 @@ public class BeansConfiguration {
             protected void configure() {
                 skip(destination.getId());
                 skip(destination.getQualifications());
+
             }
         });
 

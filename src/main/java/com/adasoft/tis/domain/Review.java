@@ -15,11 +15,12 @@ import java.util.Set;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(exclude = {"qualifications"}, callSuper = true)
+@EqualsAndHashCode(exclude = {"qualifications", "observations", "spaces"}, callSuper = true)
 @ToString(exclude = {"qualifications"}, callSuper = true)
 @NoArgsConstructor
 @Entity
 @Table(name = "reviews")
+
 public class Review extends BaseEntity<Long> {
 
     @Column(nullable = false)
@@ -28,8 +29,8 @@ public class Review extends BaseEntity<Long> {
     @Column
     private String comment;
 
-    @Column
-    private Boolean published;
+    @Column(nullable = false)
+    private boolean published;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

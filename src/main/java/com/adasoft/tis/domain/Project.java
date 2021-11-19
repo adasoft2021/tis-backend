@@ -1,4 +1,4 @@
-package com.adasoft.tis.domain.proyect;
+package com.adasoft.tis.domain;
 
 import com.adasoft.tis.core.domain.BaseEntity;
 import lombok.Data;

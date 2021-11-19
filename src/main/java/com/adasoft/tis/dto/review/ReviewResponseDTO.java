@@ -13,7 +13,7 @@ import java.util.Set;
 @Setter
 public class ReviewResponseDTO extends BaseResponseDTO<Long> {
     private String title;
-    private Boolean published;
+    private boolean published;
     private String comment;
     private String adviserName;
     private String companyName;
