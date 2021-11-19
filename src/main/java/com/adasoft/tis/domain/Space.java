@@ -25,7 +25,7 @@ public class Space extends BaseEntity<Long> {
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_proyect_id", nullable = false, updatable = false)
+    @JoinColumn(name = "fk_project_id", nullable = false, updatable = false)
     private Project project;
 
     @Column(nullable = false)

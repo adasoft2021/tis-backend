@@ -14,5 +14,7 @@ public class SpaceRepositoryImpl extends AbstractTisRepository<Space, Long>
     @Autowired
     protected SpaceRepositoryImpl(final EntityManager entityManager) {
         super(entityManager, Space.class);
+
     }
 }
+

@@ -1,13 +1,17 @@
 package com.adasoft.tis.services;
 
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
+import com.adasoft.tis.core.repository.AbstractTisRepository;
 import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Space;
+import com.adasoft.tis.domain.proyect.Project;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.space.CreateSpaceDTO;
+import com.adasoft.tis.dto.space.SpaceResponseDTO;
 import com.adasoft.tis.repository.AdviserRepository;
+import com.adasoft.tis.repository.ProjectRepository;
 import com.adasoft.tis.repository.SpaceRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,14 +28,28 @@ import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
 public class SpaceService {
     private SpaceRepository spaceRepository;
     private ModelMapper spaceMapper;
+    private AdviserRepository adviserRepository;
+    private ProjectRepository projectRepository;
 
-    public AdviserResponseDTO create(final CreateSpaceDTO spaceDTO) {
+    public SpaceResponseDTO create(final CreateSpaceDTO spaceDTO, final Long adviserId) {
         checkArgument(spaceDTO != null, "El SpaceDTO a crear no puede ser nulo.");
+
+        Adviser x = adviserRepository.findById(adviserId).orElseThrow(()->
+            new EntityNotFoundException(Adviser.class,adviserId)
+        );
+
+        Project y = projectRepository.findById(spaceDTO.getProyectId()).orElseThrow(()->
+                new EntityNotFoundException(Project.class,spaceDTO.getProyectId())
+        );
 
         Space defaultSpace = spaceMapper.map(spaceDTO, Space.class);
 
-        Space persistedAdviser = spaceRepository.save(defaultSpace);
+        defaultSpace.setCreatedBy(x);
 
-        return spaceMapper.map(persistedAdviser, AdviserResponseDTO.class);
+        defaultSpace.setProject(y);
+
+        Space persistedSpace = spaceRepository.save(defaultSpace);
+
+        return spaceMapper.map(persistedSpace, SpaceResponseDTO.class);
     }
 }
