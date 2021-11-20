@@ -278,11 +278,10 @@ class ReviewRestControllerImplTest {
 
     @Test
     void publishUnauthorized() throws Exception {
-        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+
         when(reviewService.publish(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
-        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID)
-                .header(X_TOKEN, TOKEN_VALUE))
-            .andExpect(status().isNotFound());
+        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -313,8 +312,7 @@ class ReviewRestControllerImplTest {
 
     @Test
     void getAdviserReviewsUnautorized() throws Exception {
-        Set<ReviewCompactResponseDTO> reviews = Set.of(new ReviewCompactResponseDTO());
-        
+
         mvc.perform(get(BASE_URL))
             .andExpect(status().isUnauthorized());
     }

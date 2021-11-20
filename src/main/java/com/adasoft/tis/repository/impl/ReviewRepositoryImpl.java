@@ -30,8 +30,7 @@ public class ReviewRepositoryImpl extends AbstractTisRepository<Review, Long> im
 
     @Override
     public Collection<Review> findByAdviser(Long adviserId) {
-        String jpqlQuery = "SELECT r FROM Review r WHERE r.createdBy.id = :adviserId " +
-            "and r.deleted = false and r.published = true";
+        String jpqlQuery = "SELECT r FROM Review r WHERE r.createdBy.id = :adviserId and r.deleted = false";
 
         return entityManager.createQuery(jpqlQuery, Review.class)
             .setParameter("adviserId", adviserId)

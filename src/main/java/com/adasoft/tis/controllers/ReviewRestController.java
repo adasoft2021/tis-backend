@@ -214,6 +214,12 @@ public interface ReviewRestController {
                 schema = @Schema(implementation = ErrorResponse.class)
             )
         ),
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<Collection<ReviewCompactResponseDTO>> getAdviserReviews(Long userId);
 }
