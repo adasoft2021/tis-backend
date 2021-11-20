@@ -19,10 +19,7 @@ import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
-import com.adasoft.tis.dto.review.CreateReviewDTO;
-import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
-import com.adasoft.tis.dto.review.ReviewResponseDTO;
-import com.adasoft.tis.dto.review.UpdateReviewDTO;
+import com.adasoft.tis.dto.review.*;
 import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.space.SpaceResponseDTO;
@@ -49,9 +46,19 @@ public class BeansConfiguration {
                 skip(destination.getQualifications());
                 skip(destination.getObservations());
                 skip(destination.getSpaces());
-
                 map().setCompanyName(source.getCompany().getName());
 
+
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<Review, ReviewFilesResponseDTO>() {
+            @Override
+            protected void configure() {
+                skip(destination.getQualifications());
+                skip(destination.getObservations());
+                skip(destination.getSpaces());
+                skip(destination.getSpaceAnswers());
+                map().setCompanyName(source.getCompany().getName());
 
             }
         });
