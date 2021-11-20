@@ -38,4 +38,11 @@ public class Space extends BaseEntity<Long> {
     @JoinColumn(name = "fk_adviser_id", nullable = false, updatable = false)
     private Adviser createdBy;
 
+    @Column(nullable = false)
+    private SpaceType spaceType;
+
+    public enum SpaceType {
+        ALL, PROPOSAL
+    }
+
 }
