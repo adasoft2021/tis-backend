@@ -7,10 +7,12 @@ import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.AdviserService;
 import com.adasoft.tis.services.ClassCodeService;
 import com.adasoft.tis.services.SpaceAnswerService;
+import com.adasoft.tis.services.SpaceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -46,6 +49,8 @@ class AdviserRestControllerImplTest {
     private ClassCodeService classCodeService;
     @MockBean
     private SpaceAnswerService spaceAnswerService;
+    @MockBean
+    private SpaceService spaceService;
 
     private static final String BASE_URL = "/advisers";
     private static final String X_TOKEN = "X-Token";
@@ -55,9 +60,7 @@ class AdviserRestControllerImplTest {
     private static final String CODE = "asd-asd-asd";
     private static final Long SPACE_ID = 1L;
 
-
     private static ClassCodeResponseDTO classCodeDTO;
-
 
     @BeforeAll
     static void setup() {
@@ -154,5 +157,28 @@ class AdviserRestControllerImplTest {
                 .header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isNotFound()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+    }
+
+    @Test
+    void getSpacesSuccess() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        HashSet<SpaceCompactResponseDTO> spacesDTOs = new HashSet<>();
+        when(spaceService.getAdviserSpaces(any(), any())).thenReturn(spacesDTOs);
+
+        mvc.perform(get(String.format("%s/{adviserId}/spaces", BASE_URL), ID)
+                .queryParam("spaceType", "ALL").header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(spacesDTOs)));
+    }
+
+    @Test
+    void getSpacesUnauthorized() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(45L);
+        HashSet<SpaceCompactResponseDTO> spacesDTOs = new HashSet<>();
+
+        mvc.perform(get(String.format("%s/{adviserId}/spaces", BASE_URL), ID)
+                .queryParam("spaceType", "ALL").header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isUnauthorized());
     }
 }

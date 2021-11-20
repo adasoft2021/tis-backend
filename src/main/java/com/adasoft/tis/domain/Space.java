@@ -1,7 +1,6 @@
 package com.adasoft.tis.domain;
 
 import com.adasoft.tis.core.domain.BaseEntity;
-import com.adasoft.tis.domain.proyect.Project;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +24,7 @@ public class Space extends BaseEntity<Long> {
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_proyect_id", nullable = false, updatable = false)
+    @JoinColumn(name = "fk_project_id", nullable = false, updatable = false)
     private Project project;
 
     @Column(nullable = false)
@@ -38,5 +37,12 @@ public class Space extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_adviser_id", nullable = false, updatable = false)
     private Adviser createdBy;
+
+    @Column(nullable = false)
+    private SpaceType spaceType;
+
+    public enum SpaceType {
+        ALL, PROPOSAL
+    }
 
 }
