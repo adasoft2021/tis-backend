@@ -1,11 +1,14 @@
 package com.adasoft.tis.controllers;
 
 import com.adasoft.tis.core.exceptions.ErrorResponse;
+import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
+import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -254,5 +257,32 @@ public interface CompanyRestController {
         @Parameter(description = "ID de la GE") Long companyId,
         @Parameter(description = "ID de la revision") Long reviewId);
 
+    @Operation(summary = "Crear SpaceAnswer", responses = {
+        @ApiResponse(
+            description = "SpaceAnswer creado exitosamente",
+            responseCode = "201",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = SpaceAnswerResponseDTO.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<SpaceCompactResponseDTO>> getCompanySpaces(
+        Long userId,
+        @Parameter(description = "ID de la GE") Long companyId,
+        @Parameter(description = "Tipo de space") Space.SpaceType spaceType
+    );
 
 }
