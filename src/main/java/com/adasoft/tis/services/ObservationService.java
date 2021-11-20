@@ -3,11 +3,12 @@ package com.adasoft.tis.services;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.domain.Observation;
 import com.adasoft.tis.domain.Proposal;
+import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.observation.CreateObservationDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
 import com.adasoft.tis.repository.ObservationRepository;
-import com.adasoft.tis.repository.ProposalRepository;
+import com.adasoft.tis.repository.ReviewRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -23,20 +24,20 @@ import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 @Service
 public class ObservationService {
     private ObservationRepository observationRepository;
-    private ProposalRepository proposalRepository;
+    private ReviewRepository reviewRepository;
     private ModelMapper observationMapper;
 
     public ObservationResponseDTO create(
         final Long userId,
         final CreateObservationDTO observationDTO,
-        final Long proposalId) {
+        final Long reviewId) {
         checkArgument(observationDTO != null, "El ObservationDTO a crear no puede ser nulo.");
-        checkArgument(proposalId != null, "El ID del Proposal a observar no puede ser nulo.");
-        Proposal proposal = proposalRepository.findById(proposalId)
-            .orElseThrow(() -> new EntityNotFoundException(Proposal.class, proposalId));
-        checkUserId(userId, proposal.getAdviser());
+        checkArgument(reviewId != null, "El ID del Review a observar no puede ser nulo.");
+        Review review = reviewRepository.findById(reviewId)
+            .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
+        checkUserId(userId, review.getCreatedBy().getId());
         Observation defaultObservation = observationMapper.map(observationDTO, Observation.class);
-        defaultObservation.setProposal(proposal);
+        defaultObservation.setReview(review);
         Observation persistedObservation = observationRepository.save(defaultObservation);
 
         return observationMapper.map(persistedObservation, ObservationResponseDTO.class);
@@ -52,7 +53,7 @@ public class ObservationService {
         Observation foundObservation = observationRepository.findById(observationId)
             .orElseThrow(() -> new EntityNotFoundException(Observation.class, observationId));
 
-        checkUserId(userId, foundObservation.getProposal().getAdviser());
+        checkUserId(userId, foundObservation.getReview().getCreatedBy().getId());
 
         if (foundObservation.isDeleted()) {
             throw new EntityNotFoundException(Observation.class, observationId);
@@ -70,7 +71,7 @@ public class ObservationService {
         Observation foundObservation = observationRepository.findById(observationId)
             .orElseThrow(() -> new EntityNotFoundException(Observation.class, observationId));
 
-        checkUserId(userId, foundObservation.getProposal().getAdviser());
+        checkUserId(userId, foundObservation.getReview().getCreatedBy().getId());
 
         if (foundObservation.isDeleted()) {
             throw new EntityNotFoundException(Observation.class, observationId);
@@ -93,12 +94,12 @@ public class ObservationService {
         return observationMapper.map(foundObservation, ObservationResponseDTO.class);
     }
 
-    public Collection<ObservationResponseDTO> getAllByProposalId(Long proposalId) {
-        checkArgument(proposalId != null, "El ID del proposal no puede ser nulo.");
-        Proposal p = proposalRepository.findById(proposalId)
-            .orElseThrow(() -> new EntityNotFoundException(Proposal.class, proposalId));
+    public Collection<ObservationResponseDTO> getAllByReviewId(Long reviewId) {
+        checkArgument(reviewId != null, "El ID del proposal no puede ser nulo.");
+        reviewRepository.findById(reviewId)
+            .orElseThrow(() -> new EntityNotFoundException(Proposal.class, reviewId));
 
-        Collection<ObservationResponseDTO> observations = observationRepository.getAllByProposalId(proposalId)
+        Collection<ObservationResponseDTO> observations = observationRepository.getAllByReviewId(reviewId)
             .stream().filter(observation -> !observation.isDeleted())
             .map(observation -> observationMapper.map(observation, ObservationResponseDTO.class))
             .collect(Collectors.toSet());

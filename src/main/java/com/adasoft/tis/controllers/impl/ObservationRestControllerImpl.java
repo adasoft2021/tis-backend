@@ -25,9 +25,9 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @Override
     public ResponseEntity<ObservationResponseDTO> create(
         @RequestAttribute("userId") final Long userId,
-        @NotNull @RequestParam(name = "proposal") final Long proposalId,
+        @NotNull @RequestParam(name = "reviewId") final Long reviewId,
         @Valid @RequestBody final CreateObservationDTO observationDTO) {
-        ObservationResponseDTO responseDTO = observationService.create(userId, observationDTO, proposalId);
+        ObservationResponseDTO responseDTO = observationService.create(userId, observationDTO, reviewId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
@@ -61,10 +61,10 @@ public class ObservationRestControllerImpl implements ObservationRestController 
 
     @GetMapping
     @Override
-    public ResponseEntity<Collection<ObservationResponseDTO>> getAllByProposalId(
+    public ResponseEntity<Collection<ObservationResponseDTO>> getAllByReviewId(
         @RequestAttribute("userId") final Long userId,
-        @NotNull @RequestParam(name = "proposal") final Long proposalId) {
-        Collection<ObservationResponseDTO> responses = observationService.getAllByProposalId(proposalId);
+        @NotNull @RequestParam(name = "reviewId") final Long reviewId) {
+        Collection<ObservationResponseDTO> responses = observationService.getAllByReviewId(reviewId);
         return ResponseEntity.ok(responses);
     }
 }

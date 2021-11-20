@@ -43,10 +43,20 @@ public class ReviewRestControllerImpl implements ReviewRestController {
     @PutMapping("/{reviewId}")
     @Override
     public ResponseEntity<ReviewResponseDTO> update(
-        @RequestAttribute("userId") final Long userId,
+        Long userId,
         @NotNull @PathVariable("reviewId") final Long id,
         @Valid @RequestBody final UpdateReviewDTO reviewDTO) {
         ReviewResponseDTO responseDTO = reviewService.update(userId, id, reviewDTO);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PutMapping("/{reviewId}/publish")
+    @Override
+    public ResponseEntity<ReviewResponseDTO> publish(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("reviewId") Long id) {
+
+        ReviewResponseDTO responseDTO = reviewService.publish(userId, id);
         return ResponseEntity.ok(responseDTO);
     }
 }

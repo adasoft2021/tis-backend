@@ -4,8 +4,11 @@ import com.adasoft.tis.controllers.CompanyRestController;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
+import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
+import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
 import com.adasoft.tis.services.CompanyService;
+import com.adasoft.tis.services.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,7 @@ import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 @AllArgsConstructor
 public class CompanyRestControllerImpl implements CompanyRestController {
     private CompanyService companyService;
+    private ReviewService reviewService;
 
     @PostMapping
     @Override
@@ -69,5 +73,26 @@ public class CompanyRestControllerImpl implements CompanyRestController {
     public ResponseEntity<Collection<CompanyResponseDTO>> getAll() {
         Collection<CompanyResponseDTO> responses = companyService.getAll();
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/{companyId}/reviews")
+    @Override
+    public ResponseEntity<Collection<ReviewCompactResponseDTO>> getCompanyReviews(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("companyId") final Long id) {
+        checkUserId(userId, id);
+        Collection<ReviewCompactResponseDTO> responses = reviewService.getCompanyReviews(id);
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/{companyId}/reviews/{reviewId}")
+    @Override
+    public ResponseEntity<ReviewResponseDTO> getReview(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("companyId") final Long companyId,
+        @NotNull @PathVariable("reviewId") Long reviewId) {
+        checkUserId(userId, companyId);
+        ReviewResponseDTO response = reviewService.getCompanyReview(companyId, reviewId);
+        return ResponseEntity.ok(response);
     }
 }

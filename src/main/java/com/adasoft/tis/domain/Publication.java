@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(exclude = {"createdBy"}, callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
 @Entity

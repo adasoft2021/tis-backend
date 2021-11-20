@@ -50,8 +50,8 @@ public interface ObservationRestController {
     ))
     ResponseEntity<ObservationResponseDTO> create(
         Long userId,
-        @Parameter(description = "ID de Proposal del cual se crea una Observation", example = "1")
-            Long proposalId,
+        @Parameter(description = "ID de Review del cual se crea una Observation", example = "1")
+            Long reviewId,
         @RequestBody(description = "ObservationDTO que contiene los nuevos datos a crear")
             CreateObservationDTO observationDTO
     );
@@ -209,7 +209,7 @@ public interface ObservationRestController {
             )
         ),
         @ApiResponse(
-            description = "No se encontró el ID del Proposal en el sistema",
+            description = "No se encontró el ID del Review en el sistema",
             responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
@@ -222,9 +222,9 @@ public interface ObservationRestController {
         schema = @Schema(implementation = String.class),
         required = true
     ))
-    ResponseEntity<Collection<ObservationResponseDTO>> getAllByProposalId(
+    ResponseEntity<Collection<ObservationResponseDTO>> getAllByReviewId(
         Long userId,
-        @Parameter(description = "ID del Proposal de las Observations a obtener", example = "1")
-            Long proposalId
+        @Parameter(description = "ID del Review de las Observations a obtener", example = "1")
+            Long reviewId
     );
 }
