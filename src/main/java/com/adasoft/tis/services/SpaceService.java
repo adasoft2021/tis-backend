@@ -5,6 +5,7 @@ import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Company;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.space.SpaceResponseDTO;
 import com.adasoft.tis.repository.AdviserRepository;
 import com.adasoft.tis.repository.CompanyRepository;
 import com.adasoft.tis.repository.SpaceRepository;
@@ -41,5 +42,11 @@ public class SpaceService {
                 .collect(Collectors.toSet());
         return spaces.stream().map(space -> spaceMapper.map(space, SpaceCompactResponseDTO.class))
             .collect(Collectors.toSet());
+    }
+
+    public SpaceResponseDTO getSpace(Long spaceId) {
+        Space space = spaceRepository.findById(spaceId)
+            .orElseThrow(() -> new EntityNotFoundException(Space.class, spaceId));
+        return spaceMapper.map(space, SpaceResponseDTO.class);
     }
 }
