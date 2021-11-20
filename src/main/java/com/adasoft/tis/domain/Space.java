@@ -42,7 +42,7 @@ public class Space extends BaseEntity<Long> {
     private SpaceType spaceType;
 
     public enum SpaceType {
-        ALL, PROPOSAL
+        ALL, PROPOSALS_PRESENTATION, PROJECT_DEVELOPMENT, FINAL_EVALUATION
     }
 
 }
