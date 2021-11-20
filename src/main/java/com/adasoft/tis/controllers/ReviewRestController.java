@@ -2,17 +2,21 @@ package com.adasoft.tis.controllers;
 
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
+import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Collection;
 
 @Tag(name = "ReviewRestController", description = "Controlador para gestionar las Revisiones")
 public interface ReviewRestController {
@@ -192,4 +196,24 @@ public interface ReviewRestController {
         @Parameter(description = "ID del Review a actualizar", example = "1")
             Long id
     );
+
+    @Operation(summary = "Obtener revisiones de un asesor", responses = {
+        @ApiResponse(
+            description = "Reviews devueltos exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = ReviewCompactResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "Falta autorizacion",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+    })
+    ResponseEntity<Collection<ReviewCompactResponseDTO>> getAdviserReviews(Long userId);
 }

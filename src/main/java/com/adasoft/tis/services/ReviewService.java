@@ -185,4 +185,14 @@ public class ReviewService {
         reviewRepository.save(foundReview);
         return getReviewResponseDTO(foundReview, reviewMapper.map(foundReview, ReviewResponseDTO.class));
     }
+
+    public Collection<ReviewCompactResponseDTO> getAdviserReviews(Long userId) {
+        checkArgument(userId != null, "El ID de adviser no puede ser nulo");
+        Adviser foundAdviser = adviserRepository.findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException(Adviser.class, userId));
+        checkUserId(userId, foundAdviser.getId());
+        Collection<Review> reviews = reviewRepository.findByAdviser(userId);
+        return reviews.stream().map(review -> reviewMapper.map(review, ReviewCompactResponseDTO.class))
+            .collect(Collectors.toSet());
+    }
 }

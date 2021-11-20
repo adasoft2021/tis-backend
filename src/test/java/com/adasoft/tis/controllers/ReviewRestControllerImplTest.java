@@ -9,6 +9,7 @@ import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
+import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
 import com.adasoft.tis.services.ReviewService;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -295,4 +297,26 @@ class ReviewRestControllerImplTest {
                 .header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isMethodNotAllowed());
     }
+
+    @Test
+    void getAdviserReviewsSuccesfully() throws Exception {
+        Set<ReviewCompactResponseDTO> reviews = Set.of(new ReviewCompactResponseDTO());
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.getAdviserReviews(any()))
+            .thenReturn(reviews);
+
+        mvc.perform(get(BASE_URL).header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(reviews)));
+    }
+
+    @Test
+    void getAdviserReviewsUnautorized() throws Exception {
+        Set<ReviewCompactResponseDTO> reviews = Set.of(new ReviewCompactResponseDTO());
+        
+        mvc.perform(get(BASE_URL))
+            .andExpect(status().isUnauthorized());
+    }
+
 }
