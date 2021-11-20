@@ -9,11 +9,9 @@ import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
-import com.adasoft.tis.dto.review.CreateReviewDTO;
-import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
-import com.adasoft.tis.dto.review.ReviewResponseDTO;
-import com.adasoft.tis.dto.review.UpdateReviewDTO;
+import com.adasoft.tis.dto.review.*;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.repository.AdviserRepository;
 import com.adasoft.tis.repository.CompanyRepository;
 import com.adasoft.tis.repository.ReviewRepository;
@@ -43,6 +41,7 @@ public class ReviewService {
     private SpaceRepository spaceRepository;
     private ModelMapper observationMapper;
     private ModelMapper spaceMapper;
+    private SpaceAnswerService spaceAnswersService;
 
     private Collection<QualificationResponseDTO> updateQualifications(
         final Review review,
@@ -59,7 +58,8 @@ public class ReviewService {
     private ReviewResponseDTO updateReviewQualifications(
         final Review review,
         final Collection<UpdateQualificationDTO> qualificationDTOS) {
-        Collection<QualificationResponseDTO> qualificationResponseDTOS = updateQualifications(review, qualificationDTOS);
+        Collection<QualificationResponseDTO> qualificationResponseDTOS =
+            updateQualifications(review, qualificationDTOS);
 
         reviewRepository.update(review);
 
@@ -73,7 +73,13 @@ public class ReviewService {
         Review foundReview = reviewRepository.findById(reviewId)
             .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
 
-        ReviewResponseDTO responseDTO = reviewMapper.map(foundReview, ReviewResponseDTO.class);
+        ReviewFilesResponseDTO responseDTO = reviewMapper.map(foundReview, ReviewFilesResponseDTO.class);
+        Collection<SpaceAnswerResponseDTO> spaceAnswers = new HashSet<>();
+        for (Space space : foundReview.getSpaces()) {
+            spaceAnswers.addAll(spaceAnswersService.getBySpaceIdAndCompanyId(
+                space.getId(), foundReview.getCompany().getId()));
+        }
+        responseDTO.setSpaceAnswers(spaceAnswers);
 
         return getReviewResponseDTO(foundReview, responseDTO);
     }
@@ -115,7 +121,8 @@ public class ReviewService {
         }
         defaultReview.setSpaces(spaces);
         Review persistedReview = reviewRepository.save(defaultReview);
-        Collection<QualificationResponseDTO> qualificationResponseDTOS = qualificationService.createAll(persistedReview);
+        Collection<QualificationResponseDTO> qualificationResponseDTOS =
+            qualificationService.createAll(persistedReview);
         ReviewResponseDTO responseDTO = reviewMapper.map(persistedReview, ReviewResponseDTO.class);
         getReviewResponseDTO(defaultReview, responseDTO);
         responseDTO.setQualifications(new HashSet<>(qualificationResponseDTOS));

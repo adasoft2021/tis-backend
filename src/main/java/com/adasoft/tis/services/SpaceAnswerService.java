@@ -65,4 +65,18 @@ public class SpaceAnswerService {
             .map(space -> spaceAnswerMapper.map(space, SpaceAnswerResponseDTO.class))
             .collect(Collectors.toSet());
     }
+
+    public Collection<SpaceAnswerResponseDTO> getBySpaceIdAndCompanyId(final Long spaceId, final Long companyId) {
+        checkArgument(spaceId != null, "El id de Space no puede ser nulo.");
+        spaceRepository.findById(spaceId)
+            .orElseThrow(() -> new EntityNotFoundException(Space.class, spaceId));
+        companyRepository.findById(companyId)
+            .orElseThrow(() -> new EntityNotFoundException(Company.class, companyId));
+        Collection<SpaceAnswer> spaceAnswers = spaceAnswerRepository.getBySpaceId(spaceId);
+
+        return spaceAnswers.stream().filter(spaceAnswer -> !spaceAnswer.isDeleted())
+            .filter(spaceAnswer -> spaceAnswer.getCreatedBy().getId().equals(companyId))
+            .map(spaceAnswer -> spaceAnswerMapper.map(spaceAnswer, SpaceAnswerResponseDTO.class))
+            .collect(Collectors.toSet());
+    }
 }
