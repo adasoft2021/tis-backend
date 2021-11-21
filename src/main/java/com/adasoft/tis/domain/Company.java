@@ -36,4 +36,8 @@ public class Company extends User<Long> {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_adviser_id", nullable = false, updatable = false)
     Adviser adviser;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_project_id")
+    Project project;
 }
