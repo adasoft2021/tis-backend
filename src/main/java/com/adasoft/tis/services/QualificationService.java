@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 
 @AllArgsConstructor
 @Service
@@ -100,11 +101,14 @@ public class QualificationService {
             .collect(Collectors.toSet());
     }
 
-    public QualificationResponseDTO create(final Long reviewId, final CreateQualificationDTO dto) {
+    public QualificationResponseDTO create(final Long userId, final Long reviewId, final CreateQualificationDTO dto) {
+        checkArgument(reviewId != null, "El ID de user no debe ser nulo");
         checkArgument(reviewId != null, "El ID de review no debe ser nulo");
         checkArgument(dto != null, "El dto de qualification no debe ser nulo");
         Review review = reviewRepository.findById(reviewId)
             .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
+        checkUserId(userId, review.getCreatedBy().getId());
+
         Qualification defaultQualification = qualificationMapper.map(dto, Qualification.class);
         defaultQualification.setReview(review);
         Qualification persistedQualification = qualificationRepository.save(defaultQualification);

@@ -7,11 +7,14 @@ import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Review;
+import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
+import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
+import com.adasoft.tis.services.QualificationService;
 import com.adasoft.tis.services.ReviewService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -45,6 +48,8 @@ class ReviewRestControllerImplTest {
     private JWTProvider jwtProvider;
     @MockBean
     private ReviewService reviewService;
+    @MockBean
+    private QualificationService qualificationService;
 
     private static final String BASE_URL = "/reviews";
     private static final String X_TOKEN = "X-Token";
@@ -317,4 +322,74 @@ class ReviewRestControllerImplTest {
             .andExpect(status().isUnauthorized());
     }
 
+
+    @Test
+    void createReviewQualificationSuccessfully() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        CreateQualificationDTO qualificationDTO = new CreateQualificationDTO();
+        qualificationDTO.setDescription("Description");
+        qualificationDTO.setMaxScore(20);
+        QualificationResponseDTO responseDTO = new QualificationResponseDTO();
+        responseDTO.setCreatedAt(qualificationDTO.getCreatedAt());
+        responseDTO.setUpdatedAt(qualificationDTO.getUpdatedAt());
+        responseDTO.setDeleted(qualificationDTO.isDeleted());
+        responseDTO.setDescription(qualificationDTO.getDescription());
+        responseDTO.setMaxScore(qualificationDTO.getMaxScore());
+
+
+        when(qualificationService.create(any(), any(), any())).thenReturn(responseDTO);
+
+        mvc.perform(post(BASE_URL + "/{reviewId}/qualifications", 1L)
+                .header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(qualificationDTO)))
+            .andExpect(status().isCreated())
+            .andExpect(content().json(objectMapper.writeValueAsString(responseDTO)));
+    }
+
+    @Test
+    void createdReviewQualificationBadRequest() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+
+        mvc.perform(post(BASE_URL + "/{reviewId}/qualifications", 1L)
+                .header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(String.valueOf(new CreateQualificationDTO())))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createdReviewQualificationUnauthorized() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(2L);
+        CreateQualificationDTO badQualificationDTO = new CreateQualificationDTO();
+
+        mvc.perform(post(BASE_URL + "/{reviewId}/qualifications", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(badQualificationDTO)))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void createReviewQualificationReviewNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        CreateQualificationDTO qualificationDTO = new CreateQualificationDTO();
+        qualificationDTO.setDescription("Description");
+        qualificationDTO.setMaxScore(20);
+        QualificationResponseDTO responseDTO = new QualificationResponseDTO();
+        responseDTO.setCreatedAt(qualificationDTO.getCreatedAt());
+        responseDTO.setUpdatedAt(qualificationDTO.getUpdatedAt());
+        responseDTO.setDeleted(qualificationDTO.isDeleted());
+        responseDTO.setDescription(qualificationDTO.getDescription());
+        responseDTO.setMaxScore(qualificationDTO.getMaxScore());
+
+
+        when(qualificationService.create(any(), any(), any()))
+            .thenThrow(new EntityNotFoundException(Review.class, ID));
+
+        mvc.perform(post(BASE_URL + "/{reviewId}/qualifications", ID)
+                .header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(qualificationDTO)))
+            .andExpect(status().isNotFound());
+    }
 }

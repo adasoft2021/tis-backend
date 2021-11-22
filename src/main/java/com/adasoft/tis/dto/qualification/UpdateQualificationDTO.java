@@ -36,8 +36,8 @@ public class UpdateQualificationDTO extends BaseUpdateDTO<Long> {
         name = "description",
         description = "descripcion del Qualification a actualizar",
         required = true,
-        example = "1",
-        type = "Number"
+        example = "Descripcion",
+        type = "String"
     )
     private String description;
     @Schema(

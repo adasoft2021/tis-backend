@@ -1,10 +1,13 @@
 package com.adasoft.tis.controllers.impl;
 
 import com.adasoft.tis.controllers.ReviewRestController;
+import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
+import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
+import com.adasoft.tis.services.QualificationService;
 import com.adasoft.tis.services.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,7 @@ import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 @AllArgsConstructor
 public class ReviewRestControllerImpl implements ReviewRestController {
     private ReviewService reviewService;
+    private QualificationService qualificationService;
 
     @GetMapping("/{reviewId}")
     @Override
@@ -68,5 +72,15 @@ public class ReviewRestControllerImpl implements ReviewRestController {
         @RequestAttribute("userId") final Long userId) {
         Collection<ReviewCompactResponseDTO> responses = reviewService.getAdviserReviews(userId);
         return ResponseEntity.ok(responses);
+    }
+
+    @PostMapping("/{reviewId}/qualifications")
+    @Override
+    public ResponseEntity<QualificationResponseDTO> createReviewQualification(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable Long reviewId,
+        @RequestBody CreateQualificationDTO qualificationDTO) {
+        QualificationResponseDTO response = qualificationService.create(userId, reviewId, qualificationDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

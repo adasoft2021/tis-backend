@@ -1,6 +1,8 @@
 package com.adasoft.tis.controllers;
 
 import com.adasoft.tis.core.exceptions.ErrorResponse;
+import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
+import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
@@ -222,4 +224,47 @@ public interface ReviewRestController {
         required = true
     ))
     ResponseEntity<Collection<ReviewCompactResponseDTO>> getAdviserReviews(Long userId);
+
+    @Operation(summary = "Creación de una revisión", responses = {
+        @ApiResponse(
+            description = "Qualification creado exitosamente",
+            responseCode = "201",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ReviewResponseDTO.class)
+            )
+        ),
+        @ApiResponse(
+            description = "Fallo al crear el Qualification",
+            responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "Review no encontrado",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<QualificationResponseDTO> createReviewQualification(
+        Long userId,
+        @Parameter(description = "ID del review") Long reviewId,
+        @RequestBody(description = "ReviewDTO que contiene los nuevos datos a crear")
+            CreateQualificationDTO qualificationDTO
+    );
 }

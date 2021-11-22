@@ -20,8 +20,8 @@ public class CreateQualificationDTO extends BaseCreateDTO {
         name = "description",
         description = "descripcion del Qualification a actualizar",
         required = true,
-        example = "1",
-        type = "Number"
+        example = "Descripcion",
+        type = "String"
     )
     @NotNull
     private String description;
