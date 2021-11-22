@@ -161,8 +161,7 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Qualification, QualificationResponseDTO>() {
             @Override
             protected void configure() {
-                map().setDescription(source.getBaseQualification().getDescription());
-                map().setMaxScore(source.getBaseQualification().getMaxScore());
+               
             }
         });
 

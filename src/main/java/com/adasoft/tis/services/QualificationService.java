@@ -5,10 +5,12 @@ import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.domain.BaseQualification;
 import com.adasoft.tis.domain.Qualification;
 import com.adasoft.tis.domain.Review;
+import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.repository.BaseQualificationRepository;
 import com.adasoft.tis.repository.QualificationRepository;
+import com.adasoft.tis.repository.ReviewRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -17,12 +19,15 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
+
 @AllArgsConstructor
 @Service
 public class QualificationService {
     private QualificationRepository qualificationRepository;
     private BaseQualificationRepository baseQualificationRepository;
     private ModelMapper qualificationMapper;
+    private ReviewRepository reviewRepository;
 
     private Qualification validateScore(
         final Qualification qualification,
@@ -93,5 +98,16 @@ public class QualificationService {
         return qualifications.stream()
             .map((qualification -> qualificationMapper.map(qualification, QualificationResponseDTO.class)))
             .collect(Collectors.toSet());
+    }
+
+    public QualificationResponseDTO create(final Long reviewId, final CreateQualificationDTO dto) {
+        checkArgument(reviewId != null, "El ID de review no debe ser nulo");
+        checkArgument(dto != null, "El dto de qualification no debe ser nulo");
+        Review review = reviewRepository.findById(reviewId)
+            .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
+        Qualification defaultQualification = qualificationMapper.map(dto, Qualification.class);
+        defaultQualification.setReview(review);
+        Qualification persistedQualification = qualificationRepository.save(defaultQualification);
+        return qualificationMapper.map(persistedQualification, QualificationResponseDTO.class);
     }
 }
