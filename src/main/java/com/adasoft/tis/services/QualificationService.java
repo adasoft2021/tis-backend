@@ -36,7 +36,7 @@ public class QualificationService {
                         qualification.getId(), scoreValid));
             }
 
-            scoreValid = qualification.getBaseQualification().getMaxScore();
+            scoreValid = qualification.getMaxScore();
             if (qualificationDTO.getScore() > scoreValid) {
                 throw new DefaultTisDomainException(
                     HttpStatus.BAD_REQUEST,
@@ -74,7 +74,8 @@ public class QualificationService {
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
                 .review(review)
-                .baseQualification(baseQualification)
+                .description(baseQualification.getDescription())
+                .maxScore(baseQualification.getMaxScore())
                 .build();
 
             qualification = qualificationRepository.save(qualification);
