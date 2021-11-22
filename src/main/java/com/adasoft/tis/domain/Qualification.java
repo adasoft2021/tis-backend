@@ -12,8 +12,8 @@ import javax.persistence.*;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(exclude = {"review", "baseQualification" }, callSuper = true)
-@ToString(exclude = {"review", "baseQualification" }, callSuper = true)
+@EqualsAndHashCode(exclude = {"review"}, callSuper = true)
+@ToString(exclude = {"review"}, callSuper = true)
 @NoArgsConstructor
 @Entity
 @Table(name = "qualifications")
@@ -25,9 +25,8 @@ public class Qualification extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_review_id", nullable = false, updatable = false)
     private Review review;
-
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_base_qualification_id", nullable = false, updatable = false)
-    private BaseQualification baseQualification;
+    @Column(nullable = false)
+    private String description;
+    @Column(nullable = false)
+    private int maxScore;
 }
