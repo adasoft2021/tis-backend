@@ -257,10 +257,10 @@ public interface CompanyRestController {
         @Parameter(description = "ID de la GE") Long companyId,
         @Parameter(description = "ID de la revision") Long reviewId);
 
-    @Operation(summary = "Crear SpaceAnswer", responses = {
+    @Operation(summary = "Obtener SpaceAnswer", responses = {
         @ApiResponse(
-            description = "SpaceAnswer creado exitosamente",
-            responseCode = "201",
+            description = "SpaceAnswer obtenidos exitosamente",
+            responseCode = "200",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = SpaceAnswerResponseDTO.class)
             )
