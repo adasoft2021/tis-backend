@@ -63,7 +63,7 @@ public class ReviewService {
 
         reviewRepository.update(review);
 
-        ReviewResponseDTO responseDTO = reviewMapper.map(review, ReviewResponseDTO.class);
+        ReviewFilesResponseDTO responseDTO = reviewMapper.map(review, ReviewFilesResponseDTO.class);
         return getReviewResponseDTO(review, responseDTO);
     }
 
@@ -74,17 +74,11 @@ public class ReviewService {
             .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
 
         ReviewFilesResponseDTO responseDTO = reviewMapper.map(foundReview, ReviewFilesResponseDTO.class);
-        Collection<SpaceAnswerResponseDTO> spaceAnswers = new HashSet<>();
-        for (Space space : foundReview.getSpaces()) {
-            spaceAnswers.addAll(spaceAnswersService.getBySpaceIdAndCompanyId(
-                space.getId(), foundReview.getCompany().getId()));
-        }
-        responseDTO.setSpaceAnswers(spaceAnswers);
 
         return getReviewResponseDTO(foundReview, responseDTO);
     }
 
-    private ReviewResponseDTO getReviewResponseDTO(Review foundReview, ReviewResponseDTO responseDTO) {
+    private ReviewResponseDTO getReviewResponseDTO(Review foundReview, ReviewFilesResponseDTO responseDTO) {
         responseDTO.setAdviserName(String.format("%s %s",
             foundReview.getCreatedBy().getFirstName(),
             foundReview.getCreatedBy().getLastName()));
@@ -98,6 +92,12 @@ public class ReviewService {
         responseDTO.setSpaces(foundReview.getSpaces().stream()
             .map(space -> spaceMapper.map(space, SpaceCompactResponseDTO.class))
             .collect(Collectors.toSet()));
+        Collection<SpaceAnswerResponseDTO> spaceAnswers = new HashSet<>();
+        for (Space space : foundReview.getSpaces()) {
+            spaceAnswers.addAll(spaceAnswersService.getBySpaceIdAndCompanyId(
+                space.getId(), foundReview.getCompany().getId()));
+        }
+        responseDTO.setSpaceAnswers(spaceAnswers);
         return responseDTO;
     }
 
@@ -123,7 +123,7 @@ public class ReviewService {
         Review persistedReview = reviewRepository.save(defaultReview);
         Collection<QualificationResponseDTO> qualificationResponseDTOS =
             qualificationService.createAll(persistedReview);
-        ReviewResponseDTO responseDTO = reviewMapper.map(persistedReview, ReviewResponseDTO.class);
+        ReviewFilesResponseDTO responseDTO = reviewMapper.map(persistedReview, ReviewFilesResponseDTO.class);
         getReviewResponseDTO(defaultReview, responseDTO);
         responseDTO.setQualifications(new HashSet<>(qualificationResponseDTOS));
         return responseDTO;
@@ -166,7 +166,7 @@ public class ReviewService {
             .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
         if (!foundReview.getCompany().equals(foundCompany) || !foundReview.isPublished())
             throw new EntityNotFoundException(Review.class, reviewId);
-        ReviewResponseDTO responseDTO = reviewMapper.map(foundReview, ReviewResponseDTO.class);
+        ReviewFilesResponseDTO responseDTO = reviewMapper.map(foundReview, ReviewFilesResponseDTO.class);
         return getReviewResponseDTO(foundReview, responseDTO);
     }
 
@@ -183,7 +183,7 @@ public class ReviewService {
         }
         foundReview.setPublished(true);
         reviewRepository.save(foundReview);
-        return getReviewResponseDTO(foundReview, reviewMapper.map(foundReview, ReviewResponseDTO.class));
+        return getReviewResponseDTO(foundReview, reviewMapper.map(foundReview, ReviewFilesResponseDTO.class));
     }
 
     public Collection<ReviewCompactResponseDTO> getAdviserReviews(Long userId) {
