@@ -5,6 +5,7 @@ import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -268,5 +269,46 @@ public interface AdviserRestController {
         @Parameter(description = "ID del adviser") Long adviserId,
         @Parameter(description = "ID del space") Long spaceId
     );
+
+
+    @Operation(summary = "Creación de Adviser", responses = {
+            @ApiResponse(
+                    description = "Space creado exitosamente",
+                    responseCode = "201"
+            ),
+            @ApiResponse(
+                    description = "Fallo al crear Space",
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    description = "Falta autorizacion",
+                    responseCode = "401",
+                    content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    description = "Proyecto no enconrado",
+                    responseCode = "404",
+                    content = @Content(
+                            mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            )
+    }, parameters = @Parameter(
+            in = ParameterIn.HEADER,
+            name = "X-Token",
+            description = "Token del usuario",
+            schema = @Schema(implementation = String.class),
+            required = true
+    ))
+
+    ResponseEntity createSpace (
+            Long userId,
+            @Parameter(description = "ID del adviser") Long adviserId,
+            @RequestBody(description = "SpaceDTO nuevos datos")
+                    CreateSpaceDTO spaceDTO);
 
 }

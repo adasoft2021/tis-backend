@@ -5,10 +5,12 @@ import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.AdviserService;
 import com.adasoft.tis.services.ClassCodeService;
 import com.adasoft.tis.services.SpaceAnswerService;
+import com.adasoft.tis.services.SpaceService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     private AdviserService adviserService;
     private ClassCodeService classCodeService;
     private SpaceAnswerService spaceAnswerService;
+    private SpaceService spaceService;
 
     @PostMapping
     @Override
@@ -94,5 +97,16 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         checkUserId(userId, adviserId);
         Collection<SpaceAnswerResponseDTO> response = spaceAnswerService.getBySpaceId(userId, spaceId);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{adviserId}/spaces")
+    @Override
+    public ResponseEntity createSpace(@RequestAttribute("userId") final Long userId,
+                                      @NotNull @PathVariable Long adviserId,
+                                      @RequestBody CreateSpaceDTO spaceDTO
+                                      ) {
+        checkUserId(userId, adviserId);
+        spaceService.create(spaceDTO,userId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
