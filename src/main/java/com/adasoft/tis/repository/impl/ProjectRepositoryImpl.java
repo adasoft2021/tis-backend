@@ -1,7 +1,7 @@
 package com.adasoft.tis.repository.impl;
 
 import com.adasoft.tis.core.repository.AbstractTisRepository;
-import com.adasoft.tis.domain.proyect.Project;
+import com.adasoft.tis.domain.Project;
 import com.adasoft.tis.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

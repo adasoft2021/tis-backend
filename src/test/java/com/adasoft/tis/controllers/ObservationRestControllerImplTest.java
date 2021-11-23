@@ -43,7 +43,7 @@ class ObservationRestControllerImplTest {
     private static final Long ID = 15615L;
     private static final String TITLE = "SECCION 2";
     private static final String DESCRIPTION = "Descripcion de la observacion";
-    private static final Long PROPOSAL_ID = 2L;
+    private static final Long REVIEW_ID = 2L;
 
     private static CreateObservationDTO observationDTO;
     private static ObservationResponseDTO responseDTO;
@@ -56,7 +56,7 @@ class ObservationRestControllerImplTest {
         responseDTO = new ObservationResponseDTO();
         responseDTO.setTitle(TITLE);
         responseDTO.setDescription(DESCRIPTION);
-        responseDTO.setProposalId(PROPOSAL_ID);
+        responseDTO.setReviewId(REVIEW_ID);
     }
 
     @Test
@@ -68,7 +68,7 @@ class ObservationRestControllerImplTest {
 
         when(observationService.create(any(), any(), any())).thenReturn(responseDTO);
 
-        mvc.perform(post(BASE_URL).param("proposal", PROPOSAL_ID.toString())
+        mvc.perform(post(BASE_URL).param("reviewId", REVIEW_ID.toString())
                 .header(X_TOKEN, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(observationDTO)))
@@ -81,7 +81,7 @@ class ObservationRestControllerImplTest {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         CreateObservationDTO badObservationDTO = new CreateObservationDTO();
 
-        mvc.perform(post(BASE_URL).param("proposal", PROPOSAL_ID.toString())
+        mvc.perform(post(BASE_URL).param("reviewId", REVIEW_ID.toString())
                 .header(X_TOKEN, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(badObservationDTO)))

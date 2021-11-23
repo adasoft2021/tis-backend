@@ -5,9 +5,11 @@ import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.core.utils.JWTProvider;
+import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
+import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
 import com.adasoft.tis.services.ReviewService;
@@ -23,6 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -53,13 +57,15 @@ class ReviewRestControllerImplTest {
 
     private static final long ID = 1996128482800373344L;
     private static final int SCORE = 10;
-    private static final int TOTAL_SCORE = 70;
     private static final String COMMENT = "Este es un comentario.";
     private static final long CREATED_BY_ID = 982451052632054485L;
 
     @BeforeAll
     static void setup() {
         CREATE_REVIEW_DTO.setCreatedById(CREATED_BY_ID);
+        CREATE_REVIEW_DTO.setCompanyId(2L);
+        CREATE_REVIEW_DTO.setSpaces(List.of(3L));
+        CREATE_REVIEW_DTO.setTitle("titulo");
 
         Collection<UpdateQualificationDTO> qualificationDTOS = new HashSet<>();
         for (int i = 0; i < 7; i++) {
@@ -81,7 +87,6 @@ class ReviewRestControllerImplTest {
         REVIEW_RESPONSE_DTO.setCreatedAt(CREATE_REVIEW_DTO.getCreatedAt());
         REVIEW_RESPONSE_DTO.setUpdatedAt(CREATE_REVIEW_DTO.getUpdatedAt());
         REVIEW_RESPONSE_DTO.setComment(COMMENT);
-        REVIEW_RESPONSE_DTO.setTotalScore(TOTAL_SCORE);
         REVIEW_RESPONSE_DTO.setQualifications(new HashSet<>());
     }
 
@@ -152,7 +157,7 @@ class ReviewRestControllerImplTest {
     void updateReviewBadRequest() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         UpdateReviewDTO reviewDTO = new UpdateReviewDTO();
-
+        reviewDTO.setQualifications(new HashSet<>());
         mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID)
                 .header(X_TOKEN, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -224,4 +229,92 @@ class ReviewRestControllerImplTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
+
+    @Test
+    void updateReviewOnlyComment() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        UpdateReviewDTO updateComment = new UpdateReviewDTO();
+        updateComment.setComment("Este es el comentario de la revision");
+        ReviewResponseDTO reviewWithComment = new ReviewResponseDTO();
+        reviewWithComment.setComment(updateComment.getComment());
+        when(reviewService.update(any(), any(), any())).thenReturn(reviewWithComment);
+
+        mvc.perform(put(String.format("%s/{reviewId}", BASE_URL), ID).header(X_TOKEN, TOKEN_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateComment)))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(reviewWithComment)));
+    }
+
+    @Test
+    void publishSuccessfull() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.publish(any(), any())).thenReturn(REVIEW_RESPONSE_DTO);
+        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_RESPONSE_DTO)));
+    }
+
+    @Test
+    void publishReviewNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.publish(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
+        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void publishAdviserNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.publish(any(), any())).thenThrow(new EntityNotFoundException(Adviser.class, USER_ID));
+        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void publishUnauthorized() throws Exception {
+
+        when(reviewService.publish(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
+        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void publishAlreadyPublished() throws Exception {
+
+        when(reviewService.publish(any(), any()))
+            .thenThrow(
+                new DefaultTisDomainException(
+                    HttpStatus.METHOD_NOT_ALLOWED,
+                    "Usted ya no puede hacer ningún cambio en la entidad Review."));
+        mvc.perform(put(String.format("%s/{reviewId}/publish", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isMethodNotAllowed());
+    }
+
+    @Test
+    void getAdviserReviewsSuccesfully() throws Exception {
+        Set<ReviewCompactResponseDTO> reviews = Set.of(new ReviewCompactResponseDTO());
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.getAdviserReviews(any()))
+            .thenReturn(reviews);
+
+        mvc.perform(get(BASE_URL).header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(reviews)));
+    }
+
+    @Test
+    void getAdviserReviewsUnautorized() throws Exception {
+
+        mvc.perform(get(BASE_URL))
+            .andExpect(status().isUnauthorized());
+    }
+
 }

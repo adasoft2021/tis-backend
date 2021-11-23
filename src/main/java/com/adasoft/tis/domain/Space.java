@@ -1,8 +1,8 @@
 package com.adasoft.tis.domain;
 
 import com.adasoft.tis.core.domain.BaseEntity;
-import com.adasoft.tis.domain.proyect.Project;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -11,10 +11,12 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(exclude = {"spaceAnswers"}, callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
 @Entity
@@ -38,5 +40,16 @@ public class Space extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_adviser_id", nullable = false, updatable = false)
     private Adviser createdBy;
+
+    @Column(nullable = false)
+    private SpaceType spaceType;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "space")
+    private Set<SpaceAnswer> spaceAnswers = new HashSet<>();
+
+    public enum SpaceType {
+        PROPOSALS_PRESENTATION, PROJECT_DEVELOPMENT, FINAL_EVALUATION, ALL
+    }
 
 }

@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(exclude = {"publications"}, callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
 @Entity

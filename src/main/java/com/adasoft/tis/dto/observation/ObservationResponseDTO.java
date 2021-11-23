@@ -9,5 +9,5 @@ import lombok.Setter;
 public class ObservationResponseDTO extends BaseResponseDTO<Long> {
     private String title;
     private String description;
-    private Long proposalId;
+    private Long reviewId;
 }

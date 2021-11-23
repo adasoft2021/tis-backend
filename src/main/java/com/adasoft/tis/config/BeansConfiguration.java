@@ -19,9 +19,7 @@ import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
-import com.adasoft.tis.dto.review.CreateReviewDTO;
-import com.adasoft.tis.dto.review.ReviewResponseDTO;
-import com.adasoft.tis.dto.review.UpdateReviewDTO;
+import com.adasoft.tis.dto.review.*;
 import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.space.SpaceResponseDTO;
@@ -46,7 +44,29 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getQualifications());
-                map().setCreatedById(source.getCreatedBy());
+                skip(destination.getObservations());
+                skip(destination.getSpaces());
+                map().setCompanyName(source.getCompany().getName());
+
+
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<Review, ReviewFilesResponseDTO>() {
+            @Override
+            protected void configure() {
+                skip(destination.getQualifications());
+                skip(destination.getObservations());
+                skip(destination.getSpaces());
+                skip(destination.getSpaceAnswers());
+                map().setCompanyName(source.getCompany().getName());
+
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<Review, ReviewCompactResponseDTO>() {
+            @Override
+            protected void configure() {
+
             }
         });
 
@@ -54,7 +74,12 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
-                map().setCreatedBy(source.getCreatedById());
+                skip(destination.getCompany());
+                skip(destination.getCreatedBy());
+                skip(destination.getQualifications());
+                skip(destination.getObservations());
+                skip(destination.getSpaces());
+                map().setPublished(false);
             }
         });
 
@@ -63,6 +88,7 @@ public class BeansConfiguration {
             protected void configure() {
                 skip(destination.getId());
                 skip(destination.getQualifications());
+
             }
         });
 
@@ -111,7 +137,7 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Observation, ObservationResponseDTO>() {
             @Override
             protected void configure() {
-                map().setProposalId(source.getProposal().getId());
+                map().setReviewId(source.getReview().getId());
             }
         });
 

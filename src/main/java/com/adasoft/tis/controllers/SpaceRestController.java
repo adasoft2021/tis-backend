@@ -1,6 +1,7 @@
 package com.adasoft.tis.controllers;
 
 import com.adasoft.tis.core.exceptions.ErrorResponse;
+import com.adasoft.tis.dto.space.SpaceResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,4 +64,39 @@ public interface SpaceRestController {
         Long userId,
         @Parameter(description = "ID de Space") Long spaceId,
         @RequestBody(description = "DTO de SpaceAnswer a crear") CreateSpaceAnswerDTO createSpaceAnswerDTO);
+
+    @Operation(summary = "Obtener un Space", responses = {
+        @ApiResponse(
+            description = "Space devuelto exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = SpaceResponseDTO.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No existe la entidad",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<SpaceResponseDTO> getSpace(
+        Long userId,
+        @Parameter(description = "ID del space") Long spaceId
+    );
 }

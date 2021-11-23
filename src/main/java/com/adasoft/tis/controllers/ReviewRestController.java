@@ -2,17 +2,21 @@ package com.adasoft.tis.controllers;
 
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
+import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.review.UpdateReviewDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Collection;
 
 @Tag(name = "ReviewRestController", description = "Controlador para gestionar las Revisiones")
 public interface ReviewRestController {
@@ -143,4 +147,79 @@ public interface ReviewRestController {
         @RequestBody(description = "ReviewDTO que contiene los nuevos datos a ser actualizados")
             UpdateReviewDTO reviewDTO
     );
+
+    @Operation(summary = "Actualizacion del estado a publicado de revisión por su ID", responses = {
+        @ApiResponse(
+            description = "Review actualizado exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ReviewResponseDTO.class)
+            )
+        ),
+        @ApiResponse(
+            description = "Fallo al actualizar el Review",
+            responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No se encontró el ID del Review o del Qualification en el sistema",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "Ya se realizó la revisión de todas las notas parciales",
+            responseCode = "405",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<ReviewResponseDTO> publish(
+        Long userId,
+        @Parameter(description = "ID del Review a actualizar", example = "1")
+            Long id
+    );
+
+    @Operation(summary = "Obtener revisiones de un asesor", responses = {
+        @ApiResponse(
+            description = "Reviews devueltos exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = ReviewCompactResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "Falta autorizacion",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<ReviewCompactResponseDTO>> getAdviserReviews(Long userId);
 }

@@ -1,11 +1,13 @@
 package com.adasoft.tis.controllers;
 
 import com.adasoft.tis.core.exceptions.ErrorResponse;
+import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.space.CreateSpaceDTO;
+import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -270,6 +272,41 @@ public interface AdviserRestController {
         @Parameter(description = "ID del space") Long spaceId
     );
 
+    @Operation(summary = "Obtener los Spaces del adviser", responses = {
+        @ApiResponse(
+            description = "Spaces devueltos exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = SpaceCompactResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No existe la entidad",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<SpaceCompactResponseDTO>> getSpaces(
+        Long userId,
+        @Parameter(description = "ID del adviser") Long adviserId,
+        @Parameter(description = "Tipo de space") Space.SpaceType spaceType
+    );
 
     @Operation(summary = "Creación de Adviser", responses = {
             @ApiResponse(
