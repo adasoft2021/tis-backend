@@ -8,6 +8,7 @@ import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.space.SpaceResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -342,7 +343,7 @@ public interface AdviserRestController {
             required = true
     ))
 
-    ResponseEntity createSpace (
+    ResponseEntity<SpaceResponseDTO> createSpace (
             Long userId,
             @Parameter(description = "ID del adviser") Long adviserId,
             @RequestBody(description = "SpaceDTO nuevos datos")

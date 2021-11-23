@@ -1,13 +1,16 @@
 package com.adasoft.tis.controllers;
 
 import com.adasoft.tis.controllers.impl.AdviserRestControllerImpl;
+import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.space.SpaceResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.AdviserService;
 import com.adasoft.tis.services.ClassCodeService;
@@ -19,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -59,6 +63,8 @@ class AdviserRestControllerImplTest {
     private static final Long ID = 1L;
     private static final String CODE = "asd-asd-asd";
     private static final Long SPACE_ID = 1L;
+    private static final CreateSpaceDTO CREATE_SPACE_DTO = new CreateSpaceDTO();
+    private static final Long PROJECT_ID = 2L ;
 
     private static ClassCodeResponseDTO classCodeDTO;
 
@@ -66,6 +72,9 @@ class AdviserRestControllerImplTest {
     static void setup() {
         classCodeDTO = new ClassCodeResponseDTO();
         classCodeDTO.setCode(CODE);
+        CREATE_SPACE_DTO.setDescription("");
+        CREATE_SPACE_DTO.setProyectId(PROJECT_ID);
+        CREATE_SPACE_DTO.setTitle("");
     }
 
     @Test
@@ -181,4 +190,43 @@ class AdviserRestControllerImplTest {
                 .queryParam("spaceType", "ALL").header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isUnauthorized());
     }
+
+    @Test
+    void createSpaceSuccess() throws Exception {
+        SpaceResponseDTO x= new SpaceResponseDTO();
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(spaceService.create(any(),any())).thenReturn(x);
+
+        mvc.perform(post(String.format("%s/{adviserId}/spaces", BASE_URL), ID).header(X_TOKEN, "")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(CREATE_SPACE_DTO)))
+                .andExpect(status().isCreated());
+
+    }
+    @Test
+    void createSpaceNull() throws Exception {
+        CreateSpaceDTO CREATE_SPACE_DTO_NEW = new CreateSpaceDTO();
+        SpaceResponseDTO x= new SpaceResponseDTO();
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(spaceService.create(any(),any())).thenThrow(new DefaultTisDomainException(HttpStatus.BAD_REQUEST,""));
+
+        mvc.perform(post(String.format("%s/{adviserId}/spaces", BASE_URL), ID).header(X_TOKEN, "")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(CREATE_SPACE_DTO_NEW)))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void createSpaceAdviserNotFound() throws Exception {
+        SpaceResponseDTO x= new SpaceResponseDTO();
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(spaceService.create(any(),any())).thenThrow(new EntityNotFoundException(Adviser.class, USER_ID ));
+
+        mvc.perform(post(String.format("%s/{adviserId}/spaces", BASE_URL), ID).header(X_TOKEN, "")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(CREATE_SPACE_DTO)))
+                .andExpect(status().isNotFound());
+    }
+
 }

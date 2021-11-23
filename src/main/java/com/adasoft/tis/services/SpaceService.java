@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
+import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
+
 @AllArgsConstructor
 @Service
 
@@ -41,6 +43,7 @@ public class SpaceService {
         Project y = projectRepository.findById(spaceDTO.getProyectId()).orElseThrow(() ->
                 new EntityNotFoundException(Project.class, spaceDTO.getProyectId())
         );
+
 
         Space defaultSpace = spaceMapper.map(spaceDTO, Space.class);
 

@@ -8,6 +8,7 @@ import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.space.SpaceResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.AdviserService;
 import com.adasoft.tis.services.ClassCodeService;
@@ -103,13 +104,14 @@ public class AdviserRestControllerImpl implements AdviserRestController {
 
     @PostMapping("/{adviserId}/spaces")
     @Override
-    public ResponseEntity createSpace(@RequestAttribute("userId") final Long userId,
+    public ResponseEntity<SpaceResponseDTO> createSpace(@RequestAttribute("userId") final Long userId,
                                       @NotNull @PathVariable Long adviserId,
                                       @RequestBody CreateSpaceDTO spaceDTO
                                       ) {
         checkUserId(userId, adviserId);
-        spaceService.create(spaceDTO,userId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        SpaceResponseDTO respose = spaceService.create(spaceDTO,userId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(respose);
     }
 
     @GetMapping("/{adviserId}/spaces")

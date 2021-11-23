@@ -1,6 +1,7 @@
 package com.adasoft.tis.dto.space;
 
 import com.adasoft.tis.core.dto.BaseCreateDTO;
+import com.adasoft.tis.domain.Space;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class CreateSpaceDTO extends BaseCreateDTO {
+
     @Schema(
         name = "title",
         description = "Título del espacio a crear.",
@@ -45,4 +47,11 @@ public class CreateSpaceDTO extends BaseCreateDTO {
         type = "String"
     )
     private String description;
+    @NotNull
+    @Schema(
+            name = "spaceType",
+            description = "Tipo de espacio",
+            type = "Enum"
+    )
+    private Space.SpaceType spaceType;
 }
