@@ -15,11 +15,13 @@ import com.adasoft.tis.dto.proposal.CreateProposalDTO;
 import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import com.adasoft.tis.dto.proposal.UpdateProposalDTO;
 import com.adasoft.tis.dto.publication.CreatePublicationDTO;
+import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.*;
+import com.adasoft.tis.dto.semester.SemesterResponseDTO;
 import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.space.SpaceResponseDTO;
@@ -264,6 +266,7 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                skip(destination.getSemester());
             }
         });
 
@@ -271,6 +274,14 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                skip(destination.getSemester());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<Publication, PublicationResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setSemester(source.getSemester().getSemester());
             }
         });
 
@@ -335,6 +346,18 @@ public class BeansConfiguration {
             }
         });
 
+        return modelMapper;
+    }
+
+    @Bean("semesterMapper")
+    public ModelMapper semesterMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Semester, SemesterResponseDTO>() {
+            @Override
+            protected void configure() {
+            }
+        });
         return modelMapper;
     }
 

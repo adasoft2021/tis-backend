@@ -103,4 +103,11 @@ public class CompanyService {
             .stream().filter(company -> !company.isDeleted())
             .map(company -> companyMapper.map(company, CompanyResponseDTO.class)).collect(Collectors.toSet());
     }
+
+    public Collection<CompanyResponseDTO> getSemesterCompanies(String semester, Long adviserId) {
+        return companyRepository.getSemesterCompanies(semester, adviserId)
+            .stream().filter(company -> !company.isDeleted())
+            .map(company -> companyMapper.map(company, CompanyResponseDTO.class)).collect(Collectors.toSet());
+
+    }
 }

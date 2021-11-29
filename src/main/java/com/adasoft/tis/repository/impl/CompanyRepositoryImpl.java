@@ -32,4 +32,15 @@ public class CompanyRepositoryImpl extends AbstractTisRepository<Company, Long> 
         return entityManager.createQuery(query, Boolean.class)
             .setParameter("name", name).getSingleResult();
     }
+
+    @Override
+    public Collection<Company> getSemesterCompanies(String semester, Long adviserId) {
+        String jpqlQuery = "SELECT c FROM Company c where c.semester.semester = :semester " +
+            "and c.adviser.id = :adviserId";
+
+        return entityManager.createQuery(jpqlQuery, Company.class)
+            .setParameter("semester", semester)
+            .setParameter("adviserId", adviserId)
+            .getResultList();
+    }
 }
