@@ -1,6 +1,7 @@
 package com.adasoft.tis.controllers.impl;
 
 import com.adasoft.tis.controllers.AdviserRestController;
+import com.adasoft.tis.domain.Publication;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
@@ -110,5 +111,14 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         Collection<SpaceCompactResponseDTO> responses = spaceService.getAdviserSpaces(adviserId, spaceType);
         return ResponseEntity.ok(responses);
 
+    }
+
+    @GetMapping("/{adviserId}/publications/history")
+    @Override
+    public ResponseEntity<Collection<SpaceCompactResponseDTO>> getPublicationsHistory(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId,
+        @NotNull @RequestParam("type") final Publication.PublicationType publicationType) {
+        return null;
     }
 }

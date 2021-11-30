@@ -6,6 +6,7 @@ import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Collection;
+
+import static com.adasoft.tis.domain.Publication.PublicationType;
 
 @Tag(name = "AdviserRestController", description = "Controlador para gestionar Advisers")
 public interface AdviserRestController {
@@ -305,5 +308,41 @@ public interface AdviserRestController {
         Long userId,
         @Parameter(description = "ID del adviser") Long adviserId,
         @Parameter(description = "Tipo de space") Space.SpaceType spaceType
+    );
+
+    @Operation(summary = "Obtener el historial de Publicaciones del adviser", responses = {
+        @ApiResponse(
+            description = "Historial de Publicaciones obtenidos satisfactoriamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = PublicationResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No existe el Asesor",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<SpaceCompactResponseDTO>> getPublicationsHistory(
+        Long userId,
+        @Parameter(description = "ID del Asesor") Long id,
+        @Parameter(description = "Tipo de publicación") PublicationType publicationType
     );
 }
