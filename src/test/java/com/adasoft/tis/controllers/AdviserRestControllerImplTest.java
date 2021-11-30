@@ -5,14 +5,13 @@ import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.Adviser;
+import com.adasoft.tis.domain.Publication;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
-import com.adasoft.tis.services.AdviserService;
-import com.adasoft.tis.services.ClassCodeService;
-import com.adasoft.tis.services.SpaceAnswerService;
-import com.adasoft.tis.services.SpaceService;
+import com.adasoft.tis.services.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -47,6 +48,8 @@ class AdviserRestControllerImplTest {
     private AdviserService adviserService;
     @MockBean
     private ClassCodeService classCodeService;
+    @MockBean
+    private PublicationService publicationService;
     @MockBean
     private SpaceAnswerService spaceAnswerService;
     @MockBean
@@ -180,5 +183,48 @@ class AdviserRestControllerImplTest {
         mvc.perform(get(String.format("%s/{adviserId}/spaces", BASE_URL), ID)
                 .queryParam("spaceType", "ALL").header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getPublicationsHistorySuccess() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        Collection<PublicationResponseDTO> response = new LinkedList<>();
+        when(publicationService.getHistoryByAdviserId(any(), any())).thenReturn(response);
+
+        mvc.perform(get(String.format("%s/{adviserId}/publications/history", BASE_URL), ID)
+                .queryParam("type", Publication.PublicationType.SPECIFICATION_SHEET.name())
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
+    void getPublicationsHistoryUnauthorized() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(16L);
+
+        mvc.perform(get(String.format("%s/{adviserId}/publications/history", BASE_URL), ID)
+                .queryParam("type", Publication.PublicationType.SPECIFICATION_SHEET.name())
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getPublicationsHistoryNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(publicationService.getHistoryByAdviserId(any(), any()))
+            .thenThrow(new EntityNotFoundException(Adviser.class, USER_ID));
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .title("No se pudo encontrar la entidad")
+            .message(String.format("Adviser con id %d no se pudo encontrar o no existe.", USER_ID))
+            .build();
+
+        mvc.perform(get(String.format("%s/{adviserId}/publications/history", BASE_URL), ID)
+                .queryParam("type", Publication.PublicationType.SPECIFICATION_SHEET.name())
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 }
