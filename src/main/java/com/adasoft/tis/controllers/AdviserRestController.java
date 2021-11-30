@@ -340,7 +340,7 @@ public interface AdviserRestController {
         schema = @Schema(implementation = String.class),
         required = true
     ))
-    ResponseEntity<Collection<SpaceCompactResponseDTO>> getPublicationsHistory(
+    ResponseEntity<Collection<PublicationResponseDTO>> getPublicationsHistory(
         Long userId,
         @Parameter(description = "ID del Asesor") Long id,
         @Parameter(description = "Tipo de publicación") PublicationType publicationType
