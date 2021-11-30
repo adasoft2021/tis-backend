@@ -45,6 +45,7 @@ public class CompanyService {
         }
         Company defaultCompany = companyMapper.map(companyDTO, Company.class);
         defaultCompany.setAdviser(foundCode.getCreatedBy());
+
         Company persistedCompany = companyRepository.save(defaultCompany);
 
         UserResponseDTO responseDTO = companyMapper.map(persistedCompany, UserResponseDTO.class);
@@ -110,4 +111,5 @@ public class CompanyService {
             .map(company -> companyMapper.map(company, CompanyResponseDTO.class)).collect(Collectors.toSet());
 
     }
+
 }

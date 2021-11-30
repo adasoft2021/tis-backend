@@ -1,13 +1,14 @@
 package com.adasoft.tis.dto.company;
 
 import com.adasoft.tis.core.dto.BaseCreateDTO;
+import com.adasoft.tis.dto.partner.CreatePartnerDTO;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Collection;
 
 @Schema(name = "CreateCompanyDTO", description = "DTO para creación de una observation")
 @Getter
@@ -55,8 +56,8 @@ public class CreateCompanyDTO extends BaseCreateDTO {
     private String telephone;
     @ArraySchema(
         schema = @Schema(
-            type = "String"
+            type = "Collection"
         )
     )
-    private List<String> partners;
+    private Collection<CreatePartnerDTO> partners;
 }

@@ -11,6 +11,9 @@ import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
+import com.adasoft.tis.dto.partner.CreatePartnerDTO;
+import com.adasoft.tis.dto.partner.PartnerResponseDTO;
+import com.adasoft.tis.dto.partner.UpdatePartnerDTO;
 import com.adasoft.tis.dto.proposal.CreateProposalDTO;
 import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import com.adasoft.tis.dto.proposal.UpdateProposalDTO;
@@ -254,6 +257,31 @@ public class BeansConfiguration {
             }
         });
 
+        return modelMapper;
+    }
+
+    @Bean("partnerMapper")
+    public ModelMapper partnerMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Partner, PartnerResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setCompanyId(source.getCompany().getId());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreatePartnerDTO, Partner>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<UpdatePartnerDTO, Partner>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
         return modelMapper;
     }
 
