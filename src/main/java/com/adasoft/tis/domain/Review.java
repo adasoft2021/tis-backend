@@ -23,14 +23,11 @@ import java.util.Set;
 
 public class Review extends BaseEntity<Long> {
 
-    @Column(nullable = false)
-    private String title;
-
     @Column
     private String comment;
 
     @Column(nullable = false)
-    private boolean published;
+    private Review.Status status;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -54,4 +51,14 @@ public class Review extends BaseEntity<Long> {
     @JsonManagedReference
     @OneToMany(mappedBy = "review")
     private Set<Observation> observations = new HashSet<>();
+
+    public boolean isPublished() {
+        return status.ordinal() > Status.QUALIFIED.ordinal();
+    }
+
+    public enum Status {
+        UNREVIEWED, REVIEWED, QUALIFIED,
+        /// final states ///
+        CHANGE_ORDER, PROPOSAL_ACCEPTANCE, ADDENDUM
+    }
 }

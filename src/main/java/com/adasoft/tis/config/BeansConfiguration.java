@@ -66,7 +66,7 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Review, ReviewCompactResponseDTO>() {
             @Override
             protected void configure() {
-
+                map().setCompanyName(source.getCompany().getName());
             }
         });
 
@@ -79,7 +79,7 @@ public class BeansConfiguration {
                 skip(destination.getQualifications());
                 skip(destination.getObservations());
                 skip(destination.getSpaces());
-                map().setPublished(false);
+                map().setStatus(Review.Status.UNREVIEWED);
             }
         });
 

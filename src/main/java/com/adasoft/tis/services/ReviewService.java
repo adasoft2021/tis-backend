@@ -60,7 +60,8 @@ public class ReviewService {
         final Collection<UpdateQualificationDTO> qualificationDTOS) {
         Collection<QualificationResponseDTO> qualificationResponseDTOS =
             updateQualifications(review, qualificationDTOS);
-
+        boolean notFull = qualificationResponseDTOS.stream().anyMatch(q -> q.getScore() != null);
+        review.setStatus(notFull ? Review.Status.REVIEWED : Review.Status.QUALIFIED);
         reviewRepository.update(review);
 
         ReviewFilesResponseDTO responseDTO = reviewMapper.map(review, ReviewFilesResponseDTO.class);
@@ -112,7 +113,7 @@ public class ReviewService {
         Review defaultReview = reviewMapper.map(reviewDTO, Review.class);
         defaultReview.setCreatedBy(foundAdviser);
         defaultReview.setCompany(foundCompany);
-        defaultReview.setPublished(false);
+        defaultReview.setStatus(Review.Status.UNREVIEWED);
         HashSet<Space> spaces = new HashSet<>();
         for (Long s : reviewDTO.getSpaces()) {
             Space foundSpace = spaceRepository.findById(s)
@@ -181,7 +182,7 @@ public class ReviewService {
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "Usted ya no puede hacer ningún cambio en la entidad Review.");
         }
-        foundReview.setPublished(true);
+        foundReview.setStatus(Review.Status.CHANGE_ORDER);
         reviewRepository.save(foundReview);
         return getReviewResponseDTO(foundReview, reviewMapper.map(foundReview, ReviewFilesResponseDTO.class));
     }

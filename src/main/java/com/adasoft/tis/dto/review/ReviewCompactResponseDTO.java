@@ -1,6 +1,7 @@
 package com.adasoft.tis.dto.review;
 
 import com.adasoft.tis.core.dto.BaseResponseDTO;
+import com.adasoft.tis.domain.Review;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,5 +10,7 @@ import lombok.Setter;
 @Setter
 @Schema(name = "ReviewCompactResponseDTO", description = "DTO para ")
 public class ReviewCompactResponseDTO extends BaseResponseDTO<Long> {
-    private String title;
+    String companyName;
+    Review.Status status;
+
 }
