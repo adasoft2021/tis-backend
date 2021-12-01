@@ -17,7 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "company_spaces")
-public class CompanySpaces extends BaseEntity<Long> {
+public class CompanySpace extends BaseEntity<Long> {
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_company_id", nullable = false, updatable = false)

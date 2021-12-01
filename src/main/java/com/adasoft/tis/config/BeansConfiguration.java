@@ -338,7 +338,6 @@ public class BeansConfiguration {
         return modelMapper;
     }
 
-
     @Bean("codeGenerator")
     @Scope("singleton")
     public CodeGenerator codeGenerator() {

@@ -45,5 +45,5 @@ public class Company extends User<Long> {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "company")
-    private Set<CompanySpaces> assigned;
+    private Set<CompanySpace> assigned;
 }

@@ -3,7 +3,7 @@ package com.adasoft.tis.services;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Company;
-import com.adasoft.tis.domain.CompanySpaces;
+import com.adasoft.tis.domain.CompanySpace;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.space.SpaceResponseDTO;
@@ -37,7 +37,7 @@ public class SpaceService {
         Company foundCompany = companyRepository.findById(companyId)
             .orElseThrow(() -> new EntityNotFoundException(Company.class, companyId));
         Collection<Space> spaces = foundCompany.getAssigned().stream()
-            .map(CompanySpaces::getSpace).collect(Collectors.toSet());
+            .map(CompanySpace::getSpace).collect(Collectors.toSet());
         return spaces.stream().map(space -> spaceMapper.map(space, SpaceCompactResponseDTO.class))
             .collect(Collectors.toSet());
     }
