@@ -6,6 +6,7 @@ import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.AdviserService;
@@ -110,5 +111,14 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         Collection<SpaceCompactResponseDTO> responses = spaceService.getAdviserSpaces(adviserId, spaceType);
         return ResponseEntity.ok(responses);
 
+    }
+
+    @GetMapping("/{adviserId}/companies")
+    @Override
+    public ResponseEntity<Collection<CompanyResponseDTO>> getCompanies(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId) {
+        checkUserId(userId, adviserId);
+        return null;
     }
 }
