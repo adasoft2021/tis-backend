@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
@@ -196,4 +197,17 @@ public class ReviewService {
         return reviews.stream().map(review -> reviewMapper.map(review, ReviewCompactResponseDTO.class))
             .collect(Collectors.toSet());
     }
+
+    public Collection<List<ReviewResponseDTO>> getProjectReviewsPublishedByStatus(final Long adviserId, final Long projectId) {
+        Collection<List<ReviewResponseDTO>> reviewss = new HashSet<>();
+        List<Review> reviews;
+        for (Review.Status s : Review.Status.finalValues()) {
+            reviews = reviewRepository.findByStatus(adviserId, projectId, s);
+            if (!reviews.isEmpty())
+                reviewss.add(reviews.stream()
+                    .map(r -> reviewMapper.map(r, ReviewResponseDTO.class)).collect(Collectors.toList()));
+        }
+        return reviewss;
+    }
+
 }

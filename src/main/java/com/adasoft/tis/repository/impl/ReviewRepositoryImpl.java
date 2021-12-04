@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class ReviewRepositoryImpl extends AbstractTisRepository<Review, Long> implements ReviewRepository {
@@ -20,10 +21,11 @@ public class ReviewRepositoryImpl extends AbstractTisRepository<Review, Long> im
     public Collection<Review> findByCompany(Long companyId) {
 
         String jpqlQuery = "SELECT r FROM Review r WHERE r.company.id = :companyId " +
-            "and r.deleted = false and r.published = true";
+            "and r.deleted = false and r.status >= :s";
 
         return entityManager.createQuery(jpqlQuery, Review.class)
             .setParameter("companyId", companyId)
+            .setParameter("s", Review.Status.CHANGE_ORDER)
             .getResultList();
 
     }
@@ -34,6 +36,18 @@ public class ReviewRepositoryImpl extends AbstractTisRepository<Review, Long> im
 
         return entityManager.createQuery(jpqlQuery, Review.class)
             .setParameter("adviserId", adviserId)
+            .getResultList();
+    }
+
+    @Override
+    public List<Review> findByStatus(Long adviserId, Long projectId, Review.Status status) {
+        String jpqlQuery = "SELECT r FROM Review r WHERE r.createdBy.id = :adviserId and r.deleted = false " +
+            "and r.company.project.id = :projectId and r.status = :status";
+
+        return entityManager.createQuery(jpqlQuery, Review.class)
+            .setParameter("adviserId", adviserId)
+            .setParameter("projectId", projectId)
+            .setParameter("status", status)
             .getResultList();
     }
 }
