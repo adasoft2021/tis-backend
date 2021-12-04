@@ -11,6 +11,8 @@ import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
+import com.adasoft.tis.dto.project.CreateProjectDTO;
+import com.adasoft.tis.dto.project.ProjectResponseDTO;
 import com.adasoft.tis.dto.proposal.CreateProposalDTO;
 import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import com.adasoft.tis.dto.proposal.UpdateProposalDTO;
@@ -214,7 +216,6 @@ public class BeansConfiguration {
         });
         return modelMapper;
     }
-
     @Bean("companyMapper")
     public ModelMapper companyMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -241,8 +242,6 @@ public class BeansConfiguration {
             }
         });
         modelMapper.addMappings(new PropertyMap<Company, UserResponseDTO>() {
-
-
             @Override
             protected void configure() {
                 skip(destination.getToken());
@@ -342,5 +341,25 @@ public class BeansConfiguration {
     @Scope("singleton")
     public CodeGenerator codeGenerator() {
         return new CodeGenerator();
+    }
+
+    @Bean("projectMapper")
+    public ModelMapper projectMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Project, ProjectResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreateProjectDTO, Project>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        return modelMapper;
     }
 }

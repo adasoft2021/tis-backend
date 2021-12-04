@@ -58,6 +58,15 @@ public class PublicationService {
         foundPublication = publicationRepository.update(foundPublication);
         return publicationMapper.map(foundPublication, PublicationResponseDTO.class);
     }
+    public PublicationResponseDTO findByID(
+        final Long publicationId) {
+        checkArgument(publicationId != null, "El id de Publication no puede ser nulo.");
+
+        Publication foundPublication = publicationRepository.findById(publicationId)
+            .orElseThrow(() -> new EntityNotFoundException(Publication.class, publicationId));
+
+        return publicationMapper.map(foundPublication, PublicationResponseDTO.class);
+    }
 
     public Object delete(final Long userId, final Long publicationId) {
         checkArgument(publicationId != null, "El id de Publication no puede ser nulo.");
