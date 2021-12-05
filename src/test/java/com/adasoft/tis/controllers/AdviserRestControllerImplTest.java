@@ -7,12 +7,11 @@ import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.company.CompanyResponseDTO;
+import com.adasoft.tis.dto.semester.SemesterResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
-import com.adasoft.tis.services.AdviserService;
-import com.adasoft.tis.services.ClassCodeService;
-import com.adasoft.tis.services.SpaceAnswerService;
-import com.adasoft.tis.services.SpaceService;
+import com.adasoft.tis.services.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -48,6 +49,10 @@ class AdviserRestControllerImplTest {
     @MockBean
     private ClassCodeService classCodeService;
     @MockBean
+    private CompanyService companyService;
+    @MockBean
+    private SemesterService semesterService;
+    @MockBean
     private SpaceAnswerService spaceAnswerService;
     @MockBean
     private SpaceService spaceService;
@@ -59,13 +64,18 @@ class AdviserRestControllerImplTest {
     private static final Long ID = 1L;
     private static final String CODE = "asd-asd-asd";
     private static final Long SPACE_ID = 1L;
+    private static final String CURRENT_SEMESTER = "2-2021";
 
     private static ClassCodeResponseDTO classCodeDTO;
+    private static SemesterResponseDTO semester;
 
     @BeforeAll
     static void setup() {
         classCodeDTO = new ClassCodeResponseDTO();
         classCodeDTO.setCode(CODE);
+
+        semester = new SemesterResponseDTO();
+        semester.setSemester(CURRENT_SEMESTER);
     }
 
     @Test
@@ -183,11 +193,45 @@ class AdviserRestControllerImplTest {
     }
 
     @Test
+    void getCompaniesSuccess() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        Collection<CompanyResponseDTO> companies = new LinkedList<>();
+        when(companyService.getSemesterCompanies(any(), any())).thenReturn(companies);
+        when(semesterService.getNow()).thenReturn(semester);
+
+        mvc.perform(get(String.format("%s/{adviserId}/companies", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(companies)));
+    }
+
+    @Test
     void getCompaniesUnauthorized() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(78L);
 
         mvc.perform(get(String.format("%s/{adviserId}/companies", BASE_URL), ID)
                 .header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getCompaniesNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(companyService.getSemesterCompanies(any(), any()))
+            .thenThrow(new EntityNotFoundException(Adviser.class, USER_ID));
+        when(semesterService.getNow()).thenReturn(semester);
+
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .title("No se pudo encontrar la entidad")
+            .message(String.format("Adviser con id %d no se pudo encontrar o no existe.", ID))
+            .build();
+
+        mvc.perform(get(String.format("%s/{adviserId}/companies", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
     }
 }
