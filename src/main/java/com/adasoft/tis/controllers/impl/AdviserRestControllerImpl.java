@@ -9,10 +9,7 @@ import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
-import com.adasoft.tis.services.AdviserService;
-import com.adasoft.tis.services.ClassCodeService;
-import com.adasoft.tis.services.SpaceAnswerService;
-import com.adasoft.tis.services.SpaceService;
+import com.adasoft.tis.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +28,8 @@ import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 public class AdviserRestControllerImpl implements AdviserRestController {
     private AdviserService adviserService;
     private ClassCodeService classCodeService;
+    private CompanyService companyService;
+    private SemesterService semesterService;
     private SpaceAnswerService spaceAnswerService;
     private SpaceService spaceService;
 
@@ -119,6 +118,8 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") final Long adviserId) {
         checkUserId(userId, adviserId);
-        return null;
+        String semester = semesterService.getNow().getSemester();
+        Collection<CompanyResponseDTO> response = companyService.getSemesterCompanies(semester, userId);
+        return ResponseEntity.ok(response);
     }
 }
