@@ -49,4 +49,5 @@ public class SpaceService {
             .orElseThrow(() -> new EntityNotFoundException(Space.class, spaceId));
         return spaceMapper.map(space, SpaceResponseDTO.class);
     }
+
 }
