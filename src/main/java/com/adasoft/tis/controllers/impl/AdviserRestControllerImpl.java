@@ -1,12 +1,14 @@
 package com.adasoft.tis.controllers.impl;
 
 import com.adasoft.tis.controllers.AdviserRestController;
+import com.adasoft.tis.domain.Publication;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
+import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.*;
@@ -30,6 +32,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     private ClassCodeService classCodeService;
     private CompanyService companyService;
     private SemesterService semesterService;
+    private PublicationService publicationService;
     private SpaceAnswerService spaceAnswerService;
     private SpaceService spaceService;
 
@@ -121,5 +124,17 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         String semester = semesterService.getNow().getSemester();
         Collection<CompanyResponseDTO> response = companyService.getSemesterCompanies(semester, userId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{adviserId}/publications/history")
+    @Override
+    public ResponseEntity<Collection<PublicationResponseDTO>> getPublicationsHistory(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId,
+        @NotNull @RequestParam("type") final Publication.PublicationType publicationType) {
+        checkUserId(userId, adviserId);
+        Collection<PublicationResponseDTO> publications = publicationService
+            .getHistoryByAdviserId(userId, publicationType);
+        return ResponseEntity.ok(publications);
     }
 }

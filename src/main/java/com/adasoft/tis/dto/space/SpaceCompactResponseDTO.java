@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Schema(name = "SpaceCompactResponseDTO", description = "DTO para Ddevolver lista de spaces")
+@Schema(name = "SpaceCompactResponseDTO", description = "DTO para devolver lista de spaces")
 public class SpaceCompactResponseDTO extends BaseResponseDTO<Long> {
     private String title;
     private Long projectId;

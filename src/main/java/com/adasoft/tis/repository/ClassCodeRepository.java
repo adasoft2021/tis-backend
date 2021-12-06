@@ -7,7 +7,9 @@ import java.util.Optional;
 
 public interface ClassCodeRepository extends TisRepository<ClassCode, Long> {
     boolean existByCode(String code);
+
     Optional<ClassCode> getByCode(String code);
+
     Optional<ClassCode> findByAdviserId(Long adviserId);
 }
 

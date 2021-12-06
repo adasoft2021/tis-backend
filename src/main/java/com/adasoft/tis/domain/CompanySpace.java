@@ -16,15 +16,21 @@ import javax.persistence.*;
 @ToString(callSuper = true)
 @NoArgsConstructor
 @Entity
-@Table(name = "partners")
-public class Partner extends BaseEntity<Long> {
-    @Column(nullable = false, updatable = false)
-    String name;
-    @Column(unique = true)
-    String email;
+@Table(name = "company_spaces")
+public class CompanySpace extends BaseEntity<Long> {
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_company_id", nullable = false, updatable = false)
-    private Company company;
+    Company company;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_space_id", nullable = false, updatable = false)
+    Space space;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_review_id", updatable = false)
+    Review becauseOf;
 
 }

@@ -14,6 +14,8 @@ import com.adasoft.tis.dto.observation.UpdateObservationDTO;
 import com.adasoft.tis.dto.partner.CreatePartnerDTO;
 import com.adasoft.tis.dto.partner.PartnerResponseDTO;
 import com.adasoft.tis.dto.partner.UpdatePartnerDTO;
+import com.adasoft.tis.dto.project.CreateProjectDTO;
+import com.adasoft.tis.dto.project.ProjectResponseDTO;
 import com.adasoft.tis.dto.proposal.CreateProposalDTO;
 import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import com.adasoft.tis.dto.proposal.UpdateProposalDTO;
@@ -28,6 +30,7 @@ import com.adasoft.tis.dto.semester.SemesterResponseDTO;
 import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.space.SpaceResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.CompanySpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
@@ -71,7 +74,7 @@ public class BeansConfiguration {
         modelMapper.addMappings(new PropertyMap<Review, ReviewCompactResponseDTO>() {
             @Override
             protected void configure() {
-
+                map().setCompanyName(source.getCompany().getName());
             }
         });
 
@@ -84,7 +87,7 @@ public class BeansConfiguration {
                 skip(destination.getQualifications());
                 skip(destination.getObservations());
                 skip(destination.getSpaces());
-                map().setPublished(false);
+                map().setStatus(Review.Status.UNREVIEWED);
             }
         });
 
@@ -246,8 +249,6 @@ public class BeansConfiguration {
             }
         });
         modelMapper.addMappings(new PropertyMap<Company, UserResponseDTO>() {
-
-
             @Override
             protected void configure() {
                 skip(destination.getToken());
@@ -345,6 +346,13 @@ public class BeansConfiguration {
                 skip(destination.getId());
             }
         });
+        modelMapper.addMappings(new PropertyMap<SpaceAnswer, CompanySpaceAnswersResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setCompanyName(source.getCreatedBy().getName());
+                map().setProject(source.getCreatedBy().getProject().getTitle());
+            }
+        });
 
         return modelMapper;
     }
@@ -389,10 +397,29 @@ public class BeansConfiguration {
         return modelMapper;
     }
 
-
     @Bean("codeGenerator")
     @Scope("singleton")
     public CodeGenerator codeGenerator() {
         return new CodeGenerator();
+    }
+
+    @Bean("projectMapper")
+    public ModelMapper projectMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Project, ProjectResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreateProjectDTO, Project>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        return modelMapper;
     }
 }

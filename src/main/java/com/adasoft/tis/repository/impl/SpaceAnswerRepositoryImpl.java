@@ -25,4 +25,14 @@ public class SpaceAnswerRepositoryImpl extends AbstractTisRepository<SpaceAnswer
             .setParameter("spaceId", spaceId)
             .getResultList();
     }
+
+    @Override
+    public Collection<SpaceAnswer> findCompanyAnswers(Long companyId, Long spaceId) {
+        String jpqlQuery = "SELECT s FROM SpaceAnswer s WHERE s.space.id = :spaceId and s.createdBy = :companyId";
+
+        return entityManager.createQuery(jpqlQuery, SpaceAnswer.class)
+            .setParameter("companyId", companyId)
+            .setParameter("spaceId", spaceId)
+            .getResultList();
+    }
 }

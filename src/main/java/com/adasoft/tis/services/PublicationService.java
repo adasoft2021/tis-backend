@@ -74,6 +74,15 @@ public class PublicationService {
         foundPublication = publicationRepository.update(foundPublication);
         return publicationMapper.map(foundPublication, PublicationResponseDTO.class);
     }
+    public PublicationResponseDTO findByID(
+        final Long publicationId) {
+        checkArgument(publicationId != null, "El id de Publication no puede ser nulo.");
+
+        Publication foundPublication = publicationRepository.findById(publicationId)
+            .orElseThrow(() -> new EntityNotFoundException(Publication.class, publicationId));
+
+        return publicationMapper.map(foundPublication, PublicationResponseDTO.class);
+    }
 
     public Object delete(final Long userId, final Long publicationId) {
         checkArgument(publicationId != null, "El id de Publication no puede ser nulo.");
@@ -119,6 +128,21 @@ public class PublicationService {
             .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
 
         Collection<Publication> publications = publicationRepository.getByAdviserIdSemester(adviserId, type, semester);
+
+        return publications.stream()
+            .map(publication -> publicationMapper.map(publication, PublicationResponseDTO.class))
+            .collect(Collectors.toSet());
+    }
+
+    public Collection<PublicationResponseDTO> getHistoryByAdviserId(
+        final Long adviserId,
+        final Publication.PublicationType type) {
+        checkArgument(adviserId != null, "El id de Adviser no puede ser nulo.");
+
+        adviserRepository.findById(adviserId)
+            .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
+
+        Collection<Publication> publications = publicationRepository.getByAdviserId(adviserId, type, true);
 
         return publications.stream()
             .map(publication -> publicationMapper.map(publication, PublicationResponseDTO.class))
