@@ -25,8 +25,10 @@ public class Publication extends BaseEntity<Long> {
     private LocalDateTime date;
     @Column(nullable = false, unique = true)
     private String code;
-    @Column(nullable = false)
-    private String semester;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_semester_id", nullable = false, updatable = false)
+    private Semester semester;
     @Column(nullable = false)
     private String fileUrl;
     @Column(nullable = false)

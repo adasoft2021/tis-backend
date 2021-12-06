@@ -19,5 +19,5 @@ public interface SemesterRestController {
             )
         )
     })
-    ResponseEntity<SemesterResponseDTO> get();
+    ResponseEntity<SemesterResponseDTO> getNow();
 }

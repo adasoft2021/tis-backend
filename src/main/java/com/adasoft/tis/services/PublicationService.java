@@ -4,11 +4,13 @@ import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Publication;
+import com.adasoft.tis.domain.Semester;
 import com.adasoft.tis.dto.publication.CreatePublicationDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import com.adasoft.tis.repository.AdviserRepository;
 import com.adasoft.tis.repository.PublicationRepository;
+import com.adasoft.tis.repository.SemesterRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -26,16 +28,23 @@ public class PublicationService {
     private PublicationRepository publicationRepository;
     private AdviserRepository adviserRepository;
     private ModelMapper publicationMapper;
+    private SemesterRepository semesterRepository;
 
     public PublicationResponseDTO create(final CreatePublicationDTO publicationDTO) {
         checkArgument(publicationDTO != null, "El PublicationDTO no puede ser nulo.");
 
         Adviser foundAdviser = adviserRepository.findById(publicationDTO.getCreatedById())
             .orElseThrow(() -> new EntityNotFoundException(Adviser.class, publicationDTO.getCreatedById()));
-
+        Semester foundSemester = semesterRepository.findBySemester(publicationDTO.getSemester())
+            .orElseThrow(() -> new EntityNotFoundException(Semester.class, publicationDTO.getSemester()) {
+                @Override
+                protected String getExceptionDetail() {
+                    return super.getExceptionDetail().replaceAll("con id ", "");
+                }
+            });
         Publication defaultPublication = publicationMapper.map(publicationDTO, Publication.class);
         defaultPublication.setCreatedBy(foundAdviser);
-
+        defaultPublication.setSemester(foundSemester);
         Publication persistedPublication = publicationRepository.save(defaultPublication);
 
         return publicationMapper.map(persistedPublication, PublicationResponseDTO.class);
@@ -54,7 +63,14 @@ public class PublicationService {
         checkUserId(userId, foundPublication.getCreatedBy().getId());
 
         publicationMapper.map(publicationDTO, foundPublication);
-
+        Semester foundSemester = semesterRepository.findBySemester(publicationDTO.getSemester())
+            .orElseThrow(() -> new EntityNotFoundException(Semester.class, publicationDTO.getSemester()) {
+                @Override
+                protected String getExceptionDetail() {
+                    return super.getExceptionDetail().replaceAll("con id ", "");
+                }
+            });
+        foundPublication.setSemester(foundSemester);
         foundPublication = publicationRepository.update(foundPublication);
         return publicationMapper.map(foundPublication, PublicationResponseDTO.class);
     }
