@@ -1,5 +1,6 @@
 package com.adasoft.tis.controllers;
 
+import com.adasoft.tis.core.dto.BaseResponseDTO;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
@@ -305,5 +306,40 @@ public interface AdviserRestController {
         Long userId,
         @Parameter(description = "ID del adviser") Long adviserId,
         @Parameter(description = "Tipo de space") Space.SpaceType spaceType
+    );
+
+    @Operation(summary = "Obtener el historial de Propuestas de GE por Asesor", responses = {
+        @ApiResponse(
+            description = "Historial de propuestas devueltos exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = BaseResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No existe la entidad",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<?>> getProposalsHistory(
+        Long userId,
+        @Parameter(description = "ID del adviser") Long adviserId
     );
 }

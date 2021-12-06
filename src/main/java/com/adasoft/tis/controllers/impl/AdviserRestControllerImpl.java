@@ -111,4 +111,13 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         return ResponseEntity.ok(responses);
 
     }
+
+    @GetMapping("/{adviserId}/proposals/history")
+    @Override
+    public ResponseEntity<Collection<?>> getProposalsHistory(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId) {
+        checkUserId(userId, adviserId);
+        return null;
+    }
 }

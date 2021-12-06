@@ -181,4 +181,13 @@ class AdviserRestControllerImplTest {
                 .queryParam("spaceType", "ALL").header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isUnauthorized());
     }
+
+    @Test
+    void getProposalsHistoryUnauthorized() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(87L);
+
+        mvc.perform(get(String.format("%s/{adviserId}/proposals/history", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isUnauthorized());
+    }
 }
