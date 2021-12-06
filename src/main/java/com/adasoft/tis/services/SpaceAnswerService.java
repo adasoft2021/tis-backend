@@ -87,7 +87,11 @@ public class SpaceAnswerService {
             Collection<CompanySpaceAnswersResponseDTO> companiesAnswers = new HashSet<>();
             for (Company c : companies) {
                 HashSet<SpaceAnswer> companyAnswers = new HashSet<>();
-                for (CompanySpace cs : c.getAssigned()) {
+                Collection<CompanySpace> companySpaces = c.getAssigned().stream()
+                    .filter(companySpace -> companySpace.getSpace().getSpaceType()
+                        .equals(Space.SpaceType.PROPOSALS_PRESENTATION))
+                    .collect(Collectors.toSet());
+                for (CompanySpace cs : companySpaces) {
                     companyAnswers.addAll(spaceAnswerRepository.findCompanyAnswers(c.getId(), cs.getSpace().getId()));
                 }
                 if (!companyAnswers.isEmpty()) {

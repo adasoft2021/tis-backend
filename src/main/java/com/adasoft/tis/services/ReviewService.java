@@ -210,4 +210,16 @@ public class ReviewService {
         return reviewss;
     }
 
+    public Collection<ReviewResponseDTO> getCompanyReviewsExt(Long id) {
+        checkArgument(id != null, "El id de Company no puede ser nulo.");
+
+        companyRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Company.class, id));
+
+        Collection<Review> reviews = reviewRepository.findByCompany(id);
+
+        return reviews.stream().map(review ->
+                getReviewResponseDTO(review, reviewMapper.map(review, ReviewFilesResponseDTO.class)))
+            .collect(Collectors.toSet());
+    }
 }
