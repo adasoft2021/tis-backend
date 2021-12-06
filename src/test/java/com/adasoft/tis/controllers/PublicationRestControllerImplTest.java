@@ -102,8 +102,8 @@ class PublicationRestControllerImplTest {
     void createPublicationBadRequest() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         CreatePublicationDTO createPublicationDTO = new CreatePublicationDTO();
-
         mvc.perform(post(BASE_URL).header(X_TOKEN, TOKEN_VALUE).contentType(MediaType.APPLICATION_JSON)
+
                 .content(objectMapper.writeValueAsString(createPublicationDTO)))
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -131,7 +131,6 @@ class PublicationRestControllerImplTest {
     void updatePublicationSuccessfully() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(publicationService.update(any(), any(), any())).thenReturn(PUBLICATION_RESPONSE_DTO);
-
         mvc.perform(put(String.format("%s/{publicationId}", BASE_URL), ID)
                 .header(X_TOKEN, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -145,7 +144,6 @@ class PublicationRestControllerImplTest {
     void updatePublicationBadRequest() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         UpdatePublicationDTO updatePublicationDTO = new UpdatePublicationDTO();
-
         mvc.perform(put(String.format("%s/{publicationId}", BASE_URL), ID)
                 .header(X_TOKEN, TOKEN_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -217,7 +215,6 @@ class PublicationRestControllerImplTest {
     void getByAdviserIdNotFound() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(publicationService.getByAdviserId(any(), any())).thenThrow(new EntityNotFoundException(Adviser.class, ID));
-
         ErrorResponse errorResponse = ErrorResponse.builder()
             .title("No se pudo encontrar la entidad")
             .message(String.format("Adviser con id %d no se pudo encontrar o no existe.", ID))
@@ -237,7 +234,6 @@ class PublicationRestControllerImplTest {
         Collection<PublicationResponseDTO> publications = new HashSet<>();
         publications.add(PUBLICATION_RESPONSE_DTO);
         when(publicationService.getByAdviserIdSemester(any(), any(), any())).thenReturn(publications);
-
         mvc.perform(get(BASE_URL + "/published")
                 .queryParam("adviserId", String.valueOf(ID))
                 .queryParam("type", Publication.PublicationType.ANNOUNCEMENT.toString())

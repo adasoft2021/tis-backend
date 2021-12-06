@@ -10,8 +10,11 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @SuperBuilder
@@ -23,14 +26,11 @@ import java.util.Set;
 
 public class Review extends BaseEntity<Long> {
 
-    @Column(nullable = false)
-    private String title;
-
     @Column
     private String comment;
 
     @Column(nullable = false)
-    private boolean published;
+    private Review.Status status;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -54,4 +54,19 @@ public class Review extends BaseEntity<Long> {
     @JsonManagedReference
     @OneToMany(mappedBy = "review")
     private Set<Observation> observations = new HashSet<>();
+
+    public boolean isPublished() {
+        return status.ordinal() > Status.QUALIFIED.ordinal();
+    }
+
+    public enum Status {
+        UNREVIEWED, REVIEWED, QUALIFIED,
+        /// final states ///
+        CHANGE_ORDER, PROPOSAL_ACCEPTANCE, ADDENDUM;
+
+        public static List<Status> finalValues() {
+            return Arrays.stream(values())
+                .dropWhile(s -> !s.equals(Review.Status.CHANGE_ORDER)).collect(Collectors.toList());
+        }
+    }
 }

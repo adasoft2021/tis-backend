@@ -27,7 +27,7 @@ public class ClassCodeRepositoryImpl extends AbstractTisRepository<ClassCode, Lo
     }
 
     @Override
-    public Optional<ClassCode> getByCode(String code){
+    public Optional<ClassCode> getByCode(String code) {
         Optional<ClassCode> response = Optional.empty();
         String query = "SELECT c FROM ClassCode c WHERE c.code = :code";
         ClassCode foundClassCode = entityManager.createQuery(query, ClassCode.class)

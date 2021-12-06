@@ -40,6 +40,9 @@ public class Company extends User<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_project_id")
     Project project;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "company")
+    private Set<CompanySpace> assigned;
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_semester_id")
