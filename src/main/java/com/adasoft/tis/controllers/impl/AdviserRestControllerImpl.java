@@ -7,6 +7,7 @@ import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.AdviserService;
 import com.adasoft.tis.services.ClassCodeService;
@@ -114,10 +115,11 @@ public class AdviserRestControllerImpl implements AdviserRestController {
 
     @GetMapping("/{adviserId}/proposals/history")
     @Override
-    public ResponseEntity<Collection<?>> getProposalsHistory(
+    public ResponseEntity<Collection<SemesterSpaceAnswersResponseDTO>> getProposalsHistory(
         @RequestAttribute("userId") final Long userId,
         @NotNull @PathVariable("adviserId") final Long adviserId) {
         checkUserId(userId, adviserId);
-        return null;
+        Collection<SemesterSpaceAnswersResponseDTO> response = spaceAnswerService.getAdviserHistory(userId);
+        return ResponseEntity.ok(response);
     }
 }

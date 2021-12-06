@@ -8,6 +8,7 @@ import com.adasoft.tis.domain.Adviser;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.AdviserService;
 import com.adasoft.tis.services.ClassCodeService;
@@ -23,7 +24,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -180,6 +183,19 @@ class AdviserRestControllerImplTest {
         mvc.perform(get(String.format("%s/{adviserId}/spaces", BASE_URL), ID)
                 .queryParam("spaceType", "ALL").header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getProposalsHistorySuccess() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        Collection<SemesterSpaceAnswersResponseDTO> response = new LinkedList<>();
+        when(spaceAnswerService.getAdviserHistory(any())).thenReturn(response);
+
+        mvc.perform(get(String.format("%s/{adviserId}/proposals/history", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
 
     @Test

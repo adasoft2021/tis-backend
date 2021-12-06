@@ -1,6 +1,5 @@
 package com.adasoft.tis.controllers;
 
-import com.adasoft.tis.core.dto.BaseResponseDTO;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
@@ -8,6 +7,7 @@ import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -314,7 +314,7 @@ public interface AdviserRestController {
             responseCode = "200",
             content = @Content(
                 mediaType = "application/json",
-                array = @ArraySchema(schema = @Schema(implementation = BaseResponseDTO.class))
+                array = @ArraySchema(schema = @Schema(implementation = SemesterSpaceAnswersResponseDTO.class))
             )
         ),
         @ApiResponse(
@@ -338,7 +338,7 @@ public interface AdviserRestController {
         schema = @Schema(implementation = String.class),
         required = true
     ))
-    ResponseEntity<Collection<?>> getProposalsHistory(
+    ResponseEntity<Collection<SemesterSpaceAnswersResponseDTO>> getProposalsHistory(
         Long userId,
         @Parameter(description = "ID del adviser") Long adviserId
     );
