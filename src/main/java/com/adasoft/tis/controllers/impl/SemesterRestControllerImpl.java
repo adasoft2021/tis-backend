@@ -18,7 +18,7 @@ public class SemesterRestControllerImpl implements SemesterRestController {
 
     @GetMapping("/now")
     @Override
-    public ResponseEntity<SemesterResponseDTO> get() {
+    public ResponseEntity<SemesterResponseDTO> getNow() {
         SemesterResponseDTO responseDTO = semesterService.getNow();
 
         return ResponseEntity.ok(responseDTO);

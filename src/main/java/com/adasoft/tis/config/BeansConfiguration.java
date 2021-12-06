@@ -11,18 +11,26 @@ import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
+import com.adasoft.tis.dto.partner.CreatePartnerDTO;
+import com.adasoft.tis.dto.partner.PartnerResponseDTO;
+import com.adasoft.tis.dto.partner.UpdatePartnerDTO;
+import com.adasoft.tis.dto.project.CreateProjectDTO;
+import com.adasoft.tis.dto.project.ProjectResponseDTO;
 import com.adasoft.tis.dto.proposal.CreateProposalDTO;
 import com.adasoft.tis.dto.proposal.ProposalResponseDTO;
 import com.adasoft.tis.dto.proposal.UpdateProposalDTO;
 import com.adasoft.tis.dto.publication.CreatePublicationDTO;
+import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.publication.UpdatePublicationDTO;
 import com.adasoft.tis.dto.qualification.CreateQualificationDTO;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.*;
+import com.adasoft.tis.dto.semester.SemesterResponseDTO;
 import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.space.SpaceResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.CompanySpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
@@ -241,8 +249,6 @@ public class BeansConfiguration {
             }
         });
         modelMapper.addMappings(new PropertyMap<Company, UserResponseDTO>() {
-
-
             @Override
             protected void configure() {
                 skip(destination.getToken());
@@ -255,6 +261,31 @@ public class BeansConfiguration {
         return modelMapper;
     }
 
+    @Bean("partnerMapper")
+    public ModelMapper partnerMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Partner, PartnerResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setCompanyId(source.getCompany().getId());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreatePartnerDTO, Partner>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<UpdatePartnerDTO, Partner>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        return modelMapper;
+    }
+
     @Bean("publicationMapper")
     public ModelMapper publicationMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -264,6 +295,7 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                skip(destination.getSemester());
             }
         });
 
@@ -271,6 +303,14 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+                skip(destination.getSemester());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<Publication, PublicationResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setSemester(source.getSemester().getSemester());
             }
         });
 
@@ -306,6 +346,13 @@ public class BeansConfiguration {
                 skip(destination.getId());
             }
         });
+        modelMapper.addMappings(new PropertyMap<SpaceAnswer, CompanySpaceAnswersResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setCompanyName(source.getCreatedBy().getName());
+                map().setProject(source.getCreatedBy().getProject().getTitle());
+            }
+        });
 
         return modelMapper;
     }
@@ -338,9 +385,41 @@ public class BeansConfiguration {
         return modelMapper;
     }
 
+    @Bean("semesterMapper")
+    public ModelMapper semesterMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Semester, SemesterResponseDTO>() {
+            @Override
+            protected void configure() {
+            }
+        });
+        return modelMapper;
+    }
+
     @Bean("codeGenerator")
     @Scope("singleton")
     public CodeGenerator codeGenerator() {
         return new CodeGenerator();
+    }
+
+    @Bean("projectMapper")
+    public ModelMapper projectMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Project, ProjectResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreateProjectDTO, Project>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        return modelMapper;
     }
 }

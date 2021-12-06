@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
@@ -194,6 +195,31 @@ public class ReviewService {
         checkUserId(userId, foundAdviser.getId());
         Collection<Review> reviews = reviewRepository.findByAdviser(userId);
         return reviews.stream().map(review -> reviewMapper.map(review, ReviewCompactResponseDTO.class))
+            .collect(Collectors.toSet());
+    }
+
+    public Collection<List<ReviewResponseDTO>> getProjectReviewsPublishedByStatus(final Long adviserId, final Long projectId) {
+        Collection<List<ReviewResponseDTO>> reviewss = new HashSet<>();
+        List<Review> reviews;
+        for (Review.Status s : Review.Status.finalValues()) {
+            reviews = reviewRepository.findByStatus(adviserId, projectId, s);
+            if (!reviews.isEmpty())
+                reviewss.add(reviews.stream()
+                    .map(r -> reviewMapper.map(r, ReviewResponseDTO.class)).collect(Collectors.toList()));
+        }
+        return reviewss;
+    }
+
+    public Collection<ReviewResponseDTO> getCompanyReviewsExt(Long id) {
+        checkArgument(id != null, "El id de Company no puede ser nulo.");
+
+        companyRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Company.class, id));
+
+        Collection<Review> reviews = reviewRepository.findByCompany(id);
+
+        return reviews.stream().map(review ->
+                getReviewResponseDTO(review, reviewMapper.map(review, ReviewFilesResponseDTO.class)))
             .collect(Collectors.toSet());
     }
 }

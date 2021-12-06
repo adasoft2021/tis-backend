@@ -10,8 +10,11 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @SuperBuilder
@@ -59,6 +62,11 @@ public class Review extends BaseEntity<Long> {
     public enum Status {
         UNREVIEWED, REVIEWED, QUALIFIED,
         /// final states ///
-        CHANGE_ORDER, PROPOSAL_ACCEPTANCE, ADDENDUM
+        CHANGE_ORDER, PROPOSAL_ACCEPTANCE, ADDENDUM;
+
+        public static List<Status> finalValues() {
+            return Arrays.stream(values())
+                .dropWhile(s -> !s.equals(Review.Status.CHANGE_ORDER)).collect(Collectors.toList());
+        }
     }
 }
