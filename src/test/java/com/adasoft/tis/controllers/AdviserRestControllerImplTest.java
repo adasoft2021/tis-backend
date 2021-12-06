@@ -11,6 +11,7 @@ import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.semester.SemesterResponseDTO;
+import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.*;
@@ -51,6 +52,8 @@ class AdviserRestControllerImplTest {
     @MockBean
     private ClassCodeService classCodeService;
     @MockBean
+    private CompanySpacesService companySpacesService;
+    @MockBean
     private CompanyService companyService;
     @MockBean
     private SemesterService semesterService;
@@ -68,6 +71,7 @@ class AdviserRestControllerImplTest {
     private static final Long ID = 1L;
     private static final String CODE = "asd-asd-asd";
     private static final Long SPACE_ID = 1L;
+    private static final Long PROJECT_ID = 6400749631354349951L;
     private static final String CURRENT_SEMESTER = "2-2021";
 
     private static ClassCodeResponseDTO classCodeDTO;
@@ -197,6 +201,19 @@ class AdviserRestControllerImplTest {
     }
 
     @Test
+    void getSpacesAnswerSuccess() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        Collection<CompanySpacesResponseDTO> response = new LinkedList<>();
+        when(companySpacesService.getAdviserSpacesAndAnswers(any(), any())).thenReturn(response);
+
+        mvc.perform(get(String.format("%s/{adviserId}/proposals", BASE_URL), ID)
+                .queryParam("projectId", String.valueOf(PROJECT_ID)).header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
     void getCompaniesSuccess() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         Collection<CompanyResponseDTO> companies = new LinkedList<>();
@@ -234,6 +251,33 @@ class AdviserRestControllerImplTest {
     }
 
     @Test
+    void getSpacesAnswerUnauthorized() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(640L);
+
+        mvc.perform(get(String.format("%s/{adviserId}/proposals", BASE_URL), ID)
+                .queryParam("projectId", String.valueOf(PROJECT_ID)).header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isUnauthorized())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void getSpacesAnswerNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(companySpacesService.getAdviserSpacesAndAnswers(any(), any()))
+            .thenThrow(new EntityNotFoundException(Adviser.class, USER_ID));
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .title("No se pudo encontrar la entidad")
+            .message(String.format("Adviser con id %d no se pudo encontrar o no existe.", ID))
+            .build();
+        mvc.perform(get(String.format("%s/{adviserId}/proposals", BASE_URL), ID)
+                .queryParam("projectId", String.valueOf(PROJECT_ID)).header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+    }
+
+    @Test
     void getPublicationsHistoryUnauthorized() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(16L);
 
@@ -250,12 +294,10 @@ class AdviserRestControllerImplTest {
             .thenThrow(new EntityNotFoundException(Adviser.class, USER_ID));
         when(semesterService.getNow()).thenReturn(semester);
 
-
         ErrorResponse errorResponse = ErrorResponse.builder()
             .title("No se pudo encontrar la entidad")
             .message(String.format("Adviser con id %d no se pudo encontrar o no existe.", ID))
             .build();
-
         mvc.perform(get(String.format("%s/{adviserId}/companies", BASE_URL), ID)
                 .header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isNotFound())

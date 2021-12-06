@@ -9,6 +9,7 @@ import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
+import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.*;
@@ -30,6 +31,7 @@ import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 public class AdviserRestControllerImpl implements AdviserRestController {
     private AdviserService adviserService;
     private ClassCodeService classCodeService;
+    private CompanySpacesService companySpacesService;
     private CompanyService companyService;
     private SemesterService semesterService;
     private PublicationService publicationService;
@@ -113,6 +115,18 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         Collection<SpaceCompactResponseDTO> responses = spaceService.getAdviserSpaces(adviserId, spaceType);
         return ResponseEntity.ok(responses);
 
+    }
+
+    @GetMapping("/{adviserId}/proposals")
+    @Override
+    public ResponseEntity<Collection<CompanySpacesResponseDTO>> getSpacesAnswer(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId,
+        @NotNull @RequestParam("projectId") final Long projectId) {
+        checkUserId(userId, adviserId);
+        Collection<CompanySpacesResponseDTO> response = companySpacesService
+            .getAdviserSpacesAndAnswers(userId, projectId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{adviserId}/companies")
