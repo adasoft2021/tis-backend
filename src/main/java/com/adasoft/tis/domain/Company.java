@@ -1,6 +1,7 @@
 package com.adasoft.tis.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @SuperBuilder
@@ -28,10 +29,9 @@ public class Company extends User<Long> {
     String address;
     @Column
     String telephone;
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "partners", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "partners")
-    List<String> partners;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "company")
+    Set<Partner> partners;
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_adviser_id", nullable = false, updatable = false)
@@ -40,4 +40,11 @@ public class Company extends User<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_project_id")
     Project project;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "company")
+    private Set<CompanySpace> assigned;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_semester_id")
+    Semester semester;
 }

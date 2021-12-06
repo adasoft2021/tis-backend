@@ -1,22 +1,17 @@
 package com.adasoft.tis.services;
 
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
-import com.adasoft.tis.domain.Adviser;
-import com.adasoft.tis.domain.Company;
-import com.adasoft.tis.domain.Space;
-import com.adasoft.tis.domain.SpaceAnswer;
+import com.adasoft.tis.domain.*;
+import com.adasoft.tis.dto.spaceAnswer.CompanySpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
+import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
-import com.adasoft.tis.repository.AdviserRepository;
-import com.adasoft.tis.repository.CompanyRepository;
-import com.adasoft.tis.repository.SpaceAnswerRepository;
-import com.adasoft.tis.repository.SpaceRepository;
+import com.adasoft.tis.repository.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
@@ -29,6 +24,8 @@ public class SpaceAnswerService {
     private CompanyRepository companyRepository;
     private ModelMapper spaceAnswerMapper;
     private AdviserRepository adviserRepository;
+    private SemesterRepository semesterRepository;
+    private ModelMapper semesterMapper;
 
     public SpaceAnswerResponseDTO create(final Long spaceId, final CreateSpaceAnswerDTO spaceDTO) {
         checkArgument(spaceId != null, "El spaceId no puede ser nulo.");
@@ -78,5 +75,41 @@ public class SpaceAnswerService {
             .filter(spaceAnswer -> spaceAnswer.getCreatedBy().getId().equals(companyId))
             .map(spaceAnswer -> spaceAnswerMapper.map(spaceAnswer, SpaceAnswerResponseDTO.class))
             .collect(Collectors.toSet());
+    }
+
+    public Collection<SemesterSpaceAnswersResponseDTO> getAdviserHistory(final Long adviserId) {
+        checkArgument(adviserId != null, "El ID de Adviser no puede ser nulo.");
+        LinkedList<SemesterSpaceAnswersResponseDTO> dtos = new LinkedList<>();
+        List<Semester> semesters = semesterRepository.getAll();
+        for (Semester s : semesters) {
+            semesterMapper.map(s, SemesterSpaceAnswersResponseDTO.class);
+            Collection<Company> companies = companyRepository.getSemesterCompanies(s.getSemester(), adviserId);
+            Collection<CompanySpaceAnswersResponseDTO> companiesAnswers = new HashSet<>();
+            for (Company c : companies) {
+                HashSet<SpaceAnswer> companyAnswers = new HashSet<>();
+                Collection<CompanySpace> companySpaces = c.getAssigned().stream()
+                    .filter(companySpace -> companySpace.getSpace().getSpaceType()
+                        .equals(Space.SpaceType.PROPOSALS_PRESENTATION))
+                    .collect(Collectors.toSet());
+                for (CompanySpace cs : companySpaces) {
+                    companyAnswers.addAll(spaceAnswerRepository.findCompanyAnswers(c.getId(), cs.getSpace().getId()));
+                }
+                if (!companyAnswers.isEmpty()) {
+                    List<FileEntity> all = companyAnswers.stream().map(SpaceAnswer::getFiles).reduce((f, l) ->
+                    {
+                        List<FileEntity> files = new LinkedList<>();
+                        files.addAll(f);
+                        files.addAll(l);
+                        return files;
+                    }).orElse(null);
+                    Iterator<SpaceAnswer> i = companyAnswers.iterator();
+                    SpaceAnswer ans = i.next();
+                    ans.setFiles(all);
+                    companiesAnswers.add(spaceAnswerMapper.map(ans, CompanySpaceAnswersResponseDTO.class));
+                }
+
+            }
+        }
+        return dtos;
     }
 }

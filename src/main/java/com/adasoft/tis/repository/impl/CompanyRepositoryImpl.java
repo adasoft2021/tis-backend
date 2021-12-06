@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class CompanyRepositoryImpl extends AbstractTisRepository<Company, Long> implements CompanyRepository {
@@ -31,5 +32,37 @@ public class CompanyRepositoryImpl extends AbstractTisRepository<Company, Long> 
             "WHERE e.name = :name ", Company.class.getSimpleName());
         return entityManager.createQuery(query, Boolean.class)
             .setParameter("name", name).getSingleResult();
+    }
+
+    @Override
+    public List<Company> findByProject(Long projectId) {
+        String jpqlQuery = "SELECT a FROM Company a WHERE a.project.id = :projectId";
+
+        return entityManager.createQuery(jpqlQuery, Company.class)
+            .setParameter("projectId", projectId)
+            .getResultList();
+    }
+
+    @Override
+    public Collection<Company> getSemesterCompanies(String semester, Long adviserId) {
+        String jpqlQuery = "SELECT c FROM Company c where c.semester.semester = :semester " +
+            "and c.adviser.id = :adviserId";
+
+        return entityManager.createQuery(jpqlQuery, Company.class)
+            .setParameter("semester", semester)
+            .setParameter("adviserId", adviserId)
+            .getResultList();
+    }
+
+    @Override
+    public Collection<Company> getSemesterCompanies(String semester, Long adviserId, int partnersSize) {
+        String jpqlQuery = "SELECT c FROM Company c where c.semester.semester = :semester " +
+            "and c.adviser.id = :adviserId and c.partners.size= :partnersSize";
+
+        return entityManager.createQuery(jpqlQuery, Company.class)
+            .setParameter("semester", semester)
+            .setParameter("adviserId", adviserId)
+            .setParameter("partnersSize", partnersSize)
+            .getResultList();
     }
 }
