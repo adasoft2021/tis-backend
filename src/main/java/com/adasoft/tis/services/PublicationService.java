@@ -133,4 +133,19 @@ public class PublicationService {
             .map(publication -> publicationMapper.map(publication, PublicationResponseDTO.class))
             .collect(Collectors.toSet());
     }
+
+    public Collection<PublicationResponseDTO> getHistoryByAdviserId(
+        final Long adviserId,
+        final Publication.PublicationType type) {
+        checkArgument(adviserId != null, "El id de Adviser no puede ser nulo.");
+
+        adviserRepository.findById(adviserId)
+            .orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
+
+        Collection<Publication> publications = publicationRepository.getByAdviserId(adviserId, type, true);
+
+        return publications.stream()
+            .map(publication -> publicationMapper.map(publication, PublicationResponseDTO.class))
+            .collect(Collectors.toSet());
+    }
 }

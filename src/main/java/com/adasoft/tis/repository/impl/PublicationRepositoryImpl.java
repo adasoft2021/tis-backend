@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -37,5 +38,16 @@ public class PublicationRepositoryImpl extends AbstractTisRepository<Publication
             .setParameter("semester", semester)
             .setParameter("current", LocalDateTime.now())
             .getResultList();
+    }
+
+    @Override
+    public Collection<Publication> getByAdviserId(Long adviserId, Publication.PublicationType type, boolean includeDeleted) {
+        String jpqlQuery = "SELECT p FROM Publication p WHERE p.createdBy.id = :adviserId and p.type = :type";
+        if (!includeDeleted)
+            jpqlQuery += "and p.deleted = false";
+        TypedQuery<Publication> query = entityManager.createQuery(jpqlQuery, Publication.class)
+            .setParameter("adviserId", adviserId)
+            .setParameter("type", type);
+        return query.getResultList();
     }
 }

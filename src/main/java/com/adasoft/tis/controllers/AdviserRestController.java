@@ -6,6 +6,9 @@ import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.company.CompanyResponseDTO;
+import com.adasoft.tis.dto.publication.PublicationResponseDTO;
+import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
@@ -21,6 +24,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Collection;
+
+import static com.adasoft.tis.domain.Publication.PublicationType;
 
 @Tag(name = "AdviserRestController", description = "Controlador para gestionar Advisers")
 public interface AdviserRestController {
@@ -341,5 +346,112 @@ public interface AdviserRestController {
     ResponseEntity<Collection<SemesterSpaceAnswersResponseDTO>> getProposalsHistory(
         Long userId,
         @Parameter(description = "ID del adviser") Long adviserId
+    );
+
+    @Operation(summary = "Obtener los Spaces Answer de las GE por adviser", responses = {
+        @ApiResponse(
+            description = "Spaces Answer devueltos exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = CompanySpacesResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No existe la entidad",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<CompanySpacesResponseDTO>> getSpacesAnswer(
+        Long userId,
+        @Parameter(description = "ID del adviser") Long adviserId,
+        @Parameter(description = "ID del project") Long projectId
+    );
+
+    @Operation(summary = "Obtener las GE del adviser de la gestión actual", responses = {
+        @ApiResponse(
+            description = "GE devueltos exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = CompanyResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No existe el Asesor",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<CompanyResponseDTO>> getCompanies(
+        Long userId,
+        @Parameter(description = "ID del adviser") Long adviserId
+    );
+
+    @Operation(summary = "Obtener el historial de Publicaciones del adviser", responses = {
+        @ApiResponse(
+            description = "Historial de Publicaciones obtenidos satisfactoriamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = PublicationResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No existe el Asesor",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<PublicationResponseDTO>> getPublicationsHistory(
+        Long userId,
+        @Parameter(description = "ID del Asesor") Long id,
+        @Parameter(description = "Tipo de publicación") PublicationType publicationType
     );
 }

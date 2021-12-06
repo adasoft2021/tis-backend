@@ -1,18 +1,19 @@
 package com.adasoft.tis.controllers.impl;
 
 import com.adasoft.tis.controllers.AdviserRestController;
+import com.adasoft.tis.domain.Publication;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.company.CompanyResponseDTO;
+import com.adasoft.tis.dto.publication.PublicationResponseDTO;
+import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
-import com.adasoft.tis.services.AdviserService;
-import com.adasoft.tis.services.ClassCodeService;
-import com.adasoft.tis.services.SpaceAnswerService;
-import com.adasoft.tis.services.SpaceService;
+import com.adasoft.tis.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,10 @@ import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 public class AdviserRestControllerImpl implements AdviserRestController {
     private AdviserService adviserService;
     private ClassCodeService classCodeService;
+    private CompanySpacesService companySpacesService;
+    private CompanyService companyService;
+    private SemesterService semesterService;
+    private PublicationService publicationService;
     private SpaceAnswerService spaceAnswerService;
     private SpaceService spaceService;
 
@@ -121,5 +126,40 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         checkUserId(userId, adviserId);
         Collection<SemesterSpaceAnswersResponseDTO> response = spaceAnswerService.getAdviserHistory(userId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{adviserId}/proposals")
+    @Override
+    public ResponseEntity<Collection<CompanySpacesResponseDTO>> getSpacesAnswer(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId,
+        @NotNull @RequestParam("projectId") final Long projectId) {
+        checkUserId(userId, adviserId);
+        Collection<CompanySpacesResponseDTO> response = companySpacesService
+            .getAdviserSpacesAndAnswers(userId, projectId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{adviserId}/companies")
+    @Override
+    public ResponseEntity<Collection<CompanyResponseDTO>> getCompanies(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId) {
+        checkUserId(userId, adviserId);
+        String semester = semesterService.getNow().getSemester();
+        Collection<CompanyResponseDTO> response = companyService.getSemesterCompanies(semester, userId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{adviserId}/publications/history")
+    @Override
+    public ResponseEntity<Collection<PublicationResponseDTO>> getPublicationsHistory(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId,
+        @NotNull @RequestParam("type") final Publication.PublicationType publicationType) {
+        checkUserId(userId, adviserId);
+        Collection<PublicationResponseDTO> publications = publicationService
+            .getHistoryByAdviserId(userId, publicationType);
+        return ResponseEntity.ok(publications);
     }
 }
