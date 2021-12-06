@@ -20,17 +20,17 @@ import javax.persistence.*;
 public class Project extends BaseEntity<Long> {
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_publication_id", nullable = false, updatable = false)
+    @JoinColumn(name = "fk_publication_announcement_id", nullable = false, updatable = false)
     private Publication announcement;
-    @Column(nullable = false)
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_publication_id", nullable = false, updatable = false)
+    @JoinColumn(name = "fk_publication_specification_id", nullable = false, updatable = false)
     private Publication specificationSheet;
-    @Column(nullable = false)
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_adviser_id", nullable = false, updatable = false)

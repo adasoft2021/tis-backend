@@ -30,6 +30,7 @@ import com.adasoft.tis.dto.semester.SemesterResponseDTO;
 import com.adasoft.tis.dto.space.CreateSpaceDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.space.SpaceResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.CompanySpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
@@ -343,6 +344,13 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<SpaceAnswer, CompanySpaceAnswersResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setCompanyName(source.getCreatedBy().getName());
+                map().setProject(source.getCreatedBy().getProject().getTitle());
             }
         });
 
