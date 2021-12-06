@@ -23,7 +23,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -62,7 +61,6 @@ class CompanyRestControllerImplTest {
     private static final String ADDRESS = "Jordan y Oquendo";
     private static final String EMAIL = "acme@gmail.com";
     private static final String TELEPHONE = "77777777";
-    private static final String[] PARTNERS = {"Violeta Guzman", "Jesus Jimenez", "Leonardo Roldan", "Luis Tapia", "Viviana Tolaba"};
     private static CompanyResponseDTO responseDTO;
     private static UpdateCompanyDTO updateDTO;
 
@@ -75,11 +73,9 @@ class CompanyRestControllerImplTest {
         responseDTO.setCompanyType(COMPANY_TYPE);
         responseDTO.setAddress(ADDRESS);
         responseDTO.setEmail(EMAIL);
-        responseDTO.setPartners(Arrays.asList(PARTNERS));
         updateDTO = new UpdateCompanyDTO();
         updateDTO.setAddress(ADDRESS + "23");
         updateDTO.setTelephone(TELEPHONE);
-        updateDTO.setPartners(Arrays.asList(PARTNERS).subList(0, 3));
     }
 
     @Test
