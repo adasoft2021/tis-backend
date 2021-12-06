@@ -1,17 +1,16 @@
 package com.adasoft.tis.controllers.impl;
 
 import com.adasoft.tis.controllers.AdviserRestController;
+import com.adasoft.tis.domain.Publication;
 import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
-import com.adasoft.tis.services.AdviserService;
-import com.adasoft.tis.services.ClassCodeService;
-import com.adasoft.tis.services.SpaceAnswerService;
-import com.adasoft.tis.services.SpaceService;
+import com.adasoft.tis.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +29,7 @@ import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 public class AdviserRestControllerImpl implements AdviserRestController {
     private AdviserService adviserService;
     private ClassCodeService classCodeService;
+    private PublicationService publicationService;
     private SpaceAnswerService spaceAnswerService;
     private SpaceService spaceService;
 
@@ -110,5 +110,17 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         Collection<SpaceCompactResponseDTO> responses = spaceService.getAdviserSpaces(adviserId, spaceType);
         return ResponseEntity.ok(responses);
 
+    }
+
+    @GetMapping("/{adviserId}/publications/history")
+    @Override
+    public ResponseEntity<Collection<PublicationResponseDTO>> getPublicationsHistory(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId,
+        @NotNull @RequestParam("type") final Publication.PublicationType publicationType) {
+        checkUserId(userId, adviserId);
+        Collection<PublicationResponseDTO> publications = publicationService.getHistoryByAdviserId(userId, publicationType);
+
+        return ResponseEntity.ok(publications);
     }
 }
