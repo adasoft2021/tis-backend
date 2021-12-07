@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -37,7 +38,7 @@ public class CompanySpacesService {
     public Collection<CompanySpacesResponseDTO> getAdviserSpacesAndAnswers(Long adviserId, Long projectId) {
         adviserRepository.findById(adviserId).orElseThrow(() -> new EntityNotFoundException(Adviser.class, adviserId));
         Collection<CompanySpacesResponseDTO> companySpacesDTOs = new HashSet<>();
-        LinkedList<Company> companies = (LinkedList<Company>) companyRepository.findByProject(projectId);
+        List<Company> companies = companyRepository.findByProject(projectId);
 
         for (Company c : companies) {
             CompanySpacesResponseDTO dto = new CompanySpacesResponseDTO();
@@ -53,10 +54,8 @@ public class CompanySpacesService {
                     subDtoAnswered.setBecauseOf(reviewMapper.map(o[0], ReviewCompactResponseDTO.class));
                     subDtoUnanswered.setBecauseOf(reviewMapper.map(o[0], ReviewCompactResponseDTO.class));
                 }
-                LinkedList<Space> spacesAnswered =
-                    (LinkedList<Space>) companySpaceRepository.getSpacesByReview((Review) o[0], true);
-                LinkedList<Space> spacesUnanswered =
-                    (LinkedList<Space>) companySpaceRepository.getSpacesByReview((Review) o[0], false);
+                List<Space> spacesAnswered = companySpaceRepository.getSpacesByReview((Review) o[0], true);
+                List<Space> spacesUnanswered = companySpaceRepository.getSpacesByReview((Review) o[0], false);
                 dto.getAnswered().add(getSpaceAndAnswers(spacesAnswered, subDtoAnswered));
                 dto.getUnanswered().add(getSpaceAndAnswers(spacesUnanswered, subDtoUnanswered));
             }
@@ -65,7 +64,7 @@ public class CompanySpacesService {
     }
 
     private CompanySpaceAndAnswersResponseDTO getSpaceAndAnswers(
-        LinkedList<Space> spaces, CompanySpaceAndAnswersResponseDTO subDto) {
+        List<Space> spaces, CompanySpaceAndAnswersResponseDTO subDto) {
         subDto.setSpaces(spaces.stream()
             .map(space -> spaceMapper.map(space, SpaceResponseDTO.class))
             .collect(Collectors.toSet()));
