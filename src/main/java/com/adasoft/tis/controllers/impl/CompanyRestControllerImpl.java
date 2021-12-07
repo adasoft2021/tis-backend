@@ -110,4 +110,14 @@ public class CompanyRestControllerImpl implements CompanyRestController {
         Collection<SpaceCompactResponseDTO> responses = spaceService.getCompanySpaces(companyId, spaceType);
         return ResponseEntity.ok(responses);
     }
+
+    @GetMapping("/{companyId}/extended-reviews")
+    @Override
+    public ResponseEntity<Collection<ReviewResponseDTO>> getExtendedReviews(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("companyId") final Long companyId) {
+        checkUserId(userId, companyId);
+        Collection<ReviewResponseDTO> response = reviewService.getCompanyReviewsExt(companyId);
+        return ResponseEntity.ok(response);
+    }
 }

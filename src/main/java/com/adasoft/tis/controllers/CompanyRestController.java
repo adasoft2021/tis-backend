@@ -285,4 +285,38 @@ public interface CompanyRestController {
         @Parameter(description = "Tipo de space") Space.SpaceType spaceType
     );
 
+    @Operation(summary = "Obtener las revisiones en versión extendida por GE", responses = {
+        @ApiResponse(
+            description = "Revisiones obtenidos satisfactoriamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = ReviewResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No existe la GE",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<ReviewResponseDTO>> getExtendedReviews(
+        Long userId,
+        @Parameter(description = "ID de la GE") Long id
+    );
 }
