@@ -13,6 +13,7 @@ import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.semester.SemesterResponseDTO;
 import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -201,6 +202,19 @@ class AdviserRestControllerImplTest {
     }
 
     @Test
+    void getProposalsHistorySuccess() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        Collection<SemesterSpaceAnswersResponseDTO> response = new LinkedList<>();
+        when(spaceAnswerService.getAdviserHistory(any())).thenReturn(response);
+
+        mvc.perform(get(String.format("%s/{adviserId}/proposals/history", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
     void getSpacesAnswerSuccess() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         Collection<CompanySpacesResponseDTO> response = new LinkedList<>();
@@ -248,6 +262,15 @@ class AdviserRestControllerImplTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
+    void getProposalsHistoryUnauthorized() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(87L);
+
+        mvc.perform(get(String.format("%s/{adviserId}/proposals/history", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test

@@ -10,6 +10,7 @@ import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -310,6 +311,41 @@ public interface AdviserRestController {
         Long userId,
         @Parameter(description = "ID del adviser") Long adviserId,
         @Parameter(description = "Tipo de space") Space.SpaceType spaceType
+    );
+
+    @Operation(summary = "Obtener el historial de Propuestas de GE por Asesor", responses = {
+        @ApiResponse(
+            description = "Historial de propuestas devueltos exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = SemesterSpaceAnswersResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No existe la entidad",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<SemesterSpaceAnswersResponseDTO>> getProposalsHistory(
+        Long userId,
+        @Parameter(description = "ID del adviser") Long adviserId
     );
 
     @Operation(summary = "Obtener los Spaces Answer de las GE por adviser", responses = {

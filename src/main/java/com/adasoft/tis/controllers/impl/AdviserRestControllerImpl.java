@@ -11,6 +11,7 @@ import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
 import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
+import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.services.*;
 import lombok.AllArgsConstructor;
@@ -115,6 +116,16 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         Collection<SpaceCompactResponseDTO> responses = spaceService.getAdviserSpaces(adviserId, spaceType);
         return ResponseEntity.ok(responses);
 
+    }
+
+    @GetMapping("/{adviserId}/proposals/history")
+    @Override
+    public ResponseEntity<Collection<SemesterSpaceAnswersResponseDTO>> getProposalsHistory(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId) {
+        checkUserId(userId, adviserId);
+        Collection<SemesterSpaceAnswersResponseDTO> response = spaceAnswerService.getAdviserHistory(userId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{adviserId}/proposals")
