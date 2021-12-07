@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -243,5 +244,28 @@ class CompanyRestControllerImplTest {
         mvc.perform(get(String.format("%s/{companyId}/spaces", BASE_URL), ID)
                 .queryParam("spaceType", "ALL").header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getExtendedReviewsSuccess() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        Collection<ReviewResponseDTO> response = new LinkedList<>();
+        when(reviewService.getCompanyReviewsExt(any())).thenReturn(response);
+
+        mvc.perform(get(String.format("%s/{companyId}/extended-reviews", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
+    void getExtendedReviewsUnauthorized() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(67L);
+
+        mvc.perform(get(String.format("%s/{companyId}/extended-reviews", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isUnauthorized())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 }
