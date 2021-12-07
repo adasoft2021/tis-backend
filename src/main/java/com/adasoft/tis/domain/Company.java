@@ -13,8 +13,8 @@ import java.util.Set;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"partners", "adviser", "project", "assigned", "semester"})
+@ToString(callSuper = true, exclude = {"partners", "adviser", "project", "assigned", "semester"})
 @NoArgsConstructor
 @Entity
 @Table(name = "companies")
