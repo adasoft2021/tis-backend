@@ -8,6 +8,7 @@ import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
+import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
@@ -491,5 +492,40 @@ public interface AdviserRestController {
         Long userId,
         @Parameter(description = "ID del Asesor") Long id,
         @Parameter(description = "ID del Proyecto") Long projectId
+    );
+
+    @Operation(summary = "Obtener las revisiones compactas por adviser", responses = {
+        @ApiResponse(
+            description = "Revisiones compactas obtenidos satisfactoriamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = ReviewCompactResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No existe el Asesor",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<Collection<ReviewCompactResponseDTO>>> getCompactReviews(
+        Long userId,
+        @Parameter(description = "ID del Asesor") Long id
     );
 }
