@@ -21,7 +21,7 @@ public class SemesterRepositoryImpl extends AbstractTisRepository<Semester, Long
     @Override
     public Optional<Semester> getNow() {
         Optional<Semester> response = Optional.empty();
-        String query = "SELECT s FROM Semester s WHERE s.now = :true";
+        String query = "SELECT s FROM Semester s WHERE s.now = true";
         Semester foundSemester = entityManager.createQuery(query, Semester.class).getSingleResult();
         if (foundSemester != null) {
             response = Optional.of(foundSemester);
