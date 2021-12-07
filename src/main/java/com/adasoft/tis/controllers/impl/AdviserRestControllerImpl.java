@@ -9,6 +9,7 @@ import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
+import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
@@ -175,6 +176,16 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         checkUserId(userId, adviserId);
         Collection<List<ReviewResponseDTO>> response = reviewService
             .getProjectReviewsPublishedByStatus(userId, projectId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{adviserId}/reviews")
+    @Override
+    public ResponseEntity<Collection<Collection<ReviewCompactResponseDTO>>> getCompactReviews(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId) {
+        checkUserId(userId, adviserId);
+        Collection<Collection<ReviewCompactResponseDTO>> response = reviewService.getAdviserReviewsList(userId);
         return ResponseEntity.ok(response);
     }
 }

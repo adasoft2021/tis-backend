@@ -12,10 +12,7 @@ import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
 import com.adasoft.tis.dto.review.*;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
-import com.adasoft.tis.repository.AdviserRepository;
-import com.adasoft.tis.repository.CompanyRepository;
-import com.adasoft.tis.repository.ReviewRepository;
-import com.adasoft.tis.repository.SpaceRepository;
+import com.adasoft.tis.repository.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -43,6 +40,7 @@ public class ReviewService {
     private ModelMapper observationMapper;
     private ModelMapper spaceMapper;
     private SpaceAnswerService spaceAnswersService;
+    private SemesterRepository semesterRepository;
 
     private Collection<QualificationResponseDTO> updateQualifications(
         final Review review,
@@ -196,6 +194,23 @@ public class ReviewService {
         Collection<Review> reviews = reviewRepository.findByAdviser(userId);
         return reviews.stream().map(review -> reviewMapper.map(review, ReviewCompactResponseDTO.class))
             .collect(Collectors.toSet());
+    }
+
+    public Collection<Collection<ReviewCompactResponseDTO>> getAdviserReviewsList(Long userId) {
+        checkArgument(userId != null, "El ID de adviser no puede ser nulo");
+        Adviser foundAdviser = adviserRepository.findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException(Adviser.class, userId));
+        checkUserId(userId, foundAdviser.getId());
+        Collection<Company> companies = companyRepository.getSemesterCompanies(
+            semesterRepository.getNow().get().getSemester(),
+            userId);
+        Collection<Collection<ReviewCompactResponseDTO>> reviews = new HashSet<>();
+        for (Company c : companies) {
+            reviews.add(reviewRepository.findByCompanyAll(c.getId()).stream()
+                .map(review -> reviewMapper.map(review, ReviewCompactResponseDTO.class))
+                .collect(Collectors.toSet()));
+        }
+        return reviews;
     }
 
     public Collection<List<ReviewResponseDTO>> getProjectReviewsPublishedByStatus(final Long adviserId, final Long projectId) {
