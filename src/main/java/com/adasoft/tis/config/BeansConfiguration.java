@@ -294,7 +294,8 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 map().setId(source.getId());
-
+                skip(destination.getAnnouncement());
+                skip(destination.getSpecificationSheet());
             }
         });
         modelMapper.addMappings(new PropertyMap<CreateProjectDTO, Project>() {
