@@ -8,6 +8,7 @@ import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
+import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
@@ -24,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Collection;
+import java.util.List;
 
 import static com.adasoft.tis.domain.Publication.PublicationType;
 
@@ -453,5 +455,41 @@ public interface AdviserRestController {
         Long userId,
         @Parameter(description = "ID del Asesor") Long id,
         @Parameter(description = "Tipo de publicación") PublicationType publicationType
+    );
+
+    @Operation(summary = "Obtener las revisiones publicadas por estado del adviser", responses = {
+        @ApiResponse(
+            description = "Revisiones publicadas por estado obtenidos satisfactoriamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = ReviewResponseDTO.class))
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No existe el Asesor",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Collection<List<ReviewResponseDTO>>> getReviewsPublishedByStatus(
+        Long userId,
+        @Parameter(description = "ID del Asesor") Long id,
+        @Parameter(description = "ID del Proyecto") Long projectId
     );
 }

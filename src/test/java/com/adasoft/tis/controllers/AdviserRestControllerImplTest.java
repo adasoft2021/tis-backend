@@ -10,6 +10,7 @@ import com.adasoft.tis.domain.Space;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
+import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.semester.SemesterResponseDTO;
 import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
@@ -25,10 +26,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -56,6 +54,8 @@ class AdviserRestControllerImplTest {
     private CompanySpacesService companySpacesService;
     @MockBean
     private CompanyService companyService;
+    @MockBean
+    private ReviewService reviewService;
     @MockBean
     private SemesterService semesterService;
     @MockBean
@@ -345,5 +345,28 @@ class AdviserRestControllerImplTest {
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json(objectMapper.writeValueAsString(errorResponse)));
+    }
+
+    @Test
+    void getReviewsPublishedByStatusSuccess() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        Collection<List<ReviewResponseDTO>> response = new LinkedList<>();
+        when(reviewService.getProjectReviewsPublishedByStatus(any(), any())).thenReturn(response);
+
+        mvc.perform(get(String.format("%s/{adviserId}/reviews/published", BASE_URL), ID)
+                .queryParam("projectId", String.valueOf(PROJECT_ID)).header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
+    void getReviewsPublishedByStatusUnauthorized() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(698L);
+
+        mvc.perform(get(String.format("%s/{adviserId}/reviews/published", BASE_URL), ID)
+                .queryParam("projectId", String.valueOf(PROJECT_ID)).header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isUnauthorized())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 }

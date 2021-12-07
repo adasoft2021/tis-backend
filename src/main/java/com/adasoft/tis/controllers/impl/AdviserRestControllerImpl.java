@@ -9,6 +9,7 @@ import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.publication.PublicationResponseDTO;
+import com.adasoft.tis.dto.review.ReviewResponseDTO;
 import com.adasoft.tis.dto.space.CompanySpacesResponseDTO;
 import com.adasoft.tis.dto.space.SpaceCompactResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.List;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkUserId;
 
@@ -36,6 +38,7 @@ public class AdviserRestControllerImpl implements AdviserRestController {
     private CompanyService companyService;
     private SemesterService semesterService;
     private PublicationService publicationService;
+    private ReviewService reviewService;
     private SpaceAnswerService spaceAnswerService;
     private SpaceService spaceService;
 
@@ -161,5 +164,17 @@ public class AdviserRestControllerImpl implements AdviserRestController {
         Collection<PublicationResponseDTO> publications = publicationService
             .getHistoryByAdviserId(userId, publicationType);
         return ResponseEntity.ok(publications);
+    }
+
+    @GetMapping("/{adviserId}/reviews/published")
+    @Override
+    public ResponseEntity<Collection<List<ReviewResponseDTO>>> getReviewsPublishedByStatus(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable("adviserId") final Long adviserId,
+        @NotNull @RequestParam("projectId") final Long projectId) {
+        checkUserId(userId, adviserId);
+        Collection<List<ReviewResponseDTO>> response = reviewService
+            .getProjectReviewsPublishedByStatus(userId, projectId);
+        return ResponseEntity.ok(response);
     }
 }
