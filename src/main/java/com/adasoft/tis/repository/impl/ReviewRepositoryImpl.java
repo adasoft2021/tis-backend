@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ReviewRepositoryImpl extends AbstractTisRepository<Review, Long> implements ReviewRepository {
@@ -49,5 +50,19 @@ public class ReviewRepositoryImpl extends AbstractTisRepository<Review, Long> im
             .setParameter("projectId", projectId)
             .setParameter("status", status)
             .getResultList();
+    }
+
+    @Override
+    public Optional<Review> findByCompanyAndStatus(Long companyId, Review.Status status) {
+        Optional<Review> r = Optional.empty();
+        String jpqlQuery = "SELECT r FROM Review r WHERE r.company.id = :companyId and r.status = :status";
+
+        Review found = entityManager.createQuery(jpqlQuery, Review.class)
+            .setParameter("companyId", companyId)
+            .setParameter("status", status)
+            .getSingleResult();
+        if (found != null)
+            r = Optional.of(found);
+        return r;
     }
 }

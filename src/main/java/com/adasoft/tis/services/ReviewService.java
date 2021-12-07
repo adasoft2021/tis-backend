@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -183,9 +184,39 @@ public class ReviewService {
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "Usted ya no puede hacer ningún cambio en la entidad Review.");
         }
-        foundReview.setStatus(Review.Status.CHANGE_ORDER);
+        Review.Status s = finalStatus(foundReview);
+        if (s.equals(foundReview.getStatus())) {
+            throw new DefaultTisDomainException(
+                HttpStatus.METHOD_NOT_ALLOWED,
+                "Aun no se puede emitir la entidad Review.");
+        }
+        foundReview.setStatus(s);
         reviewRepository.save(foundReview);
         return getReviewResponseDTO(foundReview, reviewMapper.map(foundReview, ReviewFilesResponseDTO.class));
+    }
+
+    private Review.Status finalStatus(Review r) {
+        Review.Status next = r.getStatus();
+        HashMap<Review.Status, Review> statusReviews = new HashMap<>();
+
+        for (Review.Status s : Review.Status.finalValues()) {
+            reviewRepository.findByCompanyAndStatus(r.getCompany().getId(), s)
+                .ifPresent(rs -> statusReviews.put(s, rs));
+        }
+
+
+        switch (r.getStatus().name()) {
+            case "QUALIFIED":
+                if (statusReviews.isEmpty())
+                    next = Review.Status.CHANGE_ORDER;
+                else if (r.getObservations().isEmpty())
+                    next = Review.Status.PROPOSAL_ACCEPTANCE;
+                break;
+            case "REVIEWED":
+                if (statusReviews.containsKey(Review.Status.CHANGE_ORDER))
+                    next = Review.Status.ADDENDUM;
+        }
+        return next;
     }
 
     public Collection<ReviewCompactResponseDTO> getAdviserReviews(Long userId) {
