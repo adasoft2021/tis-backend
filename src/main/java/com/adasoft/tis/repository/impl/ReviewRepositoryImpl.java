@@ -50,4 +50,13 @@ public class ReviewRepositoryImpl extends AbstractTisRepository<Review, Long> im
             .setParameter("status", status)
             .getResultList();
     }
+
+    @Override
+    public Collection<Review> findByCompanyAll(Long companyId) {
+        String jpqlQuery = "SELECT r FROM Review r WHERE r.company.id = :companyId and r.deleted = false";
+
+        return entityManager.createQuery(jpqlQuery, Review.class)
+            .setParameter("companyId", companyId)
+            .getResultList();
+    }
 }

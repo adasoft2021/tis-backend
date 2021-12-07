@@ -12,4 +12,6 @@ public interface ReviewRepository extends TisRepository<Review, Long> {
     Collection<Review> findByAdviser(Long adviserId);
 
     List<Review> findByStatus(Long adviserId, Long projectId, Review.Status status);
+
+    Collection<Review> findByCompanyAll(Long id);
 }
