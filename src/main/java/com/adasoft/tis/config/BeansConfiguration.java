@@ -9,6 +9,8 @@ import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
+import com.adasoft.tis.dto.discussion.CreateDiscussionDTO;
+import com.adasoft.tis.dto.discussion.DiscussionResponseDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
 import com.adasoft.tis.dto.partner.CreatePartnerDTO;
@@ -415,6 +417,25 @@ public class BeansConfiguration {
             }
         });
         modelMapper.addMappings(new PropertyMap<CreateProjectDTO, Project>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        return modelMapper;
+    }
+    @Bean("discussionMapper")
+    public ModelMapper discussionMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Discussion, DiscussionResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreateDiscussionDTO, Discussion>() {
             @Override
             protected void configure() {
                 skip(destination.getId());
