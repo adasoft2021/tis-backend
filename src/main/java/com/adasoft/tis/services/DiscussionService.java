@@ -9,11 +9,15 @@ import com.adasoft.tis.dto.discussion.CreateDiscussionDTO;
 import com.adasoft.tis.dto.discussion.DiscussionResponseDTO;
 import com.adasoft.tis.repository.DiscussionRepository;
 import com.adasoft.tis.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@AllArgsConstructor
+@Service
 public class DiscussionService {
     private UserRepository userRepository;
     private DiscussionRepository discussionRepository;
