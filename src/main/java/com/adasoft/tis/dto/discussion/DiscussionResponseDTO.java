@@ -9,5 +9,6 @@ import lombok.Setter;
 @Setter
 @Schema(name = "DiscussionResponseDTO", description = "DTO para devolver discusiones")
 public class DiscussionResponseDTO extends BaseResponseDTO {
-
+    private String topic;
+    private Long createdById;
 }
