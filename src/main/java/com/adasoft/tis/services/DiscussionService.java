@@ -26,14 +26,14 @@ public class DiscussionService {
     public DiscussionResponseDTO create(final Long userId, final CreateDiscussionDTO dto) {
         Discussion defaultDiscussion = discussionMapper.map(dto, Discussion.class);
         User foundUser = userRepository.findById(userId).orElseThrow(
-            () -> new EntityNotFoundException(User.class, dto.getCompanyId())
+            () -> new EntityNotFoundException(User.class, dto.getCreatedById())
         );
         defaultDiscussion.setCreatedBy(foundUser);
         Set<User> participants = new HashSet<>();
         participants.add(foundUser);
         if (foundUser instanceof Adviser) {
-            User company = userRepository.findById(dto.getCompanyId()).orElseThrow(
-                () -> new EntityNotFoundException(User.class, dto.getCompanyId())
+            User company = userRepository.findById(dto.getCreatedById()).orElseThrow(
+                () -> new EntityNotFoundException(User.class, dto.getCreatedById())
             );
             participants.add(company);
         } else if (foundUser instanceof Company) {
