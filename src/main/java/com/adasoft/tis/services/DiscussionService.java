@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
+
 @AllArgsConstructor
 @Service
 public class DiscussionService {
@@ -24,6 +26,8 @@ public class DiscussionService {
     private ModelMapper discussionMapper;
 
     public DiscussionResponseDTO create(final Long userId, final CreateDiscussionDTO dto) {
+        checkArgument(userId != null, "El Id de User no puede ser nulo.");
+        checkArgument(dto != null, "CreateDiscussionDTO no puede ser nulo.");
         Discussion defaultDiscussion = discussionMapper.map(dto, Discussion.class);
         User foundUser = userRepository.findById(userId).orElseThrow(
             () -> new EntityNotFoundException(User.class, dto.getCreatedById())
@@ -32,7 +36,7 @@ public class DiscussionService {
         Set<User> participants = new HashSet<>();
         participants.add(foundUser);
         if (foundUser instanceof Adviser) {
-            User company = userRepository.findById(dto.getCreatedById()).orElseThrow(
+            User company = userRepository.findById(dto.getCompanyId()).orElseThrow(
                 () -> new EntityNotFoundException(User.class, dto.getCreatedById())
             );
             participants.add(company);

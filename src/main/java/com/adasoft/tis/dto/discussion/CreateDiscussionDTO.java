@@ -22,7 +22,21 @@ public class CreateDiscussionDTO extends BaseCreateDTO {
     @NotNull
     @Size(min = 15, max = 100, message = "Este campo debe tener entre 15 y 100 caracteres")
     private String topic;
+    @Schema(
+        name = "createdById",
+        description = "ID  del usuario.",
+        required = true,
+        type = "Number"
+    )
     @NotNull
     @Min(value = 1, message = "Este campo no puede ser menor a 1")
     private Long createdById;
+    @Schema(
+        name = "companyId",
+        description = "ID  de company cuando el asesor crea la discusion.",
+        required = true,
+        type = "Number"
+    )
+    @NotNull
+    private Long companyId;
 }

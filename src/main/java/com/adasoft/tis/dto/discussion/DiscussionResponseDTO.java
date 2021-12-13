@@ -4,11 +4,11 @@ import com.adasoft.tis.core.dto.BaseResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
- 
+
 @Getter
 @Setter
 @Schema(name = "DiscussionResponseDTO", description = "DTO para devolver discusiones")
-public class DiscussionResponseDTO extends BaseResponseDTO {
+public class DiscussionResponseDTO extends BaseResponseDTO<Long> {
     private String topic;
     private Long createdById;
 }

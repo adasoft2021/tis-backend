@@ -426,6 +426,7 @@ public class BeansConfiguration {
         });
         return modelMapper;
     }
+
     @Bean("discussionMapper")
     public ModelMapper discussionMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -445,7 +446,8 @@ public class BeansConfiguration {
         });
         return modelMapper;
     }
-    @Bean("comentMapper")
+
+    @Bean("commentMapper")
     public ModelMapper comentMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
