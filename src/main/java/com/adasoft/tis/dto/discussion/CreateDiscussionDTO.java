@@ -20,7 +20,7 @@ public class CreateDiscussionDTO extends BaseCreateDTO {
         type = "String"
     )
     @NotNull
-    @Size(min = 15, max = 100, message = "Este campo debe tener entre 15 y 100 caracteres")
+    @Size(min = 15, max = 40, message = "Este campo debe tener entre 15 y 40 caracteres")
     private String topic;
     @NotNull
     @Min(value = 1, message = "Este campo no puede ser menor a 1")
