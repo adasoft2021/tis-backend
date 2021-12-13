@@ -445,8 +445,8 @@ public class BeansConfiguration {
         });
         return modelMapper;
     }
-    @Bean("comentMapper")
-    public ModelMapper comentMapper() {
+    @Bean("commentMapper")
+    public ModelMapper commentMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         modelMapper.addMappings(new PropertyMap<Comment, CommentResponseDTO>() {
@@ -457,6 +457,25 @@ public class BeansConfiguration {
             }
         });
         modelMapper.addMappings(new PropertyMap<CreateCommentDTO, Comment>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        return modelMapper;
+    }
+    @Bean("advertisementMapper")
+    public ModelMapper advertisementMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Advertisement, AdviserResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreateAdviserDTO, Advertisement>() {
             @Override
             protected void configure() {
                 skip(destination.getId());
