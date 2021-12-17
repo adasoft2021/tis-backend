@@ -12,8 +12,8 @@ import javax.persistence.*;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"company"})
+@ToString(callSuper = true, exclude = {"company"})
 @NoArgsConstructor
 @Entity
 @Table(name = "partners")
