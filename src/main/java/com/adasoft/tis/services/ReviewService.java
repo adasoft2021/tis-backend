@@ -195,7 +195,7 @@ public class ReviewService {
         return getReviewResponseDTO(foundReview, reviewMapper.map(foundReview, ReviewFilesResponseDTO.class));
     }
 
-    public Review.Status finalStatus(Long userId, Long id) {
+    public ReviewCompactResponseDTO finalStatus(Long userId, Long id) {
         checkArgument(userId != null, "El id de Usuario no puede ser nulo.");
         checkArgument(id != null, "El id de Review no puede ser nulo.");
         Review foundReview = reviewRepository.findById(id)
@@ -206,7 +206,9 @@ public class ReviewService {
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "Usted ya no puede hacer ningún cambio en la entidad Review.");
         }
-        return finalStatus(foundReview);
+        foundReview.setStatus(finalStatus(foundReview));
+
+        return reviewMapper.map(foundReview, ReviewCompactResponseDTO.class);
 
     }
 
