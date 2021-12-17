@@ -62,6 +62,16 @@ public class ReviewRestControllerImpl implements ReviewRestController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @PutMapping("/{reviewId}/publish/try")
+    @Override
+    public ResponseEntity<ReviewCompactResponseDTO> tryPublish(
+        @RequestAttribute("userId") final Long userId,
+        @NotNull @PathVariable Long reviewId) {
+
+        ReviewCompactResponseDTO responseDTO = reviewService.finalStatus(userId, reviewId);
+        return ResponseEntity.ok(responseDTO);
+    }
+
     @GetMapping
     @Override
     public ResponseEntity<Collection<ReviewCompactResponseDTO>> getAdviserReviews(
