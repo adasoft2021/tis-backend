@@ -195,6 +195,21 @@ public class ReviewService {
         return getReviewResponseDTO(foundReview, reviewMapper.map(foundReview, ReviewFilesResponseDTO.class));
     }
 
+    public Review.Status finalStatus(Long userId, Long id) {
+        checkArgument(userId != null, "El id de Usuario no puede ser nulo.");
+        checkArgument(id != null, "El id de Review no puede ser nulo.");
+        Review foundReview = reviewRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Review.class, id));
+        checkUserId(userId, foundReview.getCreatedBy().getId());
+        if (foundReview.isPublished()) {
+            throw new DefaultTisDomainException(
+                HttpStatus.METHOD_NOT_ALLOWED,
+                "Usted ya no puede hacer ningún cambio en la entidad Review.");
+        }
+        return finalStatus(foundReview);
+
+    }
+
     private Review.Status finalStatus(Review r) {
         Review.Status next = r.getStatus();
         HashMap<Review.Status, Review> statusReviews = new HashMap<>();
