@@ -18,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "companies")
-public class Company extends User<Long> {
+public class Company extends User {
     @Column(nullable = false)
     String shortName;
     @Column(nullable = false, unique = true)
