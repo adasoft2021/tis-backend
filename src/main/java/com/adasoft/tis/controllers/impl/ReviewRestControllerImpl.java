@@ -62,7 +62,7 @@ public class ReviewRestControllerImpl implements ReviewRestController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @PutMapping("/{reviewId}/publish/try")
+    @GetMapping("/{reviewId}/publish/try")
     @Override
     public ResponseEntity<ReviewCompactResponseDTO> tryPublish(
         @RequestAttribute("userId") final Long userId,

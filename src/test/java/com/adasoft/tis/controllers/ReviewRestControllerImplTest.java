@@ -311,7 +311,7 @@ class ReviewRestControllerImplTest {
     void tryPublishSuccessfull() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(reviewService.finalStatus(any(), any())).thenReturn(REVIEW_COMPACT_RESPONSE_DTO);
-        mvc.perform(put(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
+        mvc.perform(get(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
                 .header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -322,7 +322,7 @@ class ReviewRestControllerImplTest {
     void tryPublishReviewNotFound() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(reviewService.finalStatus(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
-        mvc.perform(put(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
+        mvc.perform(get(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
                 .header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isNotFound());
     }
@@ -331,7 +331,7 @@ class ReviewRestControllerImplTest {
     void tryPublishAdviserNotFound() throws Exception {
         when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
         when(reviewService.finalStatus(any(), any())).thenThrow(new EntityNotFoundException(Adviser.class, USER_ID));
-        mvc.perform(put(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
+        mvc.perform(get(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
                 .header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isNotFound());
     }
@@ -340,7 +340,7 @@ class ReviewRestControllerImplTest {
     void tryPublishUnauthorized() throws Exception {
 
         when(reviewService.finalStatus(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
-        mvc.perform(put(String.format("%s/{reviewId}/publish/try", BASE_URL), ID))
+        mvc.perform(get(String.format("%s/{reviewId}/publish/try", BASE_URL), ID))
             .andExpect(status().isUnauthorized());
     }
 
@@ -352,7 +352,7 @@ class ReviewRestControllerImplTest {
                 new DefaultTisDomainException(
                     HttpStatus.METHOD_NOT_ALLOWED,
                     "Usted ya no puede hacer ningún cambio en la entidad Review."));
-        mvc.perform(put(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
+        mvc.perform(get(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
                 .header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isMethodNotAllowed());
     }
