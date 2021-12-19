@@ -12,5 +12,6 @@ import lombok.Setter;
 public class ReviewCompactResponseDTO extends BaseResponseDTO<Long> {
     String companyName;
     Review.Status status;
+    boolean published;
 
 }

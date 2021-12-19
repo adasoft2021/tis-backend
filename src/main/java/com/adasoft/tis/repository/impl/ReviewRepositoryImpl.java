@@ -25,7 +25,7 @@ public class ReviewRepositoryImpl extends AbstractTisRepository<Review, Long> im
 
         return entityManager.createQuery(jpqlQuery, Review.class)
             .setParameter("companyId", companyId)
-            .setParameter("s", Review.Status.CHANGE_ORDER)
+            .setParameter("s", Review.Status.IN_CHANGE_ORDER)
             .getResultList();
 
     }
