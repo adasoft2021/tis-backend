@@ -5,6 +5,7 @@ import com.adasoft.tis.domain.Review;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface ReviewRepository extends TisRepository<Review, Long> {
     Collection<Review> findByCompany(Long companyId);
@@ -14,4 +15,6 @@ public interface ReviewRepository extends TisRepository<Review, Long> {
     List<Review> findByStatus(Long adviserId, Long projectId, Review.Status status);
 
     Collection<Review> findByCompanyAll(Long id);
+
+    Optional<Review> findByCompanyAndStatus(Long id, Review.Status s);
 }

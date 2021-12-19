@@ -178,7 +178,7 @@ public interface ReviewRestController {
             )
         ),
         @ApiResponse(
-            description = "Ya se realizó la revisión de todas las notas parciales",
+            description = "Ya se realizó la emidsion de la revision",
             responseCode = "405",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
@@ -192,6 +192,55 @@ public interface ReviewRestController {
         required = true
     ))
     ResponseEntity<ReviewResponseDTO> publish(
+        Long userId,
+        @Parameter(description = "ID del Review a actualizar", example = "1")
+            Long id
+    );
+
+    @Operation(summary = "Prueba de actualizacion del estado a publicado de revisión por su ID", responses = {
+        @ApiResponse(
+            description = "Es posible actualizar el Review",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ReviewResponseDTO.class)
+            )
+        ),
+        @ApiResponse(
+            description = "Fallo al actualizar el Review",
+            responseCode = "400",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No se encontró el ID del Review o del Qualification en el sistema",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "Ya se realizó la emision de la revision",
+            responseCode = "405",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<ReviewCompactResponseDTO> tryPublish(
         Long userId,
         @Parameter(description = "ID del Review a actualizar", example = "1")
             Long id

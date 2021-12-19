@@ -60,13 +60,28 @@ public class Review extends BaseEntity<Long> {
     }
 
     public enum Status {
-        UNREVIEWED, REVIEWED, QUALIFIED,
+        UNREVIEWED("Sin Revisar"),
+        REVIEWED("Revisada"),
+        QUALIFIED("Calificada"),
         /// final states ///
-        CHANGE_ORDER, PROPOSAL_ACCEPTANCE, ADDENDUM;
+        IN_CHANGE_ORDER("En Orden de cambio"),
+        IN_PROPOSAL_ACCEPTANCE("En Aceptacion de propuesta"),
+        IN_ADDENDUM("En Adenda");
+
+        private final String value;
+
+        Status(String value) {
+            this.value = value;
+        }
 
         public static List<Status> finalValues() {
             return Arrays.stream(values())
-                .dropWhile(s -> !s.equals(Review.Status.CHANGE_ORDER)).collect(Collectors.toList());
+                .dropWhile(s -> !s.equals(Review.Status.IN_CHANGE_ORDER)).collect(Collectors.toList());
+        }
+
+        @Override
+        public String toString() {
+            return value;
         }
     }
 }
