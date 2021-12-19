@@ -6,9 +6,13 @@ import com.adasoft.tis.dto.adviser.AdviserResponseDTO;
 import com.adasoft.tis.dto.adviser.CreateAdviserDTO;
 import com.adasoft.tis.dto.adviser.UpdateAdviserDTO;
 import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
+import com.adasoft.tis.dto.comment.CommentResponseDTO;
+import com.adasoft.tis.dto.comment.CreateCommentDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
+import com.adasoft.tis.dto.discussion.CreateDiscussionDTO;
+import com.adasoft.tis.dto.discussion.DiscussionResponseDTO;
 import com.adasoft.tis.dto.file.CreateFileDTO;
 import com.adasoft.tis.dto.file.FileResponseDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
@@ -154,7 +158,6 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 map().setReviewId(source.getReview().getId());
-                map().setFileName(source.getFile().getName());
             }
         });
 
@@ -440,6 +443,46 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getObservations());
+            }
+        });
+        return modelMapper;
+    }
+
+    @Bean("discussionMapper")
+    public ModelMapper discussionMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Discussion, DiscussionResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreateDiscussionDTO, Discussion>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        return modelMapper;
+    }
+
+    @Bean("commentMapper")
+    public ModelMapper commentMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<Comment, CommentResponseDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.getId());
+
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<CreateCommentDTO, Comment>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
             }
         });
         return modelMapper;
