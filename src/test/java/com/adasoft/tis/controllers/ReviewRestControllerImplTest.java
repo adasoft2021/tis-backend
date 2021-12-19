@@ -36,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ReviewRestControllerImpl.class)
 class ReviewRestControllerImplTest {
 
+
     @Autowired
     private MockMvc mvc;
     @Autowired
@@ -54,6 +55,7 @@ class ReviewRestControllerImplTest {
     private static final CreateReviewDTO CREATE_REVIEW_DTO = new CreateReviewDTO();
     private static final UpdateReviewDTO UPDATE_REVIEW_DTO = new UpdateReviewDTO();
     private static final ReviewResponseDTO REVIEW_RESPONSE_DTO = new ReviewResponseDTO();
+    private static final ReviewCompactResponseDTO REVIEW_COMPACT_RESPONSE_DTO = new ReviewCompactResponseDTO();
 
     private static final long ID = 1996128482800373344L;
     private static final int SCORE = 10;
@@ -88,6 +90,14 @@ class ReviewRestControllerImplTest {
         REVIEW_RESPONSE_DTO.setUpdatedAt(CREATE_REVIEW_DTO.getUpdatedAt());
         REVIEW_RESPONSE_DTO.setComment(COMMENT);
         REVIEW_RESPONSE_DTO.setQualifications(new HashSet<>());
+
+        REVIEW_COMPACT_RESPONSE_DTO.setId(ID);
+        REVIEW_COMPACT_RESPONSE_DTO.setDeleted(false);
+        REVIEW_COMPACT_RESPONSE_DTO.setCreatedAt(CREATE_REVIEW_DTO.getCreatedAt());
+        REVIEW_COMPACT_RESPONSE_DTO.setUpdatedAt(CREATE_REVIEW_DTO.getUpdatedAt());
+        REVIEW_COMPACT_RESPONSE_DTO.setCompanyName("Patito");
+        REVIEW_COMPACT_RESPONSE_DTO.setStatus(Review.Status.CHANGE_ORDER);
+
     }
 
     @Test
@@ -296,6 +306,57 @@ class ReviewRestControllerImplTest {
                 .header(X_TOKEN, TOKEN_VALUE))
             .andExpect(status().isMethodNotAllowed());
     }
+
+    @Test
+    void tryPublishSuccessfull() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.finalStatus(any(), any())).thenReturn(REVIEW_COMPACT_RESPONSE_DTO);
+        mvc.perform(get(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(REVIEW_COMPACT_RESPONSE_DTO)));
+    }
+
+    @Test
+    void tryPublishReviewNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.finalStatus(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
+        mvc.perform(get(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void tryPublishAdviserNotFound() throws Exception {
+        when(jwtProvider.decryptUserId(any())).thenReturn(USER_ID);
+        when(reviewService.finalStatus(any(), any())).thenThrow(new EntityNotFoundException(Adviser.class, USER_ID));
+        mvc.perform(get(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void tryPublishUnauthorized() throws Exception {
+
+        when(reviewService.finalStatus(any(), any())).thenThrow(new EntityNotFoundException(Review.class, ID));
+        mvc.perform(get(String.format("%s/{reviewId}/publish/try", BASE_URL), ID))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void tryPublishAlreadyPublished() throws Exception {
+
+        when(reviewService.finalStatus(any(), any()))
+            .thenThrow(
+                new DefaultTisDomainException(
+                    HttpStatus.METHOD_NOT_ALLOWED,
+                    "Usted ya no puede hacer ningún cambio en la entidad Review."));
+        mvc.perform(get(String.format("%s/{reviewId}/publish/try", BASE_URL), ID)
+                .header(X_TOKEN, TOKEN_VALUE))
+            .andExpect(status().isMethodNotAllowed());
+    }
+
 
     @Test
     void getAdviserReviewsSuccesfully() throws Exception {
