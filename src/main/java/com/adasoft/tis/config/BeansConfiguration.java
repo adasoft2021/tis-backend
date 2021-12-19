@@ -40,6 +40,7 @@ import com.adasoft.tis.dto.spaceAnswer.CompanySpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
@@ -59,7 +60,8 @@ public class BeansConfiguration {
     public ModelMapper reviewMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
-
+        Converter<Review.Status, String> enumConverter =
+            ctx -> ctx.getSource() == null ? null : ctx.getSource().toString();
         modelMapper.addMappings(new PropertyMap<Review, ReviewResponseDTO>() {
             @Override
             protected void configure() {
@@ -68,7 +70,7 @@ public class BeansConfiguration {
                 skip(destination.getSpaces());
                 map().setCompanyName(source.getCompany().getName());
                 map().setPublished(source.isPublished());
-
+                using(enumConverter).map(source.getStatus()).setStatus(null);
 
             }
         });
@@ -81,6 +83,7 @@ public class BeansConfiguration {
                 skip(destination.getSpaceAnswers());
                 map().setCompanyName(source.getCompany().getName());
                 map().setPublished(source.isPublished());
+                using(enumConverter).map(source.getStatus()).setStatus(null);
 
             }
         });
@@ -90,6 +93,7 @@ public class BeansConfiguration {
             protected void configure() {
                 map().setCompanyName(source.getCompany().getName());
                 map().setPublished(source.isPublished());
+                using(enumConverter).map(source.getStatus()).setStatus(null);
             }
         });
 
@@ -102,7 +106,7 @@ public class BeansConfiguration {
                 skip(destination.getQualifications());
                 skip(destination.getObservations());
                 skip(destination.getSpaces());
-                map().setStatus(Review.Status.UNREVIEWED);
+
             }
         });
 

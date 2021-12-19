@@ -96,7 +96,7 @@ class ReviewRestControllerImplTest {
         REVIEW_COMPACT_RESPONSE_DTO.setCreatedAt(CREATE_REVIEW_DTO.getCreatedAt());
         REVIEW_COMPACT_RESPONSE_DTO.setUpdatedAt(CREATE_REVIEW_DTO.getUpdatedAt());
         REVIEW_COMPACT_RESPONSE_DTO.setCompanyName("Patito");
-        REVIEW_COMPACT_RESPONSE_DTO.setStatus(Review.Status.CHANGE_ORDER);
+        REVIEW_COMPACT_RESPONSE_DTO.setStatus(Review.Status.IN_CHANGE_ORDER.toString());
 
     }
 

@@ -14,6 +14,7 @@ import java.util.Set;
 public class ReviewResponseDTO extends BaseResponseDTO<Long> {
     private String title;
     private boolean published;
+    private String status;
     private String comment;
     private String adviserName;
     private String companyName;

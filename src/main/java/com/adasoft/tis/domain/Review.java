@@ -56,7 +56,8 @@ public class Review extends BaseEntity<Long> {
     private Set<Observation> observations = new HashSet<>();
 
     public boolean isPublished() {
-        return status.ordinal() > Status.QUALIFIED.ordinal();
+
+        return Status.finalValues().contains(status);
     }
 
     public enum Status {
@@ -65,7 +66,7 @@ public class Review extends BaseEntity<Long> {
         QUALIFIED("Calificada"),
         /// final states ///
         IN_CHANGE_ORDER("En Orden de cambio"),
-        IN_PROPOSAL_ACCEPTANCE("En Aceptacion de propuesta"),
+        IN_PROPOSAL_ACCEPTANCE("En Aceptación de Propuesta"),
         IN_ADDENDUM("En Adenda");
 
         private final String value;
