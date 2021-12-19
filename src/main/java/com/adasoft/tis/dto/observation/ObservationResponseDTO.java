@@ -10,4 +10,5 @@ public class ObservationResponseDTO extends BaseResponseDTO<Long> {
     private String title;
     private String description;
     private Long reviewId;
+    private String fileName;
 }

@@ -66,7 +66,7 @@ class ObservationRestControllerImplTest {
         responseDTO.setUpdatedAt(observationDTO.getUpdatedAt());
         responseDTO.setDeleted(observationDTO.isDeleted());
 
-        when(observationService.create(any(), any(), any())).thenReturn(responseDTO);
+        when(observationService.create(any(), any())).thenReturn(responseDTO);
 
         mvc.perform(post(BASE_URL).param("reviewId", REVIEW_ID.toString())
                 .header(X_TOKEN, TOKEN_VALUE)

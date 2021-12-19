@@ -12,7 +12,7 @@ import javax.persistence.*;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"review", "file"})
 @ToString(callSuper = true)
 @NoArgsConstructor
 @Entity
@@ -27,5 +27,10 @@ public class Observation extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_review_id", nullable = false, updatable = false)
     Review review;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fk_file_id", nullable = false, updatable = false)
+    File file;
 
 }

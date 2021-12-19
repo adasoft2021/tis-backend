@@ -1,7 +1,8 @@
 package com.adasoft.tis.dto.spaceAnswer;
 
 import com.adasoft.tis.core.dto.BaseCreateDTO;
-import com.adasoft.tis.domain.FileEntity;
+import com.adasoft.tis.domain.File;
+import com.adasoft.tis.dto.file.CreateFileDTO;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -30,8 +31,8 @@ public class CreateSpaceAnswerDTO extends BaseCreateDTO {
     @NotNull
     Long createdById;
     @ArraySchema(
-        schema = @Schema(implementation = FileEntity.class)
+        schema = @Schema(implementation = File.class)
     )
     @Size(min = 1)
-    private List<FileEntity> files;
+    private List<CreateFileDTO> files;
 }

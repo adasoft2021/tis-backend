@@ -9,6 +9,8 @@ import com.adasoft.tis.dto.classCode.ClassCodeResponseDTO;
 import com.adasoft.tis.dto.company.CompanyResponseDTO;
 import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
+import com.adasoft.tis.dto.file.CreateFileDTO;
+import com.adasoft.tis.dto.file.FileResponseDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
 import com.adasoft.tis.dto.partner.CreatePartnerDTO;
@@ -43,6 +45,12 @@ import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class BeansConfiguration {
+    @Bean("codeGenerator")
+    @Scope("singleton")
+    public CodeGenerator codeGenerator() {
+        return new CodeGenerator();
+    }
+
     @Bean("reviewMapper")
     public ModelMapper reviewMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -146,6 +154,7 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 map().setReviewId(source.getReview().getId());
+                map().setFileName(source.getFile().getName());
             }
         });
 
@@ -397,12 +406,6 @@ public class BeansConfiguration {
         return modelMapper;
     }
 
-    @Bean("codeGenerator")
-    @Scope("singleton")
-    public CodeGenerator codeGenerator() {
-        return new CodeGenerator();
-    }
-
     @Bean("projectMapper")
     public ModelMapper projectMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -418,6 +421,25 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+            }
+        });
+        return modelMapper;
+    }
+
+    @Bean("fileMapper")
+    public ModelMapper fileMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<CreateFileDTO, File>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<File, FileResponseDTO>() {
+            @Override
+            protected void configure() {
+                skip(destination.getObservations());
             }
         });
         return modelMapper;

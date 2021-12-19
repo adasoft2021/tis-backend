@@ -41,6 +41,7 @@ public class ReviewService {
     private ModelMapper spaceMapper;
     private SpaceAnswerService spaceAnswersService;
     private SemesterRepository semesterRepository;
+    private FileService fileService;
 
     private Collection<QualificationResponseDTO> updateQualifications(
         final Review review,
@@ -96,6 +97,7 @@ public class ReviewService {
         for (Space space : foundReview.getSpaces()) {
             spaceAnswers.addAll(spaceAnswersService.getBySpaceIdAndCompanyId(
                 space.getId(), foundReview.getCompany().getId()));
+
         }
         responseDTO.setSpaceAnswers(spaceAnswers);
         return responseDTO;
@@ -201,6 +203,8 @@ public class ReviewService {
         Adviser foundAdviser = adviserRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException(Adviser.class, userId));
         checkUserId(userId, foundAdviser.getId());
+        if (!semesterRepository.getNow().isPresent())
+            throw new DefaultTisDomainException(HttpStatus.NOT_FOUND, "No existe informacion del semestre");
         Collection<Company> companies = companyRepository.getSemesterCompanies(
             semesterRepository.getNow().get().getSemester(),
             userId);
