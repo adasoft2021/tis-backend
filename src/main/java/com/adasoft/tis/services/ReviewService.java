@@ -181,7 +181,7 @@ public class ReviewService {
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "Usted ya no puede hacer ningún cambio en la entidad Review.");
         }
-        foundReview.setStatus(Review.Status.CHANGE_ORDER);
+        foundReview.setStatus(Review.Status.IN_CHANGE_ORDER);
         reviewRepository.save(foundReview);
         return getReviewResponseDTO(foundReview, reviewMapper.map(foundReview, ReviewFilesResponseDTO.class));
     }
