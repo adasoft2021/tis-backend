@@ -223,13 +223,13 @@ public class ReviewService {
         switch (r.getStatus().name()) {
             case "QUALIFIED":
                 if (statusReviews.isEmpty())
-                    next = Review.Status.CHANGE_ORDER;
+                    next = Review.Status.IN_CHANGE_ORDER;
                 else if (r.getObservations().isEmpty())
-                    next = Review.Status.PROPOSAL_ACCEPTANCE;
+                    next = Review.Status.IN_PROPOSAL_ACCEPTANCE;
                 break;
             case "REVIEWED":
-                if (statusReviews.containsKey(Review.Status.CHANGE_ORDER))
-                    next = Review.Status.ADDENDUM;
+                if (statusReviews.containsKey(Review.Status.IN_CHANGE_ORDER))
+                    next = Review.Status.IN_ADDENDUM;
         }
         return next;
     }
