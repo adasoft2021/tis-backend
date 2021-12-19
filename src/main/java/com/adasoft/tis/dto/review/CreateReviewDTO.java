@@ -47,15 +47,6 @@ public class CreateReviewDTO extends BaseCreateDTO {
     @Min(value = 1, message = "Este campo no puede ser menor a 1")
     private Long companyId;
     @Schema(
-        name = "title",
-        description = "Título de la revisión.",
-        required = true,
-        example = "Orden de cambio",
-        type = "String"
-    )
-    @NotNull
-    private String title;
-    @Schema(
         name = "spaces",
         description = "ID de spaces en revision",
         required = true,

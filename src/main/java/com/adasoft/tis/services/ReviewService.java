@@ -272,7 +272,8 @@ public class ReviewService {
             reviews = reviewRepository.findByStatus(adviserId, projectId, s);
             if (!reviews.isEmpty())
                 reviewss.add(reviews.stream()
-                    .map(r -> reviewMapper.map(r, ReviewResponseDTO.class)).collect(Collectors.toList()));
+                    .map(r -> getReviewResponseDTO(r, reviewMapper.map(r, ReviewFilesResponseDTO.class)))
+                    .collect(Collectors.toList()));
         }
         return reviewss;
     }

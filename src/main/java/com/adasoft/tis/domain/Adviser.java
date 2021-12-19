@@ -28,4 +28,9 @@ public class Adviser extends User {
     @JsonManagedReference
     @OneToMany(mappedBy = "createdBy")
     private Set<Publication> publications;
+
+    public String getName() {
+        String name = firstName + lastName;
+        return name;
+    }
 }

@@ -69,6 +69,7 @@ public class BeansConfiguration {
                 skip(destination.getObservations());
                 skip(destination.getSpaces());
                 map().setCompanyName(source.getCompany().getName());
+                map().setAdviserName(source.getCreatedBy().getName());
                 map().setPublished(source.isPublished());
                 using(enumConverter).map(source.getStatus()).setStatus(null);
 
@@ -82,6 +83,7 @@ public class BeansConfiguration {
                 skip(destination.getSpaces());
                 skip(destination.getSpaceAnswers());
                 map().setCompanyName(source.getCompany().getName());
+                map().setAdviserName(source.getCreatedBy().getName());
                 map().setPublished(source.isPublished());
                 using(enumConverter).map(source.getStatus()).setStatus(null);
 
