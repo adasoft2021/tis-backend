@@ -1,12 +1,14 @@
 package com.adasoft.tis.services;
 
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
+import com.adasoft.tis.domain.File;
 import com.adasoft.tis.domain.Observation;
 import com.adasoft.tis.domain.Proposal;
 import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.observation.CreateObservationDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
+import com.adasoft.tis.repository.FileRepository;
 import com.adasoft.tis.repository.ObservationRepository;
 import com.adasoft.tis.repository.ReviewRepository;
 import lombok.AllArgsConstructor;
@@ -26,16 +28,20 @@ public class ObservationService {
     private ObservationRepository observationRepository;
     private ReviewRepository reviewRepository;
     private ModelMapper observationMapper;
+    private FileRepository fileRepository;
 
     public ObservationResponseDTO create(
         final Long userId,
-        final CreateObservationDTO observationDTO,
-        final Long reviewId) {
+        final CreateObservationDTO observationDTO) {
+        Long reviewId = observationDTO.getReviewId();
+        Long fileId = observationDTO.getFileId();
         checkArgument(observationDTO != null, "El ObservationDTO a crear no puede ser nulo.");
         checkArgument(reviewId != null, "El ID del Review a observar no puede ser nulo.");
         Review review = reviewRepository.findById(reviewId)
             .orElseThrow(() -> new EntityNotFoundException(Review.class, reviewId));
         checkUserId(userId, review.getCreatedBy().getId());
+        File file = fileRepository.findById(fileId)
+            .orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
         Observation defaultObservation = observationMapper.map(observationDTO, Observation.class);
         defaultObservation.setReview(review);
         Observation persistedObservation = observationRepository.save(defaultObservation);

@@ -13,6 +13,8 @@ import com.adasoft.tis.dto.company.CreateCompanyDTO;
 import com.adasoft.tis.dto.company.UpdateCompanyDTO;
 import com.adasoft.tis.dto.discussion.CreateDiscussionDTO;
 import com.adasoft.tis.dto.discussion.DiscussionResponseDTO;
+import com.adasoft.tis.dto.file.CreateFileDTO;
+import com.adasoft.tis.dto.file.FileResponseDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.observation.UpdateObservationDTO;
 import com.adasoft.tis.dto.partner.CreatePartnerDTO;
@@ -38,6 +40,7 @@ import com.adasoft.tis.dto.spaceAnswer.CompanySpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
 import com.adasoft.tis.dto.user.UserResponseDTO;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
@@ -47,11 +50,18 @@ import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class BeansConfiguration {
+    @Bean("codeGenerator")
+    @Scope("singleton")
+    public CodeGenerator codeGenerator() {
+        return new CodeGenerator();
+    }
+
     @Bean("reviewMapper")
     public ModelMapper reviewMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
-
+        Converter<Review.Status, String> enumConverter =
+            ctx -> ctx.getSource() == null ? null : ctx.getSource().toString();
         modelMapper.addMappings(new PropertyMap<Review, ReviewResponseDTO>() {
             @Override
             protected void configure() {
@@ -59,8 +69,9 @@ public class BeansConfiguration {
                 skip(destination.getObservations());
                 skip(destination.getSpaces());
                 map().setCompanyName(source.getCompany().getName());
+                map().setAdviserName(source.getCreatedBy().getName());
                 map().setPublished(source.isPublished());
-
+                using(enumConverter).map(source.getStatus()).setStatus(null);
 
             }
         });
@@ -72,7 +83,9 @@ public class BeansConfiguration {
                 skip(destination.getSpaces());
                 skip(destination.getSpaceAnswers());
                 map().setCompanyName(source.getCompany().getName());
+                map().setAdviserName(source.getCreatedBy().getName());
                 map().setPublished(source.isPublished());
+                using(enumConverter).map(source.getStatus()).setStatus(null);
 
             }
         });
@@ -82,6 +95,7 @@ public class BeansConfiguration {
             protected void configure() {
                 map().setCompanyName(source.getCompany().getName());
                 map().setPublished(source.isPublished());
+                using(enumConverter).map(source.getStatus()).setStatus(null);
             }
         });
 
@@ -94,7 +108,7 @@ public class BeansConfiguration {
                 skip(destination.getQualifications());
                 skip(destination.getObservations());
                 skip(destination.getSpaces());
-                map().setStatus(Review.Status.UNREVIEWED);
+
             }
         });
 
@@ -404,12 +418,6 @@ public class BeansConfiguration {
         return modelMapper;
     }
 
-    @Bean("codeGenerator")
-    @Scope("singleton")
-    public CodeGenerator codeGenerator() {
-        return new CodeGenerator();
-    }
-
     @Bean("projectMapper")
     public ModelMapper projectMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -425,6 +433,25 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 skip(destination.getId());
+            }
+        });
+        return modelMapper;
+    }
+
+    @Bean("fileMapper")
+    public ModelMapper fileMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.addMappings(new PropertyMap<CreateFileDTO, File>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<File, FileResponseDTO>() {
+            @Override
+            protected void configure() {
+                skip(destination.getObservations());
             }
         });
         return modelMapper;
@@ -451,7 +478,7 @@ public class BeansConfiguration {
     }
 
     @Bean("commentMapper")
-    public ModelMapper comentMapper() {
+    public ModelMapper commentMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         modelMapper.addMappings(new PropertyMap<Comment, CommentResponseDTO>() {

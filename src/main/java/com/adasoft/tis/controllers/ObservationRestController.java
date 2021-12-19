@@ -50,8 +50,6 @@ public interface ObservationRestController {
     ))
     ResponseEntity<ObservationResponseDTO> create(
         Long userId,
-        @Parameter(description = "ID de Review del cual se crea una Observation", example = "1")
-            Long reviewId,
         @RequestBody(description = "ObservationDTO que contiene los nuevos datos a crear")
             CreateObservationDTO observationDTO
     );

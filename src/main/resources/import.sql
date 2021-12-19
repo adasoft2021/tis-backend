@@ -80,10 +80,9 @@ INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK
 INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('3', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','3','1');
 
 -- FILES
-INSERT INTO files (ID, DELETED, NAME, URL) VALUES ('1', 0, 'AdaSoftParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
-INSERT INTO files (ID, DELETED, NAME, URL) VALUES ('1', 0, 'AdaSoftParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/Fundempresa%20TIS.pdf?alt=media&token=df9e5f85-1e50-4434-aaa1-450375effff1');
-INSERT INTO files (ID, DELETED, NAME, URL) VALUES ('2', 0, 'AdaSoftParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
-INSERT INTO files (ID, DELETED, NAME, URL) VALUES ('3', 0, 'acmeParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
+INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('1','1',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AdaSoftParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
+INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('1','2',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AdaSoftParteB.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
+INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('1','3',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'acmeParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
 
 --REVIEW
 INSERT INTO reviews (ID,CREATED_AT, DELETED, UPDATED_AT, STATUS, FK_COMPANY_ID, FK_ADVISER_ID) VALUES ('1', '2021-11-16 15:45:51.012352',FALSE, '2021-11-16 15:45:51.012352', '3', '2', '1');
@@ -94,7 +93,7 @@ INSERT INTO reviews (ID,CREATED_AT, DELETED, UPDATED_AT, STATUS, FK_COMPANY_ID, 
 INSERT INTO reviews_spaces(REVIEW_ID,SPACES_ID) VALUES ('3', '1');
 
 -- OBSERVATIONS
-INSERT INTO observations (ID, CREATED_AT, DELETED, UPDATED_AT, FK_REVIEW_ID, TITLE, DESCRIPTION) VALUES ('1','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','seccion 1','esta es una observacion');
+INSERT INTO observations (FK_FILE_ID,ID, CREATED_AT, DELETED, UPDATED_AT, FK_REVIEW_ID, TITLE, DESCRIPTION) VALUES ('1','1','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','seccion 1','esta es una observacion');
 
 --COMPANY_SPACES
 INSERT INTO company_spaces (ID, FK_COMPANY_ID, FK_SPACE_ID, FK_REVIEW_ID, CREATED_AT, DELETED, UPDATED_AT) VALUES (NULL,'2','1',NULL,'2021-10-06 08:00:00',0,'2021-10-06 08:00:00');

@@ -26,4 +26,19 @@ public class CreateObservationDTO extends BaseCreateDTO {
 
     @NotNull
     private String description;
+    @Schema(
+        name = "reviewId",
+        description = "ID de revision",
+        type = "Number"
+    )
+    @NotNull
+    private Long reviewId;
+    @Schema(
+        name = "fileId",
+        description = "ID de archivo",
+        type = "Number"
+    )
+    @NotNull
+    private Long fileId;
+
 }

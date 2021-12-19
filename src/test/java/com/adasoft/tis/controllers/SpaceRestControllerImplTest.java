@@ -5,8 +5,9 @@ import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.core.exceptions.ErrorResponse;
 import com.adasoft.tis.core.utils.JWTProvider;
 import com.adasoft.tis.domain.Company;
-import com.adasoft.tis.domain.FileEntity;
 import com.adasoft.tis.domain.Space;
+import com.adasoft.tis.dto.file.CreateFileDTO;
+import com.adasoft.tis.dto.file.FileResponseDTO;
 import com.adasoft.tis.dto.space.SpaceResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SpaceAnswerResponseDTO;
@@ -65,13 +66,16 @@ class SpaceRestControllerImplTest {
     static void setUp() {
         CREATE_SPACE_ANSWER_DTO.setSpaceId(ID);
         CREATE_SPACE_ANSWER_DTO.setCreatedById(CREATED_BY_ID);
-        FileEntity file = new FileEntity();
+        CreateFileDTO file = new CreateFileDTO();
         file.setName("archivo.pdf");
         file.setUrl("/files/archivo.pdf");
+        FileResponseDTO fileR = new FileResponseDTO();
+        fileR.setName("archivo.pdf");
+        fileR.setUrl("/files/archivo.pdf");
         CREATE_SPACE_ANSWER_DTO.setFiles(List.of(file));
         SPACE_ANSWER_RESPONSE_DTO.setSpaceId(ID);
         SPACE_ANSWER_RESPONSE_DTO.setCompanyName("acme");
-        SPACE_ANSWER_RESPONSE_DTO.setFiles(CREATE_SPACE_ANSWER_DTO.getFiles());
+        SPACE_ANSWER_RESPONSE_DTO.setFiles(List.of(fileR));
 
         SPACE_RESPONSE_DTO.setProjectId(PROJECT_ID);
         SPACE_RESPONSE_DTO.setTitle(PROJECT_TITLE);

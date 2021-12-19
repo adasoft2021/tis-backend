@@ -25,9 +25,8 @@ public class ObservationRestControllerImpl implements ObservationRestController 
     @Override
     public ResponseEntity<ObservationResponseDTO> create(
         @RequestAttribute("userId") final Long userId,
-        @NotNull @RequestParam(name = "reviewId") final Long reviewId,
         @Valid @RequestBody final CreateObservationDTO observationDTO) {
-        ObservationResponseDTO responseDTO = observationService.create(userId, observationDTO, reviewId);
+        ObservationResponseDTO responseDTO = observationService.create(userId, observationDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 

@@ -67,7 +67,6 @@ class ReviewRestControllerImplTest {
         CREATE_REVIEW_DTO.setCreatedById(CREATED_BY_ID);
         CREATE_REVIEW_DTO.setCompanyId(2L);
         CREATE_REVIEW_DTO.setSpaces(List.of(3L));
-        CREATE_REVIEW_DTO.setTitle("titulo");
 
         Collection<UpdateQualificationDTO> qualificationDTOS = new HashSet<>();
         for (int i = 0; i < 7; i++) {
@@ -96,7 +95,7 @@ class ReviewRestControllerImplTest {
         REVIEW_COMPACT_RESPONSE_DTO.setCreatedAt(CREATE_REVIEW_DTO.getCreatedAt());
         REVIEW_COMPACT_RESPONSE_DTO.setUpdatedAt(CREATE_REVIEW_DTO.getUpdatedAt());
         REVIEW_COMPACT_RESPONSE_DTO.setCompanyName("Patito");
-        REVIEW_COMPACT_RESPONSE_DTO.setStatus(Review.Status.CHANGE_ORDER);
+        REVIEW_COMPACT_RESPONSE_DTO.setStatus(Review.Status.IN_CHANGE_ORDER.toString());
 
     }
 

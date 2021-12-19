@@ -2,6 +2,7 @@ package com.adasoft.tis.domain;
 
 import com.adasoft.tis.core.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"space", "createdBy", "files"})
 @ToString(callSuper = true)
 @NoArgsConstructor
 @Entity
@@ -33,11 +34,10 @@ public class SpaceAnswer extends BaseEntity<Long> {
     @NotNull
     Company createdBy;
 
-    @ElementCollection(fetch = FetchType.LAZY, targetClass = FileEntity.class)
-    @CollectionTable(name = "files", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "files")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "spaceAnswer")
     @Size(min = 1)
-    List<FileEntity> files;
+    List<File> files;
 
 }
 

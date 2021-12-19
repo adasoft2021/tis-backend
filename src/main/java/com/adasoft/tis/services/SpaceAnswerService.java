@@ -26,6 +26,7 @@ public class SpaceAnswerService {
     private AdviserRepository adviserRepository;
     private SemesterRepository semesterRepository;
     private ModelMapper semesterMapper;
+    private FileService fileService;
 
     public SpaceAnswerResponseDTO create(final Long spaceId, final CreateSpaceAnswerDTO spaceDTO) {
         checkArgument(spaceId != null, "El spaceId no puede ser nulo.");
@@ -95,9 +96,9 @@ public class SpaceAnswerService {
                     companyAnswers.addAll(spaceAnswerRepository.findCompanyAnswers(c.getId(), cs.getSpace().getId()));
                 }
                 if (!companyAnswers.isEmpty()) {
-                    List<FileEntity> all = companyAnswers.stream().map(SpaceAnswer::getFiles).reduce((f, l) ->
+                    List<File> all = companyAnswers.stream().map(SpaceAnswer::getFiles).reduce((f, l) ->
                     {
-                        List<FileEntity> files = new LinkedList<>();
+                        List<File> files = new LinkedList<>();
                         files.addAll(f);
                         files.addAll(l);
                         return files;
@@ -111,5 +112,13 @@ public class SpaceAnswerService {
             }
         }
         return dtos;
+    }
+
+    private SpaceAnswerResponseDTO getDTO(SpaceAnswer answer, SpaceAnswerResponseDTO dto) {
+        if (dto == null)
+            dto = new SpaceAnswerResponseDTO();
+        dto.setFiles(answer.getFiles().stream().map(file -> fileService.getDTO(file, null))
+            .collect(Collectors.toList()));
+        return dto;
     }
 }
