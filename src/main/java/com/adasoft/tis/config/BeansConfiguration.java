@@ -59,6 +59,7 @@ public class BeansConfiguration {
                 skip(destination.getObservations());
                 skip(destination.getSpaces());
                 map().setCompanyName(source.getCompany().getName());
+                map().setPublished(source.isPublished());
 
 
             }
@@ -71,6 +72,7 @@ public class BeansConfiguration {
                 skip(destination.getSpaces());
                 skip(destination.getSpaceAnswers());
                 map().setCompanyName(source.getCompany().getName());
+                map().setPublished(source.isPublished());
 
             }
         });
@@ -79,6 +81,7 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 map().setCompanyName(source.getCompany().getName());
+                map().setPublished(source.isPublished());
             }
         });
 
