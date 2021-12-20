@@ -18,10 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
@@ -289,5 +286,28 @@ public class ReviewService {
         return reviews.stream().map(review ->
                 getReviewResponseDTO(review, reviewMapper.map(review, ReviewFilesResponseDTO.class)))
             .collect(Collectors.toSet());
+    }
+
+    public Review.Status setStatus(Long id, Review.Status status){
+        checkArgument(id != null, "El id de Company no puede ser nulo.");
+        Review foundReview = reviewRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Review.class, id));
+        switch (status.name()) {
+            case "UNREVIEWED":
+                foundReview.setStatus(Review.Status.REVIEWED);
+                break;
+            case "REVIEWED":
+                if(foundReview.getObservations().size()>0){
+                    foundReview.setStatus(Review.Status.UNREVIEWED);
+                }
+                else{
+                    foundReview.setStatus(Review.Status.QUALIFIED);
+                }
+                break;
+            default:
+                foundReview.setStatus(finalStatus(foundReview));
+                break;
+        }
+        return foundReview.getStatus();
     }
 }
