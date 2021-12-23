@@ -16,7 +16,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import static com.adasoft.tis.core.utils.Preconditions.checkArgument;
@@ -44,6 +43,7 @@ public class ObservationService {
             .orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
         Observation defaultObservation = observationMapper.map(observationDTO, Observation.class);
         defaultObservation.setReview(review);
+        defaultObservation.setFile(file);
         Observation persistedObservation = observationRepository.save(defaultObservation);
 
         return observationMapper.map(persistedObservation, ObservationResponseDTO.class);
@@ -105,10 +105,9 @@ public class ObservationService {
         reviewRepository.findById(reviewId)
             .orElseThrow(() -> new EntityNotFoundException(Proposal.class, reviewId));
 
-        Collection<ObservationResponseDTO> observations = observationRepository.getAllByReviewId(reviewId)
+        return observationRepository.getAllByReviewId(reviewId)
             .stream().filter(observation -> !observation.isDeleted())
             .map(observation -> observationMapper.map(observation, ObservationResponseDTO.class))
             .collect(Collectors.toSet());
-        return new HashSet<>(observations);
     }
 }
