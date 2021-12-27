@@ -31,4 +31,6 @@ public class SpaceRepositoryImpl extends AbstractTisRepository<Space, Long>
             .setParameter("adviserId", adviserId)
             .getResultList();
     }
+
+
 }
