@@ -34,15 +34,15 @@ INSERT INTO CLASS_CODES(ID, CREATED_AT, DELETED, UPDATED_AT, CODE, FK_ADVISER_ID
 
 -- PUBLICATIONS
 -- ANNOUNCEMENT
-INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('1','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Título de una nueva convocatoria','2021-09-06 08:00:00','CPTIS-0609-2021','1','https://drive.google.com/file/d/1Y1UxDtPa7Qr7uPzJ32D6pB7nwbCrrXxe/view?usp=sharing','0');
-INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('2','2020-10-06 08:00:00',0,'2020-10-06 08:00:00','1','Título de una nueva convocatoria','2020-10-06 08:00:00','CPTIS-0610-2020','3','https://drive.google.com/file/d/1Y1UxDtPa7Qr7uPzJ32D6pB7nwbCrrXxe/view?usp=sharing','0');
-INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('3','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Título de una nueva convocatoria','2021-10-07 08:00:00','CPTIS-0710-2021','1','https://drive.google.com/file/d/1Y1UxDtPa7Qr7uPzJ32D6pB7nwbCrrXxe/view?usp=sharing','0');
-INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('4','2021-03-06 08:00:00',0,'2021-03-06 08:00:00','1','Título de una nueva convocatoria','2021-10-08 08:00:00','CPTIS-0810-2021','1','https://drive.google.com/file/d/1Y1UxDtPa7Qr7uPzJ32D6pB7nwbCrrXxe/view?usp=sharing','0');
-INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('5','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Título de una nueva convocatoria','2021-10-09 08:00:00','CPTIS-0910-2021','1','https://drive.google.com/file/d/1Y1UxDtPa7Qr7uPzJ32D6pB7nwbCrrXxe/view?usp=sharing','0');
-INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('6','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Título de una nueva convocatoria','2021-10-10 08:00:00','CPTIS-1010-2021','1','https://drive.google.com/file/d/1Y1UxDtPa7Qr7uPzJ32D6pB7nwbCrrXxe/view?usp=sharing','0');
+INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('1','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Invitación Pública 01-2021','2021-02-06 08:00:00','CPTIS-0602-2021','2','https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/publications%2FInvitacionPublica022021.pdf?alt=media&token=e92d0fe1-8a45-4748-874d-d6d1c7e7a516','0');
+INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('2','2020-10-06 08:00:00',0,'2020-10-06 08:00:00','1','Invitación Pública 01-2020','2020-02-06 08:00:00','CPTIS-0602-2020','4','https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/publications%2FInvitacionPublica022021.pdf?alt=media&token=e92d0fe1-8a45-4748-874d-d6d1c7e7a516','0');
+INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('3','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Invitación Pública 02-2020','2020-10-07 08:00:00','CPTIS-0710-2020','3','https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/publications%2FInvitacionPublica022021.pdf?alt=media&token=e92d0fe1-8a45-4748-874d-d6d1c7e7a516','0');
+INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('4','2021-03-06 08:00:00',0,'2021-03-06 08:00:00','1','Primera Invitación Pública 02-2021','2021-10-08 08:00:00','CPTIS-0810-2021','1','https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/publications%2FInvitacionPublica022021.pdf?alt=media&token=e92d0fe1-8a45-4748-874d-d6d1c7e7a516','0');
+INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('5','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Segunda Invitación Pública 02-2021','2021-10-09 08:00:00','CPTIS-0910-2021','1','https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/publications%2FInvitacionPublica022021.pdf?alt=media&token=e92d0fe1-8a45-4748-874d-d6d1c7e7a516','0');
+INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('6','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Tercera Invitación Pública 02-2021','2021-10-10 08:00:00','CPTIS-1010-2021','1','https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/publications%2FInvitacionPublica022021.pdf?alt=media&token=e92d0fe1-8a45-4748-874d-d6d1c7e7a516','0');
 -- SPECIFICATION_SHEETS
-INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('7','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Título de una nueva convocatoria','2021-10-09 08:00:00','PETIS-0910-2021','1','https://drive.google.com/file/d/1Y1UxDtPa7Qr7uPzJ32D6pB7nwbCrrXxe/view?usp=sharing','1');
-INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('8','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Título de una nueva convocatoria','2021-10-10 08:00:00','PETIS-1010-2021','1','https://drive.google.com/file/d/1Y1UxDtPa7Qr7uPzJ32D6pB7nwbCrrXxe/view?usp=sharing','1');
+INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('7','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Primer Pliego de Especificaciones 02-2021','2021-10-09 08:00:00','PETIS-0910-2021','1','https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/publications%2FPliegoEspecificaciones22021.pdf?alt=media&token=1da28d0f-d7c2-4905-90bf-8f468dc005d3','1');
+INSERT INTO publications (ID, CREATED_AT, DELETED, UPDATED_AT, FK_ADVISER_ID, TITLE, DATE, CODE, FK_SEMESTER_ID, FILE_URL, TYPE) VALUES ('8','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Segundo Pliego de Especificaciones 02-2021','2021-10-10 08:00:00','PETIS-1010-2021','1','https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/publications%2FPliegoEspecificaciones22021.pdf?alt=media&token=1da28d0f-d7c2-4905-90bf-8f468dc005d3','1');
 
 --PROJECT
 INSERT INTO projects (ID, CREATED_AT, DELETED, UPDATED_AT, TITLE, FK_PUBLICATION_ANNOUNCEMENT_ID, FK_PUBLICATION_SPECIFICATION_ID, FK_ADVISER_ID) VALUES ('1','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','TIS Plataform','1','7','1');
@@ -54,7 +54,7 @@ INSERT INTO partners(FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_A
 INSERT INTO partners(FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_AT) VALUES ('2','2','Violeta Guzman','violeta@gmail.com','2021-10-06 08:00:00',0,'2021-10-06 08:00:00');
 INSERT INTO partners(FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_AT) VALUES ('2','3','Leonardo Roldan','leo@gmail.com','2021-10-06 08:00:00',0,'2021-10-06 08:00:00');
 
-INSERT INTO companies(ID, SHORT_NAME, NAME, COMPANY_TYPE, ADDRESS, FK_ADVISER_ID,FK_SEMESTER_ID) VALUES ('3','Acme','Acme Company', 'SA', 'Jordan y Oquendo', '1','1');
+INSERT INTO companies(ID, SHORT_NAME, NAME, COMPANY_TYPE, ADDRESS, FK_ADVISER_ID,FK_PROJECT_ID,FK_SEMESTER_ID) VALUES ('3','Acme','Acme Company', 'SA', 'Jordan y Oquendo', '1','1','1');
 INSERT INTO partners(FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_AT) VALUES ('3','4','Alguien Asdfd','email1@gmail.com','2021-10-06 08:00:00',0,'2021-10-06 08:00:00');
 INSERT INTO partners(FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_AT) VALUES ('3','5','Alguien Bbbbb','email2@gmail.com','2021-10-06 08:00:00',0,'2021-10-06 08:00:00');
 INSERT INTO partners(FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_AT) VALUES ('3','6','Alguien Ccccc','email3@gmail.com','2021-10-06 08:00:00',0,'2021-10-06 08:00:00');
@@ -76,21 +76,26 @@ INSERT INTO spaces (ID,CREATED_AT, DELETED, UPDATED_AT, TITLE, FK_PROJECT_ID, LI
 
 -- SPACE_ANSWERS
 INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('1', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','2','1');
-INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('2', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','2','1');
+INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('2', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','2','2');
 INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('3', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','3','1');
+INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('4', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','3','2'); -- se cambio los FK_SPACES_ID
 
 -- FILES
 INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('1','1',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AdaSoftParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
-INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('1','2',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AdaSoftParteB.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
-INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('1','3',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'acmeParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
+INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('2','2',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AdaSoftParteB.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteB.pdf?alt=media&token=fa43290b-f14c-49b3-b072-01c458844dfc');
+INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('3','3',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AcmeParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AcmeParteA.pdf?alt=media&token=414d8aa0-ae2d-4dda-8029-5dab08415ae9');
+INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('4','4',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AcmeParteB.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AcmeParteB.pdf?alt=media&token=42d74775-fc89-488a-985e-57f89c2f7b39');
 
 --REVIEW
 INSERT INTO reviews (ID,CREATED_AT, DELETED, UPDATED_AT, STATUS, FK_COMPANY_ID, FK_ADVISER_ID) VALUES ('1', '2021-11-16 15:45:51.012352',FALSE, '2021-11-16 15:45:51.012352', '3', '2', '1');
-INSERT INTO reviews_spaces(REVIEW_ID,SPACES_ID) VALUES ('1', '1');
+INSERT INTO reviews_spaces (REVIEW_ID,SPACES_ID) VALUES ('1', '1'); -- PARTE A
+INSERT INTO reviews_spaces (REVIEW_ID,SPACES_ID) VALUES ('1', '2'); -- PARTE B
 INSERT INTO reviews (ID,CREATED_AT, DELETED, UPDATED_AT, STATUS, FK_COMPANY_ID, FK_ADVISER_ID) VALUES ('2', '2021-11-16 15:45:51.012352',FALSE, '2021-11-16 15:45:51.012352', '4', '2', '1');
-INSERT INTO reviews_spaces(REVIEW_ID,SPACES_ID) VALUES ('2', '1');
-INSERT INTO reviews (ID,CREATED_AT, DELETED, UPDATED_AT, STATUS, FK_COMPANY_ID, FK_ADVISER_ID) VALUES ('3', '2021-11-16 15:45:51.012352',FALSE, '2021-11-16 15:45:51.012352', '0' , '2', '1');
-INSERT INTO reviews_spaces(REVIEW_ID,SPACES_ID) VALUES ('3', '1');
+INSERT INTO reviews_spaces (REVIEW_ID,SPACES_ID) VALUES ('2', '3'); -- CAMBIAR SPACES_ID, DEBERIA ESTAR PARTE A Y PARTE B CORREGIDA
+INSERT INTO reviews_spaces (REVIEW_ID,SPACES_ID) VALUES ('2', '4');
+INSERT INTO reviews (ID,CREATED_AT, DELETED, UPDATED_AT, STATUS, FK_COMPANY_ID, FK_ADVISER_ID) VALUES ('3', '2021-11-16 15:45:51.012352',FALSE, '2021-11-16 15:45:51.012352', '2' , '3', '1');
+INSERT INTO reviews_spaces (REVIEW_ID,SPACES_ID) VALUES ('3', '1'); -- PARTE A
+INSERT INTO reviews_spaces (REVIEW_ID,SPACES_ID) VALUES ('3', '2'); -- PARTE B
 
 -- OBSERVATIONS
 INSERT INTO observations (FK_FILE_ID,ID, CREATED_AT, DELETED, UPDATED_AT, FK_REVIEW_ID, TITLE, DESCRIPTION) VALUES ('1','1','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','seccion 1','esta es una observacion');
