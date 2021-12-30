@@ -167,6 +167,8 @@ public class BeansConfiguration {
             @Override
             protected void configure() {
                 map().setReviewId(source.getReview().getId());
+                map().setFileName(source.getFile().getName());
+                map().setFileId(source.getFile().getId());
             }
         });
 
