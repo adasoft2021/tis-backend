@@ -290,7 +290,7 @@ public class ReviewService {
     }
 
     public Review.Status setStatus(Long id) {
-        checkArgument(id != null, "El id de Company no puede ser nulo.");
+        checkArgument(id != null, "El id de Review no puede ser nulo.");
         Review foundReview = reviewRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(Review.class, id));
         switch (foundReview.getStatus()) {
