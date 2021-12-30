@@ -14,5 +14,6 @@ import java.util.List;
 public class FileResponseDTO extends BaseResponseDTO<Long> {
     String name;
     String url;
+    boolean reviewed;
     List<ObservationResponseDTO> observations;
 }

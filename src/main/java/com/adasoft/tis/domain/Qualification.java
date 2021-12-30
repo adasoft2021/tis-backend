@@ -30,4 +30,8 @@ public class Qualification extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_base_qualification_id", nullable = false, updatable = false)
     private BaseQualification baseQualification;
+
+    public boolean isEmpty() {
+        return score == null;
+    }
 }
