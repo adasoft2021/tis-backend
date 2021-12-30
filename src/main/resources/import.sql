@@ -67,6 +67,10 @@ INSERT INTO partners (FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_
 INSERT INTO partners (FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_AT) VALUES ('4','8','Victoria','victoria@gmail.com','2021-10-06 08:00:00',0,'2021-10-06 08:00:00');
 INSERT INTO partners (FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_AT) VALUES ('4','9','Gustavo','gus@gmail.com','2021-10-06 08:00:00',0,'2021-10-06 08:00:00');
 
+INSERT INTO partners (FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_AT) VALUES ('5','10','Eduardo','eduardo@gmail.com','2021-10-06 08:00:00',0,'2021-10-06 08:00:00');
+INSERT INTO partners (FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_AT) VALUES ('5','11','Victoria','victoria@gmail.com','2021-10-06 08:00:00',0,'2021-10-06 08:00:00');
+INSERT INTO partners (FK_COMPANY_ID,ID,NAME,EMAIL, CREATED_AT, DELETED, UPDATED_AT) VALUES ('5','12','Gustavo','gus@gmail.com','2021-10-06 08:00:00',0,'2021-10-06 08:00:00');
+
 -- PROPOSALS
 INSERT INTO proposals (CREATED_AT, DELETED, UPDATED_AT, CREATED_BY, PART, FILE_URL, ADVISER) VALUES ('2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','A','/files/ADASOFTParteA.pdf','1');
 INSERT INTO proposals (CREATED_AT, DELETED, UPDATED_AT, CREATED_BY, PART, FILE_URL, ADVISER) VALUES ('2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','B','/files/ADASOFTParteB.pdf','1');
@@ -82,11 +86,13 @@ INSERT INTO spaces (ID,CREATED_AT, DELETED, UPDATED_AT, TITLE, FK_PROJECT_ID, LI
 INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('1', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','2','1');
 INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('2', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','2','2');
 INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('3', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','3','1');
-INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('4', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','3','2'); -- se cambio los FK_SPACES_ID
+INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('4', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','3','2');
 INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('5', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','4','1');
-INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('6', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','4','2'); -- se cambio los FK_SPACES_ID
+INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('6', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','4','2');
 INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('7', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','2','3');
-INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('8', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','2','4'); -- se cambio los FK_SPACES_ID
+INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('8', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','2','4');
+INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('9', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','5','1');
+INSERT INTO space_answers (ID,CREATED_AT, DELETED, UPDATED_AT, FK_COMPANY_ID, FK_SPACE_ID) VALUES ('10', TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175','5','2');
 
 -- FILES
 INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('1','1',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AdaSoftParteA.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AdaSoftParteA.pdf?alt=media&token=abe66b00-508f-4821-a7fd-6d359a83fe4f');
@@ -97,6 +103,8 @@ INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME
 INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('6','6',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'INNOSISParteB.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AcmeParteB.pdf?alt=media&token=42d74775-fc89-488a-985e-57f89c2f7b39');
 INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('7','7',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AdaSoftParteACorregida.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AcmeParteA.pdf?alt=media&token=414d8aa0-ae2d-4dda-8029-5dab08415ae9');
 INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('8','8',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AdaSoftParteBCorregida.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AcmeParteB.pdf?alt=media&token=42d74775-fc89-488a-985e-57f89c2f7b39');
+INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('9','9',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AdaSoftParteACorregida.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AcmeParteA.pdf?alt=media&token=414d8aa0-ae2d-4dda-8029-5dab08415ae9');
+INSERT INTO files (FK_SPACE_ANSWER_ID, ID, CREATED_AT, DELETED, UPDATED_AT, NAME, URL) VALUES ('10','10',TIMESTAMP '2021-11-07 21:56:27.36174', 0, TIMESTAMP '2021-11-07T21:56:27.36175', 'AdaSoftParteBCorregida.pdf', 'https://firebasestorage.googleapis.com/v0/b/tis-storage.appspot.com/o/AcmeParteB.pdf?alt=media&token=42d74775-fc89-488a-985e-57f89c2f7b39');
 
 --REVIEW
 INSERT INTO reviews (ID,CREATED_AT, DELETED, UPDATED_AT, STATUS, FK_COMPANY_ID, FK_ADVISER_ID, COMMENT) VALUES ('1', '2021-11-16 15:45:51.012352',FALSE, '2021-11-16 15:45:51.012352', '3', '2', '1', 'Esta adenda de corrección debe ser entregada en el http://moodle3.umss.edu.bo/ antes de la firma del contrato. Paralelamente se solicita, llenar la planilla RESUMENGRUPOEMPRESA - disponible en moodle; con la información resumen de su propuesta técnica. En este archivo debe registrar el día que su GE ha elegido para el seguimiento de su propuesta de desarrollo.');
@@ -111,6 +119,9 @@ INSERT INTO reviews_spaces (REVIEW_ID,SPACES_ID) VALUES ('3', '2'); -- PARTE B
 INSERT INTO reviews (ID,CREATED_AT, DELETED, UPDATED_AT, STATUS, FK_COMPANY_ID, FK_ADVISER_ID, COMMENT) VALUES ('4', '2021-11-16 15:45:51.012352',FALSE, '2021-11-16 15:45:51.012352', '4' , '4', '1', 'TIS acepta la propuesta técnica presentada por su empresa: DFS S.R.L.. Por lo que solicita hacerse presente el viernes 13 de marzo del 2020 a horas 9:30 a realizar firma de contrato, via reuni’on en meet..\nParalelamente se solicita, llenar la planilla adjunta - RESUMENGRUPOEMPRESA; con la información resumen de su propuesta técnica. En este archivo debe registrar el día que su GE ha elegido para el seguimiento de su propuesta de desarrollo en el tiempo que dure el contrato con TIS. Asímismo, recordar que para el día de la firma del contrato se requiere la entrega de la planilla resumen requerida.');
 INSERT INTO reviews_spaces (REVIEW_ID,SPACES_ID) VALUES ('4', '1'); -- PARTE A
 INSERT INTO reviews_spaces (REVIEW_ID,SPACES_ID) VALUES ('4', '2'); -- PARTE B
+INSERT INTO reviews (ID,CREATED_AT, DELETED, UPDATED_AT, STATUS, FK_COMPANY_ID, FK_ADVISER_ID, COMMENT) VALUES ('5', '2021-11-16 15:45:51.012352',FALSE, '2021-11-16 15:45:51.012352', '2' , '5', '1', 'TIS acepta la propuesta técnica presentada por su empresa: DFS S.R.L.. Por lo que solicita hacerse presente el viernes 13 de marzo del 2020 a horas 9:30 a realizar firma de contrato, via reuni’on en meet..\nParalelamente se solicita, llenar la planilla adjunta - RESUMENGRUPOEMPRESA; con la información resumen de su propuesta técnica. En este archivo debe registrar el día que su GE ha elegido para el seguimiento de su propuesta de desarrollo en el tiempo que dure el contrato con TIS. Asímismo, recordar que para el día de la firma del contrato se requiere la entrega de la planilla resumen requerida.');
+INSERT INTO reviews_spaces (REVIEW_ID,SPACES_ID) VALUES ('5', '1'); -- PARTE A
+INSERT INTO reviews_spaces (REVIEW_ID,SPACES_ID) VALUES ('5', '2'); -- PARTE B
 
 -- OBSERVATIONS
 INSERT INTO observations (FK_FILE_ID,ID, CREATED_AT, DELETED, UPDATED_AT, FK_REVIEW_ID, TITLE, DESCRIPTION) VALUES ('2','1','2021-10-06 08:00:00',0,'2021-10-06 08:00:00','1','Sección 1.1','el párrafo que a la letra dice “Para la automatización de los procesos administrativos de TIS se consideró que la solución idónea es el desarrollo de de un producto...” eliminar la doble de.');
@@ -143,6 +154,14 @@ INSERT INTO qualifications (ID, CREATED_AT, DELETED, UPDATED_AT, SCORE, FK_REVIE
 INSERT INTO qualifications (ID, CREATED_AT, DELETED, UPDATED_AT, SCORE, FK_REVIEW_ID, FK_BASE_QUALIFICATION_ID) VALUES ('19', '2021-10-06 08:00:00',0,'2021-10-06 08:00:00','10','3','5');
 INSERT INTO qualifications (ID, CREATED_AT, DELETED, UPDATED_AT, SCORE, FK_REVIEW_ID, FK_BASE_QUALIFICATION_ID) VALUES ('20', '2021-10-06 08:00:00',0,'2021-10-06 08:00:00','11','3','6');
 INSERT INTO qualifications (ID, CREATED_AT, DELETED, UPDATED_AT, SCORE, FK_REVIEW_ID, FK_BASE_QUALIFICATION_ID) VALUES ('21', '2021-10-06 08:00:00',0,'2021-10-06 08:00:00','8','3','7');
+
+INSERT INTO qualifications (ID, CREATED_AT, DELETED, UPDATED_AT, SCORE, FK_REVIEW_ID, FK_BASE_QUALIFICATION_ID) VALUES ('22', '2021-10-06 08:00:00',0,'2021-10-06 08:00:00','15','5','1');
+INSERT INTO qualifications (ID, CREATED_AT, DELETED, UPDATED_AT, SCORE, FK_REVIEW_ID, FK_BASE_QUALIFICATION_ID) VALUES ('23', '2021-10-06 08:00:00',0,'2021-10-06 08:00:00','10','5','2');
+INSERT INTO qualifications (ID, CREATED_AT, DELETED, UPDATED_AT, SCORE, FK_REVIEW_ID, FK_BASE_QUALIFICATION_ID) VALUES ('24', '2021-10-06 08:00:00',0,'2021-10-06 08:00:00','30','5','3');
+INSERT INTO qualifications (ID, CREATED_AT, DELETED, UPDATED_AT, SCORE, FK_REVIEW_ID, FK_BASE_QUALIFICATION_ID) VALUES ('25', '2021-10-06 08:00:00',0,'2021-10-06 08:00:00','10','5','4');
+INSERT INTO qualifications (ID, CREATED_AT, DELETED, UPDATED_AT, SCORE, FK_REVIEW_ID, FK_BASE_QUALIFICATION_ID) VALUES ('26', '2021-10-06 08:00:00',0,'2021-10-06 08:00:00','10','5','5');
+INSERT INTO qualifications (ID, CREATED_AT, DELETED, UPDATED_AT, SCORE, FK_REVIEW_ID, FK_BASE_QUALIFICATION_ID) VALUES ('27', '2021-10-06 08:00:00',0,'2021-10-06 08:00:00','15','5','6');
+INSERT INTO qualifications (ID, CREATED_AT, DELETED, UPDATED_AT, SCORE, FK_REVIEW_ID, FK_BASE_QUALIFICATION_ID) VALUES ('28', '2021-10-06 08:00:00',0,'2021-10-06 08:00:00','10','5','7');
 
 --COMPANY_SPACES
 INSERT INTO company_spaces (ID, FK_COMPANY_ID, FK_SPACE_ID, FK_REVIEW_ID, CREATED_AT, DELETED, UPDATED_AT) VALUES (NULL,'2','1',NULL,'2021-10-06 08:00:00',0,'2021-10-06 08:00:00');
