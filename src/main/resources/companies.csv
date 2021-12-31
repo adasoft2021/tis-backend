@@ -1,6 +1,6 @@
 ID,SHORT_NAME,NAME,COMPANY_TYPE,ADDRESS,FK_SEMESTER_ID,FK_ADVISER_ID,EMAIL,,
-4,ActionSoft,ActionSoft  S.R.L.,SRL,Jordan y Oquendo,2,1,actionsoft@trashmail.top,,
-5,AGAAK development SRL,AGAAK,SRL,Jordan y Oquendo,2,1,agaak@trashmail.top,,
+4,ActionSoft,ActionSoft  S.R.L.,SRL,Jordan y Oquendo,1,1,actionsoft@trashmail.top,,
+5,AGAAK development SRL,AGAAK,SRL,Jordan y Oquendo,1,1,agaak@trashmail.top,,
 6,ANKA SOFT,ANKA SOFT SRL,SRL,Jordan y Oquendo,3,1,ankasoft@trashmail.top,,
 7,Ant Work,Ant Work SRL,SRL,Jordan y Oquendo,4,1,antwork@trashmail.top,,
 8,ARES,ARES S.R.L.,SRL,Jordan y Oquendo,2,1,ares@trashmail.top,,

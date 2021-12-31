@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class Review extends BaseEntity<Long> {
 
-    @Column
+    @Column(length = 800)
     private String comment;
 
     @Column(nullable = false)
@@ -66,7 +66,7 @@ public class Review extends BaseEntity<Long> {
         QUALIFIED("Calificada"),
         /// final states ///
         IN_CHANGE_ORDER("En Orden de cambio"),
-        IN_PROPOSAL_ACCEPTANCE("En Aceptación de Propuesta"),
+        IN_PROPOSAL_ACCEPTANCE("En Notificación de conformidad"),
         IN_ADDENDUM("En Adenda");
 
         private final String value;
