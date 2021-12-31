@@ -115,6 +115,11 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <profiles>
+                        <profile>h2</profile>
+                        <profile>mysql-init</profile>
+                        <profile>mysql-update</profile>
+                    </profiles>
                 </configuration>
             </plugin>
             <plugin>
