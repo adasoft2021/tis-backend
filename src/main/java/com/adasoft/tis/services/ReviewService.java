@@ -61,8 +61,11 @@ public class ReviewService {
         final Collection<UpdateQualificationDTO> qualificationDTOS) {
         Collection<QualificationResponseDTO> qualificationResponseDTOS =
             updateQualifications(review, qualificationDTOS);
-        boolean notFull = qualificationResponseDTOS.stream().anyMatch(q -> q.getScore() != null);
-        review.setStatus(notFull ? Review.Status.REVIEWED : Review.Status.QUALIFIED);
+        boolean full = qualificationResponseDTOS.stream()
+            .map(qualification -> qualification.getScore() != null)
+            .reduce((full1, full2) -> full1 && full2)
+            .orElse(false);
+        review.setStatus(full ? Review.Status.QUALIFIED : Review.Status.REVIEWED);
         reviewRepository.update(review);
 
         ReviewFilesResponseDTO responseDTO = reviewMapper.map(review, ReviewFilesResponseDTO.class);
@@ -231,7 +234,10 @@ public class ReviewService {
                 break;
             case "REVIEWED":
                 if (statusReviews.containsKey(Review.Status.IN_CHANGE_ORDER))
-                    next = Review.Status.IN_ADDENDUM;
+                    if (r.getObservations().isEmpty())
+                        next = Review.Status.IN_PROPOSAL_ACCEPTANCE;
+                    else
+                        next = Review.Status.IN_ADDENDUM;
         }
         return next;
     }

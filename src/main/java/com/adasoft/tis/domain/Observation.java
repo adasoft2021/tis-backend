@@ -20,7 +20,7 @@ import javax.persistence.*;
 public class Observation extends BaseEntity<Long> {
     @Column(nullable = false)
     String title;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 800)
     String description;
 
     @JsonBackReference
