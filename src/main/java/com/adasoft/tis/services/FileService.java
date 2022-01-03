@@ -20,7 +20,7 @@ public class FileService {
 
     public FileResponseDTO getDTO(File file, FileResponseDTO dto) {
         if (dto == null)
-            dto = new FileResponseDTO();
+            dto = fileMapper.map(file, FileResponseDTO.class);
         dto.setObservations(file.getObservations().stream()
             .map(observation -> observationMapper.map(observation, ObservationResponseDTO.class))
             .collect(Collectors.toList()));

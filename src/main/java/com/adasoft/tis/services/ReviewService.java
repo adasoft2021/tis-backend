@@ -2,10 +2,8 @@ package com.adasoft.tis.services;
 
 import com.adasoft.tis.core.exceptions.DefaultTisDomainException;
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
-import com.adasoft.tis.domain.Adviser;
-import com.adasoft.tis.domain.Company;
-import com.adasoft.tis.domain.Review;
-import com.adasoft.tis.domain.Space;
+import com.adasoft.tis.domain.*;
+import com.adasoft.tis.dto.file.FileResponseDTO;
 import com.adasoft.tis.dto.observation.ObservationResponseDTO;
 import com.adasoft.tis.dto.qualification.QualificationResponseDTO;
 import com.adasoft.tis.dto.qualification.UpdateQualificationDTO;
@@ -257,7 +255,7 @@ public class ReviewService {
         Adviser foundAdviser = adviserRepository.findById(userId)
             .orElseThrow(() -> new EntityNotFoundException(Adviser.class, userId));
         checkUserId(userId, foundAdviser.getId());
-        if (!semesterRepository.getNow().isPresent())
+        if (semesterRepository.getNow().isEmpty())
             throw new DefaultTisDomainException(HttpStatus.NOT_FOUND, "No existe informacion del semestre");
         Collection<Company> companies = companyRepository.getSemesterCompanies(
             semesterRepository.getNow().get().getSemester(),
@@ -295,5 +293,48 @@ public class ReviewService {
         return reviews.stream().map(review ->
                 getReviewResponseDTO(review, reviewMapper.map(review, ReviewFilesResponseDTO.class)))
             .collect(Collectors.toSet());
+    }
+
+    public Review.Status setStatus(Long id) {
+        checkArgument(id != null, "El id de Review no puede ser nulo.");
+        Review foundReview = reviewRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Review.class, id));
+        switch (foundReview.getStatus()) {
+            case UNREVIEWED:
+                if (checkFiles(foundReview))
+                    foundReview.setStatus(Review.Status.REVIEWED);
+                break;
+            case REVIEWED:
+                if (!checkFiles(foundReview)) {
+                    foundReview.setStatus(Review.Status.UNREVIEWED);
+                } else if (checkQualifications(foundReview)) {
+                    foundReview.setStatus(Review.Status.QUALIFIED);
+                }
+                break;
+            case QUALIFIED:
+                if (!checkFiles(foundReview)) {
+                    foundReview.setStatus(Review.Status.UNREVIEWED);
+                } else if (!checkQualifications(foundReview)) {
+                    foundReview.setStatus(Review.Status.REVIEWED);
+                }
+        }
+        return foundReview.getStatus();
+    }
+
+    private boolean checkQualifications(Review foundReview) {
+        return foundReview.getQualifications().stream().noneMatch(Qualification::isEmpty);
+    }
+
+    private boolean checkFiles(Review foundReview) {
+
+        ReviewFilesResponseDTO reviewWithFiles = reviewMapper.map(foundReview, ReviewFilesResponseDTO.class);
+        getReviewResponseDTO(foundReview, reviewWithFiles);
+        boolean reviewed = !reviewWithFiles.getSpaceAnswers().isEmpty();
+        for (SpaceAnswerResponseDTO a : reviewWithFiles.getSpaceAnswers()) {
+            for (FileResponseDTO f : a.getFiles()) {
+                reviewed = reviewed && f.isReviewed();
+            }
+        }
+        return reviewed;
     }
 }

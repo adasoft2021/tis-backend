@@ -1,6 +1,7 @@
 package com.adasoft.tis.controllers;
 
 import com.adasoft.tis.core.exceptions.ErrorResponse;
+import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
@@ -271,4 +272,38 @@ public interface ReviewRestController {
         required = true
     ))
     ResponseEntity<Collection<ReviewCompactResponseDTO>> getAdviserReviews(Long userId);
+
+    @Operation(summary = "Obtener el estado de una revision por su ID", responses = {
+        @ApiResponse(
+            description = "Estado obtenido exitosamente",
+            responseCode = "200",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ReviewResponseDTO.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No se encontró el ID del Review en el sistema",
+            responseCode = "404",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        )
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
+    ResponseEntity<Review.Status> status(
+        Long userId,
+        @Parameter(description = "ID del Review a actualizar", example = "1") Long reviewId
+    );
 }

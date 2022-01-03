@@ -1,6 +1,7 @@
 package com.adasoft.tis.controllers.impl;
 
 import com.adasoft.tis.controllers.ReviewRestController;
+import com.adasoft.tis.domain.Review;
 import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.review.ReviewCompactResponseDTO;
 import com.adasoft.tis.dto.review.ReviewResponseDTO;
@@ -78,5 +79,13 @@ public class ReviewRestControllerImpl implements ReviewRestController {
         @RequestAttribute("userId") final Long userId) {
         Collection<ReviewCompactResponseDTO> responses = reviewService.getAdviserReviews(userId);
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/{reviewId}/status")
+    @Override
+    public ResponseEntity<Review.Status> status(
+        @RequestAttribute("userId") Long userId, @PathVariable Long reviewId) {
+        Review.Status status = reviewService.setStatus(reviewId);
+        return ResponseEntity.ok(status);
     }
 }

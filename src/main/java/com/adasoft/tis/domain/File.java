@@ -28,6 +28,9 @@ public class File extends BaseEntity<Long> {
     @Column
     @NotNull
     String url;
+    @Column
+    @NotNull
+    boolean reviewed;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "file")
