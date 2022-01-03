@@ -95,6 +95,12 @@
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.27</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -109,6 +115,11 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <profiles>
+                        <profile>h2</profile>
+                        <profile>mysql-init</profile>
+                        <profile>mysql-update</profile>
+                    </profiles>
                 </configuration>
             </plugin>
             <plugin>
