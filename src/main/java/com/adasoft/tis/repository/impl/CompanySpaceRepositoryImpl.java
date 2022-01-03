@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CompanySpaceRepositoryImpl extends AbstractTisRepository<CompanySpace, Long> implements CompanySpaceRepository {
@@ -40,4 +42,50 @@ public class CompanySpaceRepositoryImpl extends AbstractTisRepository<CompanySpa
             .getResultList();
     }
 
+    @Override
+    public boolean checkSpacesAnswered(Long spaceId, Long companyId) {
+        Optional<CompanySpace> optCs = findBySpace(spaceId, companyId);
+        if (optCs.isEmpty()) return false;
+        CompanySpace cs = optCs.get();
+        Collection<Space> lastSpaces = lastSpaceAssigned(cs.getBecauseOf().getId(), companyId);
+        if (lastSpaces.isEmpty()) return false;
+        for (Space s : lastSpaces) {
+            long answers = s.getSpaceAnswers().stream()
+                .filter(spaceAnswer -> !spaceAnswer.isDeleted() &&
+                    spaceAnswer.getCreatedBy().getId().equals(cs.getCompany().getId()))
+                .count();
+            if (answers == 0)
+                return false;
+        }
+        return true;
+    }
+
+    @Override
+    public Collection<Space> lastSpaceAssigned(Long reviewId, Long companyId) {
+
+        String jpqlQuery2 = "SELECT cs FROM CompanySpace cs " +
+            "WHERE cs.becauseOf = :becauseOf and cs.company.id = :companyId";
+        return entityManager.createQuery(jpqlQuery2, Space.class)
+            .setParameter("becauseOf", reviewId)
+            .setParameter("companyId", companyId)
+            .getResultList();
+    }
+
+    @Override
+    public Optional<CompanySpace> findBySpace(Long spaceId, Long companyId) {
+        Optional<CompanySpace> res = Optional.empty();
+        String jpqlQuery = "SELECT cs FROM CompanySpace cs " +
+            "WHERE cs.space.id = :spaceId and cs.company.id = :companyId";
+
+        CompanySpace companySpace = entityManager.createQuery(jpqlQuery, CompanySpace.class)
+            .setParameter("spaceId", spaceId)
+            .setParameter("companyId", companyId)
+            .getSingleResult();
+        if (companySpace != null) {
+            res = Optional.of(companySpace);
+        }
+        return res;
+    }
 }
+
+

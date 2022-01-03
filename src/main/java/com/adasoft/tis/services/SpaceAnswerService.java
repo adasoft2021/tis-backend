@@ -2,6 +2,7 @@ package com.adasoft.tis.services;
 
 import com.adasoft.tis.core.exceptions.EntityNotFoundException;
 import com.adasoft.tis.domain.*;
+import com.adasoft.tis.dto.review.CreateReviewDTO;
 import com.adasoft.tis.dto.spaceAnswer.CompanySpaceAnswersResponseDTO;
 import com.adasoft.tis.dto.spaceAnswer.CreateSpaceAnswerDTO;
 import com.adasoft.tis.dto.spaceAnswer.SemesterSpaceAnswersResponseDTO;
@@ -27,6 +28,8 @@ public class SpaceAnswerService {
     private SemesterRepository semesterRepository;
     private ModelMapper semesterMapper;
     private FileService fileService;
+    private CompanySpaceRepository companySpaceRepository;
+    private ReviewService reviewService;
 
     public SpaceAnswerResponseDTO create(final Long spaceId, final CreateSpaceAnswerDTO spaceDTO) {
         checkArgument(spaceId != null, "El spaceId no puede ser nulo.");
@@ -43,11 +46,31 @@ public class SpaceAnswerService {
         defaultSpaceAnswer.setSpace(foundSpace);
         defaultSpaceAnswer.setCreatedBy(foundCompany);
 
-        SpaceAnswer persistedSpaceAnswer = spaceAnswerRepository.save(defaultSpaceAnswer);
 
+        SpaceAnswer persistedSpaceAnswer = spaceAnswerRepository.save(defaultSpaceAnswer);
+        if (companySpaceRepository.checkSpacesAnswered(spaceId, foundCompany.getId())) {
+            try {
+                CompanySpace foundCompanySpace = companySpaceRepository.findBySpace(foundSpace.getId(), foundCompany.getId())
+                    .orElseThrow(() -> new EntityNotFoundException(CompanySpace.class, foundSpace.getId()) {
+                        @Override
+                        protected String getExceptionDetail() {
+                            return super.getExceptionDetail().replace("id", "id de Space");
+                        }
+                    });
+                CreateReviewDTO reviewDTO = new CreateReviewDTO();
+                reviewDTO.setCompanyId(foundCompany.getId());
+                Collection<Space> lastSpaces = companySpaceRepository.lastSpaceAssigned(
+                    foundCompanySpace.getBecauseOf().getId(), foundCompany.getId());
+                reviewDTO.setCreatedById(foundCompany.getAdviser().getId());
+                reviewDTO.setSpaces(lastSpaces.stream().map(Space::getId).collect(Collectors.toList()));
+
+                reviewService.create(reviewDTO);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return spaceAnswerMapper.map(persistedSpaceAnswer, SpaceAnswerResponseDTO.class);
     }
-
 
     public Collection<SpaceAnswerResponseDTO> getBySpaceId(final Long adviserId, final Long spaceId) {
         checkArgument(adviserId != null, "El id de Adviser no puede ser nulo.");
