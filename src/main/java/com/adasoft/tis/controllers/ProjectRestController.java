@@ -5,6 +5,7 @@ import com.adasoft.tis.dto.project.CreateProjectDTO;
 import com.adasoft.tis.dto.project.ProjectResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -23,14 +24,35 @@ public interface ProjectRestController {
             )
         ),
         @ApiResponse(
-            description = "Fallo al crear el Project",
-            responseCode = "400",
+            description = "Conflicto",
+            responseCode = "409",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No autorizado, el token es inválido",
+            responseCode = "401",
+            content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
+            )
+        ),
+        @ApiResponse(
+            description = "No se encontró el ID del Adviser en el sistema",
+            responseCode = "404",
             content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)
             )
         )
-    })
+    }, parameters = @Parameter(
+        in = ParameterIn.HEADER,
+        name = "X-Token",
+        description = "Token del usuario",
+        schema = @Schema(implementation = String.class),
+        required = true
+    ))
     ResponseEntity<ProjectResponseDTO> create(
+        Long userId,
         @Parameter(description = "ID del Adviser a obtener sus proyectos", example = "1")
             Long adviserId,
         @RequestBody(description = "ProjectDTO que contiene los nuevos datos a crear")
